@@ -64,9 +64,9 @@ darwin)
 	;;
 esac
 
-# Checks boost
-AX_BOOST_BASE([1.33])
-AX_BOOST_REGEX
+# # Checks boost
+# AX_BOOST_BASE([1.33])
+# AX_BOOST_REGEX
 
 # Checks for header files.
 AC_HEADER_STDC

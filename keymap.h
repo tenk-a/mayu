@@ -17,14 +17,14 @@ public:
   ///
   enum Type
   {
-    Type_key,					///
-    Type_keySeq,				///
-    Type_function,				///
+    Type_key,                   ///
+    Type_keySeq,                ///
+    Type_function,              ///
   };
 
 private:
   Action(const Action &i_action);
-  
+
 public:
   Action() { }
   ///
@@ -49,7 +49,7 @@ public:
 
 private:
   ActionKey(const ActionKey &i_actionKey);
-  
+
 public:
   ///
   ActionKey(const ModifiedKey &i_mk);
@@ -67,11 +67,11 @@ class KeySeq;
 class ActionKeySeq : public Action
 {
 public:
-  KeySeq * const m_keySeq;			///
+  KeySeq * const m_keySeq;          ///
 
 private:
   ActionKeySeq(const ActionKeySeq &i_actionKeySeq);
-  
+
 public:
   ///
   ActionKeySeq(KeySeq *i_keySeq);
@@ -88,19 +88,19 @@ public:
 class ActionFunction : public Action
 {
 public:
-#if defined(__GNUC__)			// error ëŒçÙ
+#if defined(__GNUC__)           // error ëŒçÙ
   class
 #endif
-  FunctionData * const m_functionData;		/// function data
-  const Modifier m_modifier;			/// modifier for &Sync
+  FunctionData * const m_functionData;      /// function data
+  const Modifier m_modifier;            /// modifier for &Sync
 
 private:
   ActionFunction(const ActionFunction &i_actionFunction);
-  
+
 public:
   ///
   ActionFunction(FunctionData *i_functionData,
-		 Modifier i_modifier = Modifier());
+         Modifier i_modifier = Modifier());
   ///
   virtual ~ActionFunction();
   ///
@@ -117,12 +117,12 @@ public:
 class KeySeq
 {
 public:
-  typedef std::vector<Action *> Actions;	/// 
+  typedef std::vector<Action *> Actions;    ///
 
 private:
-  Actions m_actions;				///
-  tstringi m_name;				///
-  Modifier::Type m_mode;			/** Either Modifier::Type_KEYSEQ
+  Actions m_actions;                ///
+  tstringi m_name;              ///
+  Modifier::Type m_mode;            /** Either Modifier::Type_KEYSEQ
                                                     or Modifier::Type_ASSIGN */
 
 private:
@@ -130,7 +130,7 @@ private:
   void copy();
   ///
   void clear();
-  
+
 public:
   ///
   KeySeq(const tstringi &i_name);
@@ -138,22 +138,22 @@ public:
   KeySeq(const KeySeq &i_ks);
   ///
   ~KeySeq();
-  
+
   ///
   const Actions &getActions() const { return m_actions; }
-  
+
   ///
   KeySeq &operator=(const KeySeq &i_ks);
-  
+
   /// add
   KeySeq &add(const Action &i_action);
 
   /// get the first modified key of this key sequence
   ModifiedKey getFirstModifiedKey() const;
-  
+
   ///
   const tstringi &getName() const { return m_name; }
-  
+
   /// stream output
   friend tostream &operator<<(tostream &i_ost, const KeySeq &i_ks);
 
@@ -166,7 +166,7 @@ public:
     if (m_mode < i_mode)
       m_mode = i_mode;
     ASSERT( m_mode == Modifier::Type_KEYSEQ ||
-	    m_mode == Modifier::Type_ASSIGN);
+        m_mode == Modifier::Type_ASSIGN);
   }
 
   ///
@@ -181,35 +181,35 @@ public:
   ///
   enum Type
   {
-    Type_keymap,				/// this is keymap
-    Type_windowAnd,				/// this is window &amp;&amp;
-    Type_windowOr,				/// this is window ||
+    Type_keymap,                /// this is keymap
+    Type_windowAnd,             /// this is window &amp;&amp;
+    Type_windowOr,              /// this is window ||
   };
   ///
   enum AssignOperator
   {
-    AO_new,					/// =
-    AO_add,					/// +=
-    AO_sub,					/// -=
-    AO_overwrite,				/// !, !!
+    AO_new,                 /// =
+    AO_add,                 /// +=
+    AO_sub,                 /// -=
+    AO_overwrite,               /// !, !!
   };
   ///
   enum AssignMode
   {
-    AM_notModifier,				///    not modifier
-    AM_normal,					///    normal modifier
-    AM_true,					/** !  true modifier(doesn't
+    AM_notModifier,             ///    not modifier
+    AM_normal,                  ///    normal modifier
+    AM_true,                    /** !  true modifier(doesn't
                                                     generate scan code) */
-    AM_oneShot,					/// !! one shot modifier
-    AM_oneShotRepeatable,			/// !!! one shot modifier
+    AM_oneShot,                 /// !! one shot modifier
+    AM_oneShotRepeatable,           /// !!! one shot modifier
   };
-  
+
   /// key assignment
   class KeyAssignment
   {
   public:
-    ModifiedKey m_modifiedKey;	///
-    KeySeq *m_keySeq;		///
+    ModifiedKey m_modifiedKey;  ///
+    KeySeq *m_keySeq;       ///
 
   public:
     ///
@@ -227,9 +227,9 @@ public:
   class ModAssignment
   {
   public:
-    AssignOperator m_assignOperator;	///
-    AssignMode m_assignMode;		///
-    Key *m_key;				///
+    AssignOperator m_assignOperator;    ///
+    AssignMode m_assignMode;        ///
+    Key *m_key;             ///
   };
   typedef std::list<ModAssignment> ModAssignments; ///
 
@@ -249,28 +249,28 @@ public:
   public:
     DescribeParam() : m_doesDescribeModifiers(true) { }
   };
-  
+
 private:
   /// key assignments (hashed by first scan code)
   typedef std::list<KeyAssignment> KeyAssignments;
   enum {
-    HASHED_KEY_ASSIGNMENT_SIZE = 32,	///
+    HASHED_KEY_ASSIGNMENT_SIZE = 32,    ///
   };
 
 private:
-  KeyAssignments m_hashedKeyAssignments[HASHED_KEY_ASSIGNMENT_SIZE];	///
-  
+  KeyAssignments m_hashedKeyAssignments[HASHED_KEY_ASSIGNMENT_SIZE];    ///
+
   /// modifier assignments
   ModAssignments m_modAssignments[Modifier::Type_ASSIGN];
 
-  Type m_type;					/// type
-  tstringi m_name;				/// keymap name
-  tregex m_windowClass;				/// window class name regexp
-  tregex m_windowTitle;				/// window title name regexp
+  Type m_type;                  /// type
+  tstringi m_name;              /// keymap name
+  tregex m_windowClass;             /// window class name regexp
+  tregex m_windowTitle;             /// window title name regexp
 
-  KeySeq *m_defaultKeySeq;			/// default keySeq
-  Keymap *m_parentKeymap;			/// parent keymap
-  
+  KeySeq *m_defaultKeySeq;          /// default keySeq
+  Keymap *m_parentKeymap;           /// parent keymap
+
 private:
   ///
   KeyAssignments &getKeyAssignments(const ModifiedKey &i_mk);
@@ -280,19 +280,19 @@ private:
 public:
   ///
   Keymap(Type i_type,
-	 const tstringi &i_name,
-	 const tstringi &i_windowClass,
-	 const tstringi &i_windowTitle,
-	 KeySeq *i_defaultKeySeq,
-	 Keymap *i_parentKeymap);
-  
+     const tstringi &i_name,
+     const tstringi &i_windowClass,
+     const tstringi &i_windowTitle,
+     KeySeq *i_defaultKeySeq,
+     Keymap *i_parentKeymap);
+
   /// add a key assignment;
   void addAssignment(const ModifiedKey &i_mk, KeySeq *i_keySeq);
 
   /// add modifier
   void addModifier(Modifier::Type i_mt, AssignOperator i_ao,
-		   AssignMode i_am, Key *i_key);
-  
+           AssignMode i_am, Key *i_key);
+
   /// search
   const KeyAssignment *searchAssignment(const ModifiedKey &i_mk) const;
 
@@ -305,8 +305,8 @@ public:
 
   /// does same window
   bool doesSameWindow(const tstringi i_className,
-		      const tstringi &i_titleName);
-  
+              const tstringi &i_titleName);
+
   /// adjust modifier
   void adjustModifier(Keyboard &i_keyboard);
 
@@ -316,7 +316,7 @@ public:
 
   /// describe
   void describe(tostream &i_ost, DescribeParam *i_dp) const;
-  
+
   /// set default keySeq and parent keymap if default keySeq has not been set
   bool setIfNotYet(KeySeq *i_keySeq, Keymap *i_parentKeymap);
 };
@@ -330,30 +330,30 @@ extern tostream &operator<<(tostream &i_ost, const Keymap *i_keymap);
 class Keymaps
 {
 public:
-  typedef std::list<Keymap *> KeymapPtrList;	/// 
-  
-private:
-  typedef std::list<Keymap> KeymapList;		/// 
+  typedef std::list<Keymap *> KeymapPtrList;    ///
 
 private:
-  KeymapList m_keymapList;			/** pointer into keymaps may
+  typedef std::list<Keymap> KeymapList;     ///
+
+private:
+  KeymapList m_keymapList;          /** pointer into keymaps may
                                                     exist */
-  
+
 public:
   ///
   Keymaps();
-  
+
   /// search by name
   Keymap *searchByName(const tstringi &i_name);
 
   /// search window
   void searchWindow(KeymapPtrList *o_keymapPtrList,
-		    const tstringi &i_className,
-		    const tstringi &i_titleName);
-  
+            const tstringi &i_className,
+            const tstringi &i_titleName);
+
   /// add keymap
   Keymap *add(const Keymap &i_keymap);
-  
+
   /// adjust modifier
   void adjustModifier(Keyboard &i_keyboard);
 };
@@ -363,15 +363,15 @@ public:
 class KeySeqs
 {
 private:
-  typedef std::list<KeySeq> KeySeqList;		///
+  typedef std::list<KeySeq> KeySeqList;     ///
 
 private:
-  KeySeqList m_keySeqList;			///
-  
+  KeySeqList m_keySeqList;          ///
+
 public:
   /// add a named keyseq (name can be empty)
   KeySeq *add(const KeySeq &i_keySeq);
-  
+
   /// search by name
   KeySeq *searchByName(const tstringi &i_name);
 };

@@ -11,14 +11,14 @@
 #  include <cctype>
 #  include <string>
 #  include <iosfwd>
-#  include <boost/regex.hpp>
-#  include <stdio.h>				// for snprintf
-#	include <string.h>				// for stricmp
+#  include <regex>
+#  include <stdio.h>                // for snprintf
+#   include <string.h>              // for stricmp
 
 #ifdef __CYGWIN__
 namespace std
 {
-	typedef basic_string<wchar_t> wstring; // !!
+    typedef basic_string<wchar_t> wstring; // !!
 }
 #endif
 #if defined(__linux__) || defined(__APPLE__)
@@ -38,9 +38,31 @@ typedef std::basic_stringstream<_TCHAR> tstringstream;
 /// ifstream for generic international text
 typedef std::basic_ifstream<_TCHAR> tifstream;
 /// basic_regex for generic international text
-typedef boost::basic_regex<_TCHAR> tregex;
+//typedef std::basic_regex<_TCHAR> tregex;
+class tregex : public std::basic_regex<_TCHAR> {
+    typedef std::basic_regex<_TCHAR> base_type;
+public:
+    tregex() {}
+    tregex(tregex const& rhs) : base_type(rhs), m_pattern(rhs.m_pattern) {}
+    tregex(_TCHAR const* pattern) : base_type(pattern), m_pattern(pattern) {}
+    tregex(std::string const& pattern) : base_type(pattern), m_pattern(pattern) {}
+    tregex& operator=(tregex const& rhs) { tregex(rhs).swap(*this); return *this; }
+    tregex& operator=(std::string const& rhs) { tregex(rhs).swap(*this); return *this; }
+    tregex& operator=(char const* rhs) { tregex(rhs).swap(*this); return *this; }
+    void assign(std::string const& pattern, std::regex_constants::syntax_option_type f) {
+        base_type::assign(pattern, f);
+        m_pattern = pattern;
+    }
+    std::string const& str() const { return m_pattern; }
+    void swap(tregex& rhs) {
+        std::swap(*(base_type*)this, *(base_type*)&rhs);
+        std::swap(m_pattern, rhs.m_pattern);
+    }
+private:
+    std::string m_pattern;
+};
 /// match_results for generic international text
-typedef boost::match_results<tstring::const_iterator> tcmatch;
+typedef std::match_results<tstring::const_iterator> tcmatch;
 
 
 /// string with custom stream output
@@ -87,8 +109,8 @@ public:
 
 /// interpret meta characters such as \n
 tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
-				const _TCHAR *i_quote = NULL,
-				bool i_doesUseRegexpBackReference = false);
+                const _TCHAR *i_quote = NULL,
+                bool i_doesUseRegexpBackReference = false);
 
 /// add session id to i_str
 tstring addSessionId(const _TCHAR *i_str);
@@ -97,7 +119,7 @@ tstring addSessionId(const _TCHAR *i_str);
 size_t strlcpy(char *o_dest, const char *i_src, size_t i_destSize);
 /// copy
 size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
-	       size_t i_destSize);
+           size_t i_destSize);
 /// copy
 size_t wcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize);
 /// copy
@@ -105,7 +127,7 @@ inline size_t tcslcpy(char *o_dest, const char *i_src, size_t i_destSize)
 { return strlcpy(o_dest, i_src, i_destSize); }
 /// copy
 inline size_t tcslcpy(unsigned char *o_dest, const unsigned char *i_src,
-		      size_t i_destSize)
+              size_t i_destSize)
 { return mbslcpy(o_dest, i_src, i_destSize); }
 /// copy
 inline size_t tcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize)
@@ -120,7 +142,7 @@ std::string to_string(const std::wstring &i_str);
 // convert wstring to UTF-8
 std::string to_UTF_8(const std::wstring &i_str);
 
-  
+
 /// case insensitive string
 class tstringi : public tstring
 {

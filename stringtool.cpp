@@ -13,7 +13,7 @@
 
 
 /* ************************************************************************** *
-   
+
 STRLCPY(3)                OpenBSD Programmer's Manual               STRLCPY(3)
 
 NAME
@@ -125,7 +125,7 @@ static inline size_t xstrlcpy(T *o_dest, const T *i_src, size_t i_destSize)
     do
     {
       if ((*d++ = *s++) == 0)
-	break;
+        break;
     } while (--n != 0);
   }
 
@@ -133,12 +133,12 @@ static inline size_t xstrlcpy(T *o_dest, const T *i_src, size_t i_destSize)
   if (n == 0)
   {
     if (i_destSize != 0)
-      *d = T();					// NUL-terminate o_dest
+      *d = T();                 // NUL-terminate o_dest
     while (*s++)
       ;
   }
 
-  return (s - i_src - 1);			// count does not include NUL
+  return (s - i_src - 1);           // count does not include NUL
 }
 
 
@@ -157,9 +157,9 @@ size_t wcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize)
 }
 
 
-// copy 
+// copy
 size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
-	       size_t i_destSize)
+           size_t i_destSize)
 {
   unsigned char *d = o_dest;
   const unsigned char *s = i_src;
@@ -170,14 +170,14 @@ size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
 
   if (n == 0)
     return strlen(reinterpret_cast<const char *>(i_src));
-  
+
   // Copy as many bytes as will fit
   for (-- n; *s && 0 < n; -- n)
   {
     if (_ismbblead(*s))
     {
       if (!(s[1] && 2 <= n))
-	break;
+        break;
       *d++ = *s++;
       -- n;
     }
@@ -187,7 +187,7 @@ size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
 
   for (; *s; ++ s)
     ;
-  
+
   return s - i_src;
 }
 
@@ -200,37 +200,37 @@ tostream &operator<<(tostream &i_ost, const tstringq &i_data)
   {
     switch (*s)
     {
-      case _T('\a'): i_ost << _T("\\a"); break;
-      case _T('\f'): i_ost << _T("\\f"); break;
-      case _T('\n'): i_ost << _T("\\n"); break;
-      case _T('\r'): i_ost << _T("\\r"); break;
-      case _T('\t'): i_ost << _T("\\t"); break;
-      case _T('\v'): i_ost << _T("\\v"); break;
-      case _T('"'): i_ost << _T("\\\""); break;
-      default:
-	if (_istlead(*s))
-	{
-	  _TCHAR buf[3] = { s[0], s[1], 0 };
-	  i_ost << buf;
-	  ++ s;
-	}
-	else if (_istprint(*s))
-	{
-	  _TCHAR buf[2] = { *s, 0 };
-	  i_ost << buf;
-	}
-	else
-	{
-	  i_ost << _T("\\x");
-	  _TCHAR buf[5];
+    case _T('\a'): i_ost << _T("\\a"); break;
+    case _T('\f'): i_ost << _T("\\f"); break;
+    case _T('\n'): i_ost << _T("\\n"); break;
+    case _T('\r'): i_ost << _T("\\r"); break;
+    case _T('\t'): i_ost << _T("\\t"); break;
+    case _T('\v'): i_ost << _T("\\v"); break;
+    case _T('"'): i_ost << _T("\\\""); break;
+    default:
+      if (_istlead(*s))
+      {
+        _TCHAR buf[3] = { s[0], s[1], 0 };
+        i_ost << buf;
+        ++ s;
+      }
+      else if (_istprint(*s))
+      {
+        _TCHAR buf[2] = { *s, 0 };
+        i_ost << buf;
+      }
+      else
+      {
+        i_ost << _T("\\x");
+        _TCHAR buf[5];
 #ifdef _UNICODE
-	  _sntprintf(buf, NUMBER_OF(buf), _T("%04x"), *s);
+        _sntprintf(buf, NUMBER_OF(buf), _T("%04x"), *s);
 #else
-	  _sntprintf(buf, NUMBER_OF(buf), _T("%02x"), *s);
+        _sntprintf(buf, NUMBER_OF(buf), _T("%02x"), *s);
 #endif
-	  i_ost << buf;
-	}
-	break;
+        i_ost << buf;
+      }
+      break;
     }
   }
   i_ost << _T("\"");
@@ -240,8 +240,8 @@ tostream &operator<<(tostream &i_ost, const tstringq &i_data)
 
 // interpret meta characters such as \n
 tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
-				const _TCHAR *i_quote,
-				bool i_doesUseRegexpBackReference)
+                const _TCHAR *i_quote,
+                bool i_doesUseRegexpBackReference)
 {
   // interpreted string is always less than i_len
   Array<_TCHAR> result(i_len + 1);
@@ -249,107 +249,107 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
   _TCHAR *d = result.get();
   // end pointer
   const _TCHAR *end = i_str + i_len;
-  
+
   while (i_str < end && *i_str)
   {
     if (*i_str != _T('\\'))
     {
       if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
-	*d++ = *i_str++;
+        *d++ = *i_str++;
       *d++ = *i_str++;
     }
     else if (*(i_str + 1) != _T('\0'))
     {
       i_str ++;
       if (i_quote && _tcschr(i_quote, *i_str))
-	*d++ = *i_str++;
+        *d++ = *i_str++;
       else
-	switch (*i_str)
-	{
-	  case _T('a'): *d++ = _T('\x07'); i_str ++; break;
-	    //case _T('b'): *d++ = _T('\b'); i_str ++; break;
-	  case _T('e'): *d++ = _T('\x1b'); i_str ++; break;
-	  case _T('f'): *d++ = _T('\f'); i_str ++; break;
-	  case _T('n'): *d++ = _T('\n'); i_str ++; break;
-	  case _T('r'): *d++ = _T('\r'); i_str ++; break;
-	  case _T('t'): *d++ = _T('\t'); i_str ++; break;
-	  case _T('v'): *d++ = _T('\v'); i_str ++; break;
-	    //case _T('?'): *d++ = _T('\x7f'); i_str ++; break;
-	    //case _T('_'): *d++ = _T(' '); i_str ++; break;
-	    //case _T('\\'): *d++ = _T('\\'); i_str ++; break;
-	  case _T('\''): *d++ = _T('\''); i_str ++; break;
-	  case _T('"'): *d++ = _T('"'); i_str ++; break;
-	  case _T('\\'): *d++ = _T('\\'); i_str ++; break;
-	  case _T('c'): // control code, for example '\c[' is escape: '\x1b'
-	    i_str ++;
-	    if (i_str < end && *i_str)
-	    {
-	      static const _TCHAR *ctrlchar =
-		_T("@ABCDEFGHIJKLMNO")
-		_T("PQRSTUVWXYZ[\\]^_")
-		_T("@abcdefghijklmno")
-		_T("pqrstuvwxyz@@@@?");
-	      static const _TCHAR *ctrlcode =
-		_T("\00\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17")
-		_T("\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37")
-		_T("\00\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17")
-		_T("\20\21\22\23\24\25\26\27\30\31\32\00\00\00\00\177");
-	      if (const _TCHAR *c = _tcschr(ctrlchar, *i_str))
-		*d++ = ctrlcode[c - ctrlchar], i_str ++;
-	    }
-	    break;
-	  case _T('x'): case _T('X'):
-	  {
-	    i_str ++;
-	    static const _TCHAR *hexchar = _T("0123456789ABCDEFabcdef");
-	    static int hexvalue[] = { 0, 1, 2, 3, 4, 5 ,6, 7, 8, 9,
-				      10, 11, 12, 13, 14, 15,
-				      10, 11, 12, 13, 14, 15, };
-	    bool brace = false;
-	    if (i_str < end && *i_str == _T('{'))
-	    {
-	      i_str ++;
-	      brace = true;
-	    }
-	    int n = 0;
-	    for (; i_str < end && *i_str; i_str ++)
-	      if (const _TCHAR *c = _tcschr(hexchar, *i_str))
-		n = n * 16 + hexvalue[c - hexchar];
-	      else
-		break;
-	    if (i_str < end && *i_str == _T('}') && brace)
-	      i_str ++;
-	    if (0 < n)
-	      *d++ = static_cast<_TCHAR>(n);
-	    break;
-	  }
-	  case _T('1'): case _T('2'): case _T('3'):
-	  case _T('4'): case _T('5'): case _T('6'): case _T('7'):
-	    if (i_doesUseRegexpBackReference)
-	      goto case_default;
-	    // fall through
-	  case _T('0'):
-	  {
-	    static const _TCHAR *octalchar = _T("01234567");
-	    static int octalvalue[] = { 0, 1, 2, 3, 4, 5 ,6, 7, };
-	    int n = 0;
-	    for (; i_str < end && *i_str; i_str ++)
-	      if (const _TCHAR *c = _tcschr(octalchar, *i_str))
-		n = n * 8 + octalvalue[c - octalchar];
-	      else
-		break;
-	    if (0 < n)
-	      *d++ = static_cast<_TCHAR>(n);
-	    break;
-	  }
-	  default:
-	  case_default:
-	    *d++ = _T('\\');
-	    if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
-	      *d++ = *i_str++;
-	    *d++ = *i_str++;
-	    break;
-	}
+        switch (*i_str)
+        {
+        case _T('a'): *d++ = _T('\x07'); i_str ++; break;
+          //case _T('b'): *d++ = _T('\b'); i_str ++; break;
+        case _T('e'): *d++ = _T('\x1b'); i_str ++; break;
+        case _T('f'): *d++ = _T('\f'); i_str ++; break;
+        case _T('n'): *d++ = _T('\n'); i_str ++; break;
+        case _T('r'): *d++ = _T('\r'); i_str ++; break;
+        case _T('t'): *d++ = _T('\t'); i_str ++; break;
+        case _T('v'): *d++ = _T('\v'); i_str ++; break;
+        //case _T('?'): *d++ = _T('\x7f'); i_str ++; break;
+        //case _T('_'): *d++ = _T(' '); i_str ++; break;
+        //case _T('\\'): *d++ = _T('\\'); i_str ++; break;
+        case _T('\''): *d++ = _T('\''); i_str ++; break;
+        case _T('"'): *d++ = _T('"'); i_str ++; break;
+        case _T('\\'): *d++ = _T('\\'); i_str ++; break;
+        case _T('c'): // control code, for example '\c[' is escape: '\x1b'
+          i_str ++;
+          if (i_str < end && *i_str)
+          {
+            static const _TCHAR *ctrlchar =
+              _T("@ABCDEFGHIJKLMNO")
+              _T("PQRSTUVWXYZ[\\]^_")
+              _T("@abcdefghijklmno")
+              _T("pqrstuvwxyz@@@@?");
+            static const _TCHAR *ctrlcode =
+              _T("\00\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17")
+              _T("\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37")
+              _T("\00\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17")
+              _T("\20\21\22\23\24\25\26\27\30\31\32\00\00\00\00\177");
+            if (const _TCHAR *c = _tcschr(ctrlchar, *i_str))
+              *d++ = ctrlcode[c - ctrlchar], i_str ++;
+          }
+          break;
+        case _T('x'): case _T('X'):
+        {
+          i_str ++;
+          static const _TCHAR *hexchar = _T("0123456789ABCDEFabcdef");
+          static int hexvalue[] = { 0, 1, 2, 3, 4, 5 ,6, 7, 8, 9,
+                        10, 11, 12, 13, 14, 15,
+                        10, 11, 12, 13, 14, 15, };
+          bool brace = false;
+          if (i_str < end && *i_str == _T('{'))
+          {
+            i_str ++;
+            brace = true;
+          }
+          int n = 0;
+          for (; i_str < end && *i_str; i_str ++)
+            if (const _TCHAR *c = _tcschr(hexchar, *i_str))
+              n = n * 16 + hexvalue[c - hexchar];
+            else
+              break;
+          if (i_str < end && *i_str == _T('}') && brace)
+            i_str ++;
+          if (0 < n)
+            *d++ = static_cast<_TCHAR>(n);
+          break;
+        }
+        case _T('1'): case _T('2'): case _T('3'):
+        case _T('4'): case _T('5'): case _T('6'): case _T('7'):
+          if (i_doesUseRegexpBackReference)
+            goto case_default;
+          // fall through
+        case _T('0'):
+        {
+          static const _TCHAR *octalchar = _T("01234567");
+          static int octalvalue[] = { 0, 1, 2, 3, 4, 5 ,6, 7, };
+          int n = 0;
+          for (; i_str < end && *i_str; i_str ++)
+            if (const _TCHAR *c = _tcschr(octalchar, *i_str))
+              n = n * 8 + octalvalue[c - octalchar];
+            else
+              break;
+          if (0 < n)
+            *d++ = static_cast<_TCHAR>(n);
+          break;
+        }
+        default:
+        case_default:
+          *d++ = _T('\\');
+          if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
+            *d++ = *i_str++;
+          *d++ = *i_str++;
+          break;
+        }
     }
   }
   *d =_T('\0');
@@ -364,9 +364,9 @@ tstring addSessionId(const _TCHAR *i_str)
     DWORD sessionId;
     tstring s(i_str);
     if (ProcessIdToSessionId(GetCurrentProcessId(), &sessionId)) {
-	_TCHAR buf[20];
-	_sntprintf(buf, NUMBER_OF(buf), _T("%u"), sessionId);
-	s += buf;
+      _TCHAR buf[20];
+      _sntprintf(buf, NUMBER_OF(buf), _T("%u"), sessionId);
+      s += buf;
     }
     return s;
 }
@@ -386,7 +386,7 @@ std::string guardRegexpFromMbcs(const char *i_str)
     {
       *p ++ = *i_str ++;
       if (strchr(".*?+(){}[]^$", *i_str))
-	*p ++ = '\\';
+        *p ++ = '\\';
     }
     *p ++ = *i_str ++;
   }
@@ -449,7 +449,7 @@ std::string to_UTF_8(const std::wstring &i_str)
   // 1110xxxx 10xxxxxx 10xxxxxx: 0800 - FFFF
 
   int size = 0;
-  
+
   // count needed buffer size
   for (std::wstring::const_iterator i = i_str.begin(); i != i_str.end(); ++ i)
   {
@@ -463,7 +463,7 @@ std::string to_UTF_8(const std::wstring &i_str)
 
   Array<char> result(size);
   int ri = 0;
-  
+
   // make UTF-8
   for (std::wstring::const_iterator i = i_str.begin(); i != i_str.end(); ++ i)
   {

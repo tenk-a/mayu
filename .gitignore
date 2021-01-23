@@ -1,0 +1,13 @@
+*~
+*.bak
+*.BAK
+*.tmp
+*.sav
+*.cache
+.deps
+err.txt
+config.log
+config.status
+config.h
+Makefile
+stamp-*

@@ -33,10 +33,10 @@
 void Engine::checkFocusWindow()
 {
   int count = 0;
-  
+
  restart:
   count ++;
-  
+
   HWND hwndFore = GetForegroundWindow();
   DWORD threadId = GetWindowThreadProcessId(hwndFore, NULL);
 
@@ -50,7 +50,7 @@ void Engine::checkFocusWindow()
         return;
 
       m_emacsEditKillLine.reset();
-      
+
       // erase dead thread
       if (!m_detachedThreadIds.empty())
       {
@@ -75,7 +75,7 @@ void Engine::checkFocusWindow()
         m_detachedThreadIds.erase
           (m_detachedThreadIds.begin(), m_detachedThreadIds.end());
       }
-      
+
       FocusOfThreads::iterator i = m_focusOfThreads.find(threadId);
       if (i != m_focusOfThreads.end())
       {
@@ -88,7 +88,7 @@ void Engine::checkFocusWindow()
             setCurrentKeymap(*m_currentFocusOfThread->m_keymaps.begin());
           m_hwndFocus = m_currentFocusOfThread->m_hwndFocus;
           checkShow(m_hwndFocus);
-	
+
           Acquire a(&m_log, 1);
           m_log << _T("FocusChanged") << std::endl;
           m_log << _T("\tHWND:\t")
@@ -105,7 +105,7 @@ void Engine::checkFocusWindow()
         }
       }
     }
-    
+
     _TCHAR className[GANA_MAX_ATOM_LENGTH];
     if (GetClassName(hwndFore, className, NUMBER_OF(className)))
     {
@@ -125,7 +125,7 @@ void Engine::checkFocusWindow()
       }
     }
   }
-  
+
   Acquire a(&m_cs);
   if (m_globalFocus.m_keymaps.empty())
   {
@@ -171,7 +171,7 @@ bool Engine::fixModifierKey(ModifiedKey *io_mkey, Keymap::AssignMode *o_am)
     // get modifier assignments (list of modifier keys)
     const Keymap::ModAssignments &ma =
       m_currentKeymap->getModAssignments(static_cast<Modifier::Type>(i));
-    
+
     for (Keymap::ModAssignments::const_iterator
            j = ma.begin(); j != ma.end(); ++ j)
       if (io_mkey->m_key == (*j).m_key) // is io_mkey a modifier ?
@@ -209,13 +209,13 @@ void Engine::outputToLog(const Key *i_key, const ModifiedKey &i_mkey,
           << static_cast<int>(i_key->getScanCodes()[i].m_scan)
           << std::dec << _T(" ");
   }
-  
+
   if (!i_mkey.m_key) // key corresponds to no phisical key
   {
     m_log << std::endl;
     return;
   }
-  
+
   m_log << _T("  ") << i_mkey << std::endl;
 }
 
@@ -281,7 +281,7 @@ Modifier Engine::getCurrentModifiers(Key *i_key, bool i_isPressed)
   for (int i = Modifier::Type_Mod0; i <= Modifier::Type_Mod9; ++ i)
     cmods.press(static_cast<Modifier::Type>(i),
                 isPressed(static_cast<Modifier::Type>(i)));
-  
+
   return cmods;
 }
 
@@ -299,7 +299,7 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
     }
 
   bool isAlreadyReleased = false;
-    
+
   if (!isEvent)
   {
     if (i_doPress && !i_key->m_isPressedOnWin32)
@@ -312,12 +312,12 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
         isAlreadyReleased = true;
     }
     i_key->m_isPressedOnWin32 = i_doPress;
-    
+
     if (i_isByAssign)
       i_key->m_isPressedByAssign = i_doPress;
 
     Key *sync = m_setting->m_keyboard.getSyncKey();
-    
+
     if (!isAlreadyReleased || i_key == sync)
     {
 #if defined(WIN32) || defined(__APPLE__)
@@ -339,7 +339,7 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
 #elif defined(__APPLE__)
         write(m_device, &kid, sizeof(kid));
 #endif
-				
+
       }
 #elif defined(__linux__)
       const ScanCode *sc = i_key->getScanCodes();
@@ -354,7 +354,7 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
       m_lastGeneratedKey = i_doPress ? i_key : NULL;
     }
   }
-  
+
   {
     Acquire a(&m_log, 1);
     m_log << _T("\t\t    =>\t");
@@ -449,7 +449,7 @@ void Engine::generateModifierEvents(const Modifier &i_mod)
             break;
           }
       }
-      
+
       for (Keyboard::Mods::iterator j = mods.begin(); j != mods.end(); ++ j)
       {
         if ((*j)->m_isPressedOnWin32)
@@ -457,7 +457,7 @@ void Engine::generateModifierEvents(const Modifier &i_mod)
       }
     }
   }
-  
+
   {
     Acquire a(&m_log, 1);
     m_log << _T("\t\t}") << std::endl;
@@ -519,12 +519,12 @@ void Engine::generateActionEvents(const Current &i_c, const Action *i_a,
 
       if (!is_down && !is_up)
         break;
-      
+
       {
         Acquire a(&m_log, 1);
         m_log << _T("\t\t     >\t") << af->m_functionData;
       }
-      
+
       FunctionParam param;
       param.m_isPressed = i_doPress;
 #if defined(WIN32)
@@ -533,12 +533,12 @@ void Engine::generateActionEvents(const Current &i_c, const Action *i_a,
       param.m_c = i_c;
       param.m_doesNeedEndl = true;
       param.m_af = af;
-      
+
       param.m_c.m_mkey.m_modifier.on(Modifier::Type_Up, !i_doPress);
       param.m_c.m_mkey.m_modifier.on(Modifier::Type_Down, i_doPress);
 
       af->m_functionData->exec(this, &param);
-      
+
       if (param.m_doesNeedEndl)
       {
         Acquire a(&m_log, 1);
@@ -621,7 +621,7 @@ void Engine::beginGeneratingKeyboardEvents(
 
   bool isPhysicallyPressed
     = cnew.m_mkey.m_modifier.isPressed(Modifier::Type_Down);
-  
+
   // substitute
   ModifiedKey mkey = m_setting->m_keyboard.searchSubstitute(cnew.m_mkey);
   if (mkey.m_key)
@@ -645,22 +645,22 @@ void Engine::beginGeneratingKeyboardEvents(
         cnew.m_mkey.m_modifier.press(
                                      type, i_c.m_mkey.m_modifier.isPressed(type));
     }
-    
+
     {
       Acquire a(&m_log, 1);
       m_log << _T("* substitute") << std::endl;
     }
     outputToLog(mkey.m_key, cnew.m_mkey, 1);
   }
-  
+
   // for prefix key
   const Keymap *tmpKeymap = m_currentKeymap;
-  if (i_isModifier || !m_isPrefix) ; 
-  else if (isPhysicallyPressed)			// when (3)
+  if (i_isModifier || !m_isPrefix) ;
+  else if (isPhysicallyPressed)         // when (3)
     m_isPrefix = false;
-  else if (!isPhysicallyPressed)		// when (2)
+  else if (!isPhysicallyPressed)        // when (2)
     m_currentKeymap = m_currentFocusOfThread->m_keymaps.front();
-  
+
 #if defined(WIN32)
   // for m_emacsEditKillLine function
   m_emacsEditKillLine.m_doForceReset = !i_isModifier;
@@ -673,7 +673,7 @@ void Engine::beginGeneratingKeyboardEvents(
   generateKeyboardEvents(cnew);
   if (!isPhysicallyPressed)
     generateEvents(cnew, cnew.m_keymap, &Event::after_key_up);
-      
+
 #if defined(WIN32)
   // for m_emacsEditKillLine function
   if (m_emacsEditKillLine.m_doForceReset)
@@ -683,9 +683,9 @@ void Engine::beginGeneratingKeyboardEvents(
   // for prefix key
   if (i_isModifier)
     ;
-  else if (!m_isPrefix)				// when (1), (4)
+  else if (!m_isPrefix)             // when (1), (4)
     m_currentKeymap = m_currentFocusOfThread->m_keymaps.front();
-  else if (!isPhysicallyPressed)		// when (2)
+  else if (!isPhysicallyPressed)        // when (2)
     m_currentKeymap = tmpKeymap;
 }
 
@@ -717,14 +717,14 @@ void Engine::keyboardHandler()
   // TODO:
 #  elif defined(__APPLE__)
 #endif
-    
+
   // loop
   Key key;
   while (!m_doForceTerminate)
   {
 #if defined(WIN32)
     KEYBOARD_INPUT_DATA kid;
-    
+
     DWORD len;
 #if defined(_WINNT)
     {
@@ -735,17 +735,17 @@ void Engine::keyboardHandler()
     {
       if (GetLastError() != ERROR_IO_PENDING)
         continue;
-      
+
       HANDLE handles[] = { m_readEvent, m_interruptThreadEvent };
       switch (WaitForMultipleObjects(NUMBER_OF(handles), &handles[0],
                                      FALSE, INFINITE))
       {
-      case WAIT_OBJECT_0:			// m_readEvent
+      case WAIT_OBJECT_0:           // m_readEvent
         if (!GetOverlappedResult(m_device, &m_ol, &len, FALSE))
           continue;
         break;
-	  
-      case WAIT_OBJECT_0 + 1:			// m_interruptThreadEvent
+
+      case WAIT_OBJECT_0 + 1:           // m_interruptThreadEvent
         CancelIo(m_device);
         switch (m_interruptThreadReason) {
         default: {
@@ -755,10 +755,10 @@ void Engine::keyboardHandler()
                 << m_interruptThreadReason << std::endl;
           break;
         }
-	      
+
         case InterruptThreadReason_Terminate:
           goto break_while;
-	      
+
         case InterruptThreadReason_Pause: {
           CHECK_TRUE( SetEvent(m_threadEvent) );
           while (WaitForMultipleObjects(1, &m_interruptThreadEvent,
@@ -780,7 +780,7 @@ void Engine::keyboardHandler()
         }
         }
         break;
-	  
+
       default:
         ASSERT( false );
         continue;
@@ -802,7 +802,7 @@ void Engine::keyboardHandler()
       Acquire a(&m_log, 1);
       m_log << _T("begin read();") << std::endl;
     }
-#if defined(__linux__)	
+#if defined(__linux__)
     struct input_event ievent;
     if (!receive_keyboard_event(&ievent))
     {
@@ -838,7 +838,7 @@ void Engine::keyboardHandler()
             << std::endl;
       break;
     }
-    // 		cout << hex << "MakeCode = 0x" << kid.MakeCode << ", Flags" << kid.Flags << endl;
+    //      cout << hex << "MakeCode = 0x" << kid.MakeCode << ", Flags" << kid.Flags << endl;
 #ifdef DEBUG
     if (kid.MakeCode == 0x71) // Pause
     {
@@ -853,11 +853,11 @@ void Engine::keyboardHandler()
     }
 #else
 #  error
-#endif	// defined(WIN32)
+#endif  // defined(WIN32)
 
-    if (!m_setting ||	// m_setting has not been loaded
-        !m_isEnabled)	// disabled
-    {						// 設定ファイルが読み込まれていないか、Disableの時は受けたものをただ入力するだけ
+    if (!m_setting ||   // m_setting has not been loaded
+        !m_isEnabled)   // disabled
+    {                       // 設定ファイルが読み込まれていないか、Disableの時は受けたものをただ入力するだけ
       if (m_isLogMode)
       {
         Key key;
@@ -886,7 +886,7 @@ void Engine::keyboardHandler()
       updateLastPressedKey(NULL);
       continue;
     }
-    
+
     Acquire a(&m_cs);
 
     if (!m_currentFocusOfThread ||
@@ -914,11 +914,11 @@ void Engine::keyboardHandler()
       updateLastPressedKey(NULL);
       continue;
     }
-    
+
     Current c;
     c.m_keymap = m_currentKeymap;
     c.m_i = m_currentFocusOfThread->m_keymaps.begin();
-    
+
     // search key
 #if defined(WIN32) || defined(__APPLE__)
     key.addScanCode(ScanCode(kid.MakeCode, kid.Flags));
@@ -944,7 +944,7 @@ void Engine::keyboardHandler()
         -- m_currentKeyPressCount;
       c.m_mkey.m_key->m_isPressed = isPhysicallyPressed;
     }
-    
+
     // create modifiers
     c.m_mkey.m_modifier = getCurrentModifiers(c.m_mkey.m_key,
                                               isPhysicallyPressed);
@@ -961,7 +961,7 @@ void Engine::keyboardHandler()
         c.m_mkey.m_modifier = modifier;
       }
     }
-    
+
     if (m_isLogMode)
       outputToLog(&key, c.m_mkey, 0);
     else if (am == Keymap::AM_true)
@@ -986,7 +986,7 @@ void Engine::keyboardHandler()
       outputToLog(&key, c.m_mkey, 1);
       if (isPhysicallyPressed)
       {
-        if (am == Keymap::AM_oneShotRepeatable	// the key is repeating
+        if (am == Keymap::AM_oneShotRepeatable  // the key is repeating
             && m_oneShotKey.m_key == c.m_mkey.m_key)
         {
           if (m_oneShotRepeatableRepeatCount <
@@ -1011,7 +1011,7 @@ void Engine::keyboardHandler()
           cnew.m_mkey.m_modifier.off(Modifier::Type_Up);
           cnew.m_mkey.m_modifier.on(Modifier::Type_Down);
           beginGeneratingKeyboardEvents(cnew, false);
-	  
+
           cnew = c;
           cnew.m_mkey.m_modifier = m_oneShotKey.m_modifier;
           cnew.m_mkey.m_modifier.on(Modifier::Type_Up);
@@ -1034,7 +1034,7 @@ void Engine::keyboardHandler()
     {
       outputToLog(&key, c.m_mkey, 0);
     }
-    
+
     // if counter is zero, reset modifiers and keys on win32
     if (m_currentKeyPressCount <= 0)
     {
@@ -1049,7 +1049,7 @@ void Engine::keyboardHandler()
       m_currentKeyPressCountOnWin32 = 0;
       m_oneShotKey.m_key = NULL;
     }
-    
+
     key.initialize();
     updateLastPressedKey(isPhysicallyPressed ? c.m_mkey.m_key : NULL);
   }
@@ -1063,45 +1063,57 @@ void Engine::keyboardHandler()
 #  elif defined(__APPLE__)
 #endif
 }
-  
+
 
 Engine::Engine(tomsgstream &i_log)
   :
+  m_cs(),
 #if defined(WIN32)
   m_hwndAssocWindow(NULL),
   m_device(INVALID_HANDLE_VALUE),
   m_threadEvent(NULL),
   m_eSync(NULL),
   m_hwndFocus(NULL),
-  m_device(-1),
 #if defined(_WINNT)
   m_readEvent(NULL),
   m_interruptThreadEvent(NULL),
 #endif // _WINNT
-#elif defined(__linux__) || defined(__APPLE__)
+#elif defined(__linux__)
+#elif defined(__APPLE__)
+  m_device(-1),
 #endif
   m_setting(NULL),
-  m_didMayuStartDevice(false),
   m_mayudVersion(_T("unknown")),
+  m_didMayuStartDevice(false),
   m_doForceTerminate(false),
   m_isLogMode(false),
   m_isEnabled(true),
   m_isSynchronizing(false),
   m_generateKeyboardEventsRecursionGuard(0),
+  m_currentLock(),
   m_currentKeyPressCount(0),
   m_currentKeyPressCountOnWin32(0),
   m_lastGeneratedKey(NULL),
+  m_oneShotKey(),
   m_oneShotRepeatableRepeatCount(0),
   m_isPrefix(false),
+  m_doesIgnoreModifierForPrefix(false),
+  m_doesEditNextModifier(false),
+  m_modifierForNextKey(),
   m_currentKeymap(NULL),
+  m_focusOfThreads(),
   m_currentFocusOfThread(NULL),
+  m_globalFocus(),
+  m_detachedThreadIds(),
   m_afShellExecute(NULL),
+  m_helpMessage(),
+  m_helpTitle(),
   m_variable(0),
   m_log(i_log)
 {
   for (size_t i = 0; i < NUMBER_OF(m_lastPressedKey); ++ i)
     m_lastPressedKey[i] = NULL;
-    
+
   // set default lock state
   for (int i = 0; i < Modifier::Type_end; ++ i)
     m_currentLock.dontcare(static_cast<Modifier::Type>(i));
@@ -1115,7 +1127,7 @@ Engine::Engine(tomsgstream &i_log)
     throw ErrorMessage() << _T("error: Failed to open special files.");
 #endif
   }
-  
+
 #if defined(WIN32)
   {
     TCHAR versionBuf[256];
@@ -1124,7 +1136,7 @@ Engine::Engine(tomsgstream &i_log)
     if (DeviceIoControl(m_device, IOCTL_MAYU_GET_VERSION, NULL, 0,
                         versionBuf, sizeof(versionBuf), &length, NULL)
         && length
-        && length < sizeof(versionBuf))			// fail safe
+        && length < sizeof(versionBuf))         // fail safe
       m_mayudVersion = tstring(versionBuf, length / 2);
   }
   // create event for sync
@@ -1173,7 +1185,7 @@ bool Engine::open()
     }
     CloseServiceHandle(hscm);
   }
-  
+
   // open mayu m_device
   m_device = CreateFile(MAYU_DEVICE_FILE_NAME, GENERIC_READ | GENERIC_WRITE,
                         0, NULL, OPEN_EXISTING,
@@ -1218,7 +1230,7 @@ void Engine::start()
 {
 #if defined(WIN32)
   CHECK_TRUE( m_threadEvent = CreateEvent(NULL, FALSE, FALSE, NULL) );
-  
+
 #if defined(_WINNT)
   CHECK_TRUE( m_readEvent = CreateEvent(NULL, FALSE, FALSE, NULL) );
   CHECK_TRUE( m_interruptThreadEvent = CreateEvent(NULL, FALSE, FALSE, NULL) );
@@ -1226,7 +1238,7 @@ void Engine::start()
   m_ol.OffsetHigh = 0;
   m_ol.hEvent = m_readEvent;
 #endif // _WINNT
-  
+
   CHECK_TRUE( 0 <= _beginthread(keyboardHandler, 0, this) );
   CHECK( WAIT_OBJECT_0 ==, WaitForSingleObject(m_threadEvent, INFINITE) );
 #elif defined(__linux__)
@@ -1259,7 +1271,7 @@ void Engine::stop()
       //DWORD buf;
       //M_DeviceIoControl(m_device, IOCTL_MAYU_DETOUR_CANCEL,
       //                &buf, sizeof(buf), &buf, sizeof(buf), &buf, NULL);
-      
+
       // wait for message handler thread terminate
     } while (WaitForSingleObject(m_threadEvent, 100) != WAIT_OBJECT_0);
     CHECK_TRUE( CloseHandle(m_threadEvent) );
@@ -1282,7 +1294,7 @@ void Engine::stop()
         CloseServiceHandle(hscm);
       }
     }
-    
+
     CHECK_TRUE( CloseHandle(m_readEvent) );
     m_readEvent = NULL;
     CHECK_TRUE( CloseHandle(m_interruptThreadEvent) );
@@ -1292,7 +1304,7 @@ void Engine::stop()
 #elif defined(__linux__)
   // TODO:
 #  elif defined(__APPLE__)
-#endif 
+#endif
 }
 
 bool Engine::pause()
@@ -1320,7 +1332,7 @@ bool Engine::resume()
 #if defined(_WINNT)
   if (m_device == INVALID_HANDLE_VALUE) {
     if (!open()) {
-      return false;				// FIXME
+      return false;             // FIXME
     }
     do {
       m_interruptThreadReason = InterruptThreadReason_Resume;
@@ -1341,7 +1353,7 @@ Engine::~Engine()
 #if defined(WIN32)
   CHECK_TRUE( CloseHandle(m_eSync) );
 #endif
-  
+
   // close m_device
   close();
 #if defined(_WINNT)
@@ -1379,7 +1391,7 @@ bool Engine::setSetting(Setting *i_setting)
         m_lastPressedKey[i] =
           i_setting->m_keyboard.searchKey(*m_lastPressedKey[i]);
   }
-  
+
   m_setting = i_setting;
 #if defined(WIN32)
   g_hookData->m_correctKanaLockHandling = m_setting->m_correctKanaLockHandling;
@@ -1465,7 +1477,7 @@ void Engine::checkShow(HWND i_hwnd)
           break;
         }
       }
-    }  
+    }
     i_hwnd = GetParent(i_hwnd);
   }
   setShow(isMDIMaximized, isMDIMinimized, true);
@@ -1474,7 +1486,7 @@ void Engine::checkShow(HWND i_hwnd)
 
 
 // focus
-bool Engine::setFocus(HWND i_hwndFocus, DWORD i_threadId, 
+bool Engine::setFocus(HWND i_hwndFocus, DWORD i_threadId,
                       const tstringi &i_className, const tstringi &i_titleName,
                       bool i_isConsole)
 {
@@ -1499,7 +1511,7 @@ bool Engine::setFocus(HWND i_hwndFocus, DWORD i_threadId,
         }
     } while (i != m_detachedThreadIds.end());
   }
-  
+
   FocusOfThread *fot;
   FocusOfThreads::iterator i = m_focusOfThreads.find(i_threadId);
   if (i != m_focusOfThreads.end())
@@ -1522,7 +1534,7 @@ bool Engine::setFocus(HWND i_hwndFocus, DWORD i_threadId,
   fot->m_isConsole = i_isConsole;
   fot->m_className = i_className;
   fot->m_titleName = i_titleName;
-  
+
   if (m_setting)
   {
     m_setting->m_keymaps.searchWindow(&fot->m_keymaps,
@@ -1634,13 +1646,13 @@ void Engine::commandNotify(
   if (!hf)
     return;
 
-  if (GetWindowThreadProcessId(hf, NULL) == 
+  if (GetWindowThreadProcessId(hf, NULL) ==
       GetWindowThreadProcessId(m_hwndAssocWindow, NULL))
-    return;	// inhibit the investigation of MADO TSUKAI NO YUUTSU
+    return; // inhibit the investigation of MADO TSUKAI NO YUUTSU
 
   const _TCHAR *target = NULL;
   int number_target = 0;
-  
+
   if (i_hwnd == hf)
     target = _T("ToItself");
   else if (i_hwnd == GetParent(hf))

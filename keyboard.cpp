@@ -44,7 +44,7 @@ bool Key::operator==(const tstringi &i_name) const
   return std::find(m_names.begin(), m_names.end(), i_name) != m_names.end();
 }
 
-  
+
 // is the scan code of this key ?
 bool Key::isSameScanCode(const Key &i_key) const
 {
@@ -84,7 +84,7 @@ Modifier::Modifier()
   {
     Type_Up, Type_Down, Type_Repeat,
     Type_ImeLock, Type_ImeComp, Type_NumLock, Type_CapsLock, Type_ScrollLock,
-	Type_KanaLock,
+    Type_KanaLock,
     Type_Maximized, Type_Minimized, Type_MdiMaximized, Type_MdiMinimized,
     Type_Lock0, Type_Lock1, Type_Lock2, Type_Lock3, Type_Lock4,
     Type_Lock5, Type_Lock6, Type_Lock7, Type_Lock8, Type_Lock9,
@@ -100,11 +100,15 @@ void Modifier::add(const Modifier &i_m)
   for (int i = 0; i < Type_end; ++ i)
   {
     if (isDontcare(static_cast<Modifier::Type>(i)))
-		if (!i_m.isDontcare(static_cast<Modifier::Type>(i)))
-		  if (i_m.isPressed(static_cast<Modifier::Type>(i)))
-			  press(static_cast<Modifier::Type>(i));
-		  else
-			  release(static_cast<Modifier::Type>(i));
+    {
+        if (!i_m.isDontcare(static_cast<Modifier::Type>(i)))
+        {
+          if (i_m.isPressed(static_cast<Modifier::Type>(i)))
+              press(static_cast<Modifier::Type>(i));
+          else
+              release(static_cast<Modifier::Type>(i));
+        }
+    }
   }
 }
 
@@ -116,7 +120,7 @@ tostream &operator<<(tostream &i_ost, const Modifier &i_m)
     Modifier::Type m_mt;
     const _TCHAR *m_symbol;
   };
-  
+
   const static Mods mods[] =
   {
     { Modifier::Type_Up, _T("U-") }, { Modifier::Type_Down, _T("D-") },
@@ -165,49 +169,49 @@ tostream &operator<<(tostream &i_ost, Modifier::Type i_type)
 {
   const _TCHAR *modNames[] =
   {
-    _T("Shift"), 
-    _T("Alt"), 
-    _T("Control"), 
-    _T("Windows"), 
-    _T("Up"), 
-    _T("Down"), 
-    _T("Repeat"), 
-    _T("ImeLock"), 
-    _T("ImeComp"), 
-    _T("NumLock"), 
-    _T("CapsLock"), 
-    _T("ScrollLock"), 
-    _T("KanaLock"), 
-    _T("Maximized"), 
-    _T("Minimized"), 
-    _T("MdiMaximized"), 
-    _T("MdiMinimized"), 
-    _T("Mod0"), 
-    _T("Mod1"), 
-    _T("Mod2"), 
-    _T("Mod3"), 
-    _T("Mod4"), 
-    _T("Mod5"), 
-    _T("Mod6"), 
-    _T("Mod7"), 
-    _T("Mod8"), 
-    _T("Mod9"), 
-    _T("Lock0"), 
-    _T("Lock1"), 
-    _T("Lock2"), 
-    _T("Lock3"), 
-    _T("Lock4"), 
-    _T("Lock5"), 
-    _T("Lock6"), 
-    _T("Lock7"), 
-    _T("Lock8"), 
-    _T("Lock9"), 
+    _T("Shift"),
+    _T("Alt"),
+    _T("Control"),
+    _T("Windows"),
+    _T("Up"),
+    _T("Down"),
+    _T("Repeat"),
+    _T("ImeLock"),
+    _T("ImeComp"),
+    _T("NumLock"),
+    _T("CapsLock"),
+    _T("ScrollLock"),
+    _T("KanaLock"),
+    _T("Maximized"),
+    _T("Minimized"),
+    _T("MdiMaximized"),
+    _T("MdiMinimized"),
+    _T("Mod0"),
+    _T("Mod1"),
+    _T("Mod2"),
+    _T("Mod3"),
+    _T("Mod4"),
+    _T("Mod5"),
+    _T("Mod6"),
+    _T("Mod7"),
+    _T("Mod8"),
+    _T("Mod9"),
+    _T("Lock0"),
+    _T("Lock1"),
+    _T("Lock2"),
+    _T("Lock3"),
+    _T("Lock4"),
+    _T("Lock5"),
+    _T("Lock6"),
+    _T("Lock7"),
+    _T("Lock8"),
+    _T("Lock9"),
   };
 
   size_t i = static_cast<size_t>(i_type);
   if (0 <= i && i < NUMBER_OF(modNames))
     i_ost << modNames[i];
-  
+
   return i_ost;
 }
 
@@ -291,7 +295,7 @@ void Keyboard::addAlias(const tstringi &i_aliasName, Key *i_key)
 
 // add substitute
 void Keyboard::addSubstitute(const ModifiedKey &i_mkeyFrom,
-			     const ModifiedKey &i_mkeyTo)
+                 const ModifiedKey &i_mkeyTo)
 {
   m_substitutes.push_front(Substitute(i_mkeyFrom, i_mkeyTo));
 }
@@ -329,7 +333,7 @@ Key *Keyboard::searchPrefixKey(const Key &i_key)
   return NULL;
 }
 
-  
+
 // search a key by name
 Key *Keyboard::searchKey(const tstringi &i_name)
 {
@@ -357,9 +361,9 @@ Key *Keyboard::searchKeyByNonAliasName(const tstringi &i_name)
 ModifiedKey Keyboard::searchSubstitute(const ModifiedKey &i_mkey)
 {
   for (Substitutes::const_iterator
-	 i = m_substitutes.begin(); i != m_substitutes.end(); ++ i)
+     i = m_substitutes.begin(); i != m_substitutes.end(); ++ i)
     if (i->m_mkeyFrom.m_key == i_mkey.m_key &&
-	i->m_mkeyFrom.m_modifier.doesMatch(i_mkey.m_modifier))
+    i->m_mkeyFrom.m_modifier.doesMatch(i_mkey.m_modifier))
       return i->m_mkeyTo;
-  return ModifiedKey();				// not found (.m_mkey is NULL)
+  return ModifiedKey();             // not found (.m_mkey is NULL)
 }

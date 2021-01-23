@@ -14,13 +14,12 @@ extern _TCHAR** __targv;
 
 class Mayu
 {
-  Engine m_engine;				/// engine
-
-  tomsgstream m_log;				/** log stream (output to log
+  tomsgstream m_log;                /** log stream (output to log
                                                     dialog's edit) */
-  
-  Setting *m_setting;				/// current setting
-  time_t m_startTime;				/// mayu started at ...
+  Engine m_engine;                  /// engine
+
+  Setting *m_setting;               /// current setting
+  time_t m_startTime;               /// mayu started at ...
 public:
 
   /// load setting
@@ -71,8 +70,9 @@ public:
 #if defined(__linux__) || defined(__APPLE__)
     m_log(),
 #endif
+    m_engine(m_log),
     m_setting(NULL),
-    m_engine(m_log)
+    m_startTime(0)
   {
 #ifdef _DEBUG
     m_log.setDebugLevel(1);
@@ -86,7 +86,7 @@ public:
     for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++ i)
       if (SetCurrentDirectory(i->c_str()))
         break;
-#endif  
+#endif
   }
 
   ///
@@ -94,14 +94,14 @@ public:
   {
     // stop keyboard handler thread
     m_engine.stop();
-    
+
     // remove setting;
     delete m_setting;
   }
-	
+
   void taskLoop()
   {
     m_engine.start();
   }
-	
+
 };

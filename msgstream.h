@@ -8,7 +8,7 @@
 #  include "misc.h"
 #  include "stringtool.h"
 #  include "multithread.h"
-
+#  include <unistd.h>
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // msgstream
@@ -18,7 +18,7 @@
     <p>Before writing to omsgstream, you must acquire lock by calling
     <code>acquire()</code>.  Then after completion of writing, you
     must call <code>release()</code>.</p>
-    
+
     <p>Omsgbuf calls <code>PostMessage(hwnd, messageid, 0,
     (LPARAM)omsgbuf)</code> to notify that string is ready to get.
     When the window (<code>hwnd</code>) get the message, you can get
@@ -35,48 +35,48 @@ template<class T, size_t SIZE = 1024,
 class basic_msgbuf : public std::basic_streambuf<T, TR>, public SyncObject
 {
 public:
-  typedef std::basic_string<T, TR, A> String;	/// 
-  typedef std::basic_streambuf<T, TR> Super;	///
-  
+  typedef std::basic_string<T, TR, A> String;   ///
+  typedef std::basic_streambuf<T, TR> Super;    ///
+
 private:
 #if defined(WIN32)
-  HWND m_hwnd;					/** window handle for
-						    notification */
+  HWND m_hwnd;                  /** window handle for
+                            notification */
 #elif defined(__linux__) || defined(__APPLE__)
 // TODO:ファイル出力
-	int m_file;					// file discriptor
+    int m_file;                 // file discriptor
 #endif
-  UINT m_messageId;				/// messageid for notification
-  T *m_buf;					/// for streambuf
-  String m_str;					/// for notification
-  CriticalSection m_cs;				/// lock
-  A m_allocator;				/// allocator
-  
+  UINT m_messageId;             /// messageid for notification
+  T *m_buf;                 /// for streambuf
+  String m_str;                 /// for notification
+  CriticalSection m_cs;             /// lock
+  A m_allocator;                /// allocator
+
   /** debug level.
       if ( m_msgDebugLevel &lt;= m_debugLevel ), message is displayed
   */
   int m_debugLevel;
-  int m_msgDebugLevel;				///
+  int m_msgDebugLevel;              ///
 
 private:
-  basic_msgbuf(const basic_msgbuf &);		/// disable copy constructor
+  basic_msgbuf(const basic_msgbuf &);       /// disable copy constructor
 
 public:
   ///
   basic_msgbuf(
-#if defined(WIN32)			   
-			   UINT i_messageId,
-			   HWND i_hwnd = 0
+#if defined(WIN32)
+               UINT i_messageId,
+               HWND i_hwnd = 0
 #elif defined(__linux__) || defined(__APPLE__)
-			   int i_file
+               int i_file
 #endif
-			   )
+               )
     :
 #if defined(WIN32)
-	  m_hwnd(i_hwnd),
+      m_hwnd(i_hwnd),
       m_messageId(i_messageId),
 #elif defined(__linux__) || defined(__APPLE__)
-	  m_file(i_file),
+      m_file(i_file),
 #endif
       m_buf(m_allocator.allocate(SIZE, 0)),
       m_debugLevel(0),
@@ -85,14 +85,14 @@ public:
     ASSERT(m_buf);
     this->setp(m_buf, m_buf + SIZE);
   }
-  
+
   ///
   ~basic_msgbuf()
   {
     sync();
     m_allocator.deallocate(m_buf, SIZE);
   }
-  
+
   /// attach/detach a window
 #if defined(WIN32)
   basic_msgbuf* attach(HWND i_hwnd)
@@ -104,7 +104,7 @@ public:
       PostMessage(m_hwnd, m_messageId, 0, (LPARAM)this);
     return this;
   }
-  
+
   ///
   basic_msgbuf* detach()
   {
@@ -117,47 +117,47 @@ public:
   basic_msgbuf* attach(int i_file)
   {
     Acquire a(&m_cs);
-	ASSERT( !m_file && i_file );
-	m_file = i_file;
-	if (!m_str.empty())
-	{
-// 		fputs(m_file, m_str.c_str());
-		write(m_file, m_str.c_str(), m_str.size() + sizeof(_T('\n')));
-		releaseString();
-	}
+    ASSERT( !m_file && i_file );
+    m_file = i_file;
+    if (!m_str.empty())
+    {
+//      fputs(m_file, m_str.c_str());
+        write(m_file, m_str.c_str(), m_str.size() + sizeof(_T('\n')));
+        releaseString();
+    }
     return this;
   }
-  
+
   ///
   basic_msgbuf* detach()
   {
     Acquire a(&m_cs);
-	m_file = -1;
+    m_file = -1;
     return this;
   }
 #endif
-  
+
 #if defined(WIN32)
   /// get window handle
   HWND getHwnd() const { return m_hwnd; }
-  
+
   /// is a window attached ?
   int is_open() const { return !!m_hwnd; }
 #elif defined(__linux__) || defined(__APPLE__)
   /// get file descriptor
   int getFile() const { return m_file; }
-  
+
   /// is a window attached ?
   int is_open() const { return m_file != -1; }
 #endif
-  
+
   /// acquire string and release the string
   const String &acquireString()
   {
     m_cs.acquire();
     return m_str;
   }
-  
+
   ///
   void releaseString()
   {
@@ -170,16 +170,16 @@ public:
   {
     m_debugLevel = i_debugLevel;
   }
-  
+
   ///
   int getDebugLevel() const { return m_debugLevel; }
-  
+
   // for stream
   typename Super::int_type overflow(typename Super::int_type i_c = TR::eof())
   {
     if (sync() == TR::eof()) // sync before new buffer created below
       return TR::eof();
-    
+
     if (i_c != TR::eof())
     {
       *basic_streambuf<T, TR>::pptr() = TR::to_char_type(i_c);
@@ -188,7 +188,7 @@ public:
     }
     return TR::not_eof(i_c); // return something other than EOF if successful
   }
-  
+
   // for stream
   int sync()
   {
@@ -197,26 +197,26 @@ public:
     T *i;
     for (i = begin; i < end; ++ i)
       if (_istlead(*i))
-		  ++ i;
+          ++ i;
     if (i == end)
     {
-		if (m_msgDebugLevel <= m_debugLevel)
-			m_str += String(begin, end - begin);
-		this->setp(m_buf, m_buf + SIZE);
+        if (m_msgDebugLevel <= m_debugLevel)
+            m_str += String(begin, end - begin);
+        this->setp(m_buf, m_buf + SIZE);
     }
     else // end < i
     {
-		if (m_msgDebugLevel <= m_debugLevel)
-			m_str += String(begin, end - begin - 1);
-		m_buf[0] = end[-1];
-		this->setp(m_buf, m_buf + SIZE);
-		basic_streambuf<T, TR>::pbump(1);
+        if (m_msgDebugLevel <= m_debugLevel)
+            m_str += String(begin, end - begin - 1);
+        m_buf[0] = end[-1];
+        this->setp(m_buf, m_buf + SIZE);
+        basic_streambuf<T, TR>::pbump(1);
     }
     return TR::not_eof(0);
   }
 
   // sync object
-  
+
   /// begin writing
   virtual void acquire()
   {
@@ -229,7 +229,7 @@ public:
     m_cs.acquire();
     m_msgDebugLevel = i_msgDebugLevel;
   }
-  
+
   /// end writing
   virtual void release()
   {
@@ -238,10 +238,10 @@ public:
       PostMessage(m_hwnd, m_messageId, 0, reinterpret_cast<LPARAM>(this));
  #elif defined(__linux__) || defined(__APPLE__)
     if (!m_str.empty())
-	{
-		write(m_file, m_str.c_str(), m_str.size() + sizeof(_T('\n')));
-		releaseString();
-	}
+    {
+        write(m_file, m_str.c_str(), m_str.size() + sizeof(_T('\n')));
+        releaseString();
+    }
 #endif
     m_msgDebugLevel = m_debugLevel;
     m_cs.release();
@@ -255,37 +255,37 @@ template<class T, size_t SIZE = 1024,
 class basic_omsgstream : public std::basic_ostream<T, TR>, public SyncObject
 {
 public:
-  typedef std::basic_ostream<T, TR> Super;	/// 
-  typedef basic_msgbuf<T, SIZE, TR, A> StreamBuf; /// 
-  typedef std::basic_string<T, TR, A> String;	/// 
-  
+  typedef std::basic_ostream<T, TR> Super;  ///
+  typedef basic_msgbuf<T, SIZE, TR, A> StreamBuf; ///
+  typedef std::basic_string<T, TR, A> String;   ///
+
 private:
-  StreamBuf m_streamBuf;			/// 
+  StreamBuf m_streamBuf;            ///
 
 public:
   ///
   explicit basic_omsgstream(
-#if defined(WIN32)							
-							UINT i_messageId
-							, HWND i_hwnd = 0
+#if defined(WIN32)
+                            UINT i_messageId
+                            , HWND i_hwnd = 0
 #endif
-							)
+                            )
     : Super(&m_streamBuf), m_streamBuf(
 #if defined(WIN32)
-									   i_messageId
-									   , i_hwnd
+                                       i_messageId
+                                       , i_hwnd
 #elif defined(__linux__) || defined(__APPLE__)
-									   2 // stdout
+                                       2 // stdout
 #endif
-									   )
+                                       )
   {
   }
-  
+
   ///
   virtual ~basic_omsgstream()
   {
   }
-  
+
   ///
   StreamBuf *rdbuf() const
   {
@@ -330,7 +330,7 @@ public:
   {
     m_streamBuf.setDebugLevel(i_debugLevel);
   }
-  
+
   ///
   int getDebugLevel() const
   {
@@ -342,7 +342,7 @@ public:
   {
     return m_streamBuf.acquireString();
   }
-  
+
   ///
   void releaseString()
   {
@@ -350,19 +350,19 @@ public:
   }
 
   // sync object
-  
+
   /// begin writing
   virtual void acquire()
   {
     m_streamBuf.acquire();
   }
-  
+
   /// begin writing
   virtual void acquire(int i_msgDebugLevel)
   {
     m_streamBuf.acquire(i_msgDebugLevel);
   }
-  
+
   /// end writing
   virtual void release()
   {
