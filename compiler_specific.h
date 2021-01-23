@@ -60,8 +60,8 @@ extern wchar_t **_wargv;
 
 extern "C"
 {
-	int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance,
-						 LPTSTR i_lpszCmdLine, int i_nCmdShow);
+  int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance,
+		       LPTSTR i_lpszCmdLine, int i_nCmdShow);
 }
 
 #    define stati64_t stati64
@@ -71,14 +71,28 @@ extern "C"
 // Cygwin 1.1 (gcc 2.95.2)
 
 #  elif defined(__CYGWIN__)
-#    error "I don't know the details of this compiler... Plz hack."
-
+//#    error "I don't know the details of this compiler... Plz hack."
+#    define stati64_t stat
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Watcom C++
 
 #  elif defined(__WATCOMC__)
 #    error "I don't know the details of this compiler... Plz hack."
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Linux GCC
+
+#  elif defined(__linux__)
+#    define stati64_t stat
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Mac GCC
+
+#  elif defined(__APPLE__)
+#    define stati64_t stat
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
