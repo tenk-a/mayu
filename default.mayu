@@ -76,22 +76,30 @@ keymap Global
 
  if ( KBD109 ) and ( ! KBD104on109 )
    key *”¼Šp/‘SŠp	= *Esc			# Esc ‚Æ”¼Šp/‘SŠp‚Ì“ü‚ê‘Ö‚¦
+   key *E0”¼Šp/‘SŠp	= *Esc			# Esc ‚Æ”¼Šp/‘SŠp‚Ì“ü‚ê‘Ö‚¦
    key *Esc		= *”¼Šp/‘SŠp		#	V
  endif
 
  if ( KBD109 )
    mod control += ‰p”				# ‰p”‚ğ Control ‚É
    key *‰p”		= *LControl		#	V
+   mod control += E0‰p”				# ‰p”‚ğ Control ‚É
+   key *E0‰p”		= *LControl		#	V
  else
    mod control += CapsLock			# CapsLock ‚ğ Control ‚É
    key *CapsLock	= *LControl		#	V
+   mod control += E0CapsLock			# CapsLock ‚ğ Control ‚É
+   key *E0CapsLock	= *LControl		#	V
  endif
 
  if ( GANA )
    if ( KBD109 )
      mod alt += !!–³•ÏŠ·			# –³•ÏŠ·‚ğ Alt ‚É
+     mod alt += !!E0–³•ÏŠ·			# –³•ÏŠ·‚ğ Alt ‚É
      key *–³•ÏŠ·	= *–³•ÏŠ·		#	V
+     key *E0–³•ÏŠ·	= *–³•ÏŠ·		#	V
      key A-–³•ÏŠ·	= –³•ÏŠ·		#	V
+     key A-E0–³•ÏŠ·	= –³•ÏŠ·		#	V
      key IC-A-K		= –³•ÏŠ·		# IME ‚Å•ÏŠ·’†‚Ì A-K ‚Í–³•ÏŠ·
      key *IC-•ÏŠ·	= $ToggleIME		# IME ON/OFF ‚ğ‚·‚éƒL[‚Ìw’è
    endif
@@ -124,15 +132,22 @@ keymap	KeymapDefault = &Default
  if ( KBD109 )
    mod control += ‰p”				# ‰p”‚ğ Control ‚É
    key *‰p”		= *LControl		#	V
+   mod control += E0‰p”				# ‰p”‚ğ Control ‚É
+   key *E0‰p”		= *LControl		#	V
  else
    mod control += CapsLock			# CapsLock ‚ğ Control ‚É
    key *CapsLock	= *LControl		#	V
+   mod control += E0CapsLock			# CapsLock ‚ğ Control ‚É
+   key *E0CapsLock	= *LControl		#	V
  endif
  if ( GANA )
    if ( KBD109 )
      mod alt += !!–³•ÏŠ·			# –³•ÏŠ·‚ğ Alt ‚É
+     mod alt += !!E0–³•ÏŠ·			# –³•ÏŠ·‚ğ Alt ‚É
      key *–³•ÏŠ·	= *–³•ÏŠ·		#	V
+     key *E0–³•ÏŠ·	= *–³•ÏŠ·		#	V
      key A-–³•ÏŠ·	= –³•ÏŠ·		#	V
+     key A-E0–³•ÏŠ·	= –³•ÏŠ·		#	V
      key IC-A-K		= –³•ÏŠ·		# IME ‚Å•ÏŠ·’†‚Ì A-K ‚Í–³•ÏŠ·
    endif
  endif
@@ -261,6 +276,9 @@ window	InternetExplorer /:Internet Explorer_Server$/ : EmacsEdit
  key C-S-Z		= &Sync&WindowMaximize	# ƒEƒBƒ“ƒhƒE‚ÌÅ‘å‰»
  key C-A-Z		= C-&WindowMaximize	# ƒEƒBƒ“ƒhƒE‚Ì‘S‰æ–Ê‰»
 
+# ˆÈ‰º‚Íƒ`ƒPƒbƒg #18663 ‚ğQÆ‚Ì‚±‚Æ
+window	IEFrame	/:IEFrame/ : EmacsEdit
+
 window	MicrosoftJava	/:Microsoft VM For Java\(TM\) Host Window Class:/ \
 	: EmacsEdit
 
@@ -273,6 +291,7 @@ keymap Emacsen : Global
  if ( MAP-ESCAPE-TO-META )			# ESC ‚ª M- ‚É‚È‚é‚Ì‚ğ‘j~‚·‚é
    if ( KBD109 ) and ( ! KBD104on109 )
      key *”¼Šp/‘SŠp	= *Esc
+     key *E0”¼Šp/‘SŠp	= *Esc
      key *Esc		= *”¼Šp/‘SŠp
    else
      key Escape		= &Default

@@ -10,26 +10,27 @@
 
 
 //
+#ifdef MAYU64
+INT_PTR CALLBACK dlgLog_dlgProc(
+#else
 BOOL CALLBACK dlgLog_dlgProc(
-  HWND i_hwnd, UINT i_message, WPARAM i_wParam, LPARAM i_lParam);
+#endif
+	HWND i_hwnd, UINT i_message, WPARAM i_wParam, LPARAM i_lParam);
 
-enum
-{
-  ///
-  WM_APP_dlglogNotify = WM_APP + 115,
+enum {
+	///
+	WM_APP_dlglogNotify = WM_APP + 115,
 };
 
-enum DlgLogNotify
-{
-  DlgLogNotify_logCleared,			///
+enum DlgLogNotify {
+	DlgLogNotify_logCleared,			///
 };
 
 /// parameters for "Investigate" dialog box
-class DlgLogData
-{
+class DlgLogData {
 public:
-  tomsgstream *m_log;				/// log stream
-  HWND m_hwndTaskTray;				/// tasktray window
+	tomsgstream *m_log;				/// log stream
+	HWND m_hwndTaskTray;				/// tasktray window
 };
 
 #endif // !_DLGLOG_H

@@ -6,8 +6,7 @@
 
 
 !if "$(VERSION)" == ""
-#VERSION		= 3.31
-VERSION		= snapshot20050612
+VERSION		= 0.02
 !endif
 
 !if "$(TARGETOS)" == "WINNT"
@@ -26,12 +25,12 @@ DISTRIB_OS	= 9x
 
 
 COMMON_DEFINES	= -DSTRICT -D_WIN32_IE=0x0500 $(OS_SPECIFIC_DEFINES)
-BOOST_DIR	= ../boost_$(BOOST_VER)_0
+BOOST_DIR	= ../boost_$(BOOST_VER)_0($(MAYU_ARCH))
 
 
-# mayu.exe	###############################################################
+# yamy		###############################################################
 
-TARGET_1	= $(OUT_DIR)\mayu.exe
+TARGET_1	= $(OUT_DIR_EXE)\yamy$(MAYU_ARCH)
 OBJS_1		=					\
 		$(OUT_DIR)\compiler_specific_func.obj	\
 		$(OUT_DIR)\dlgeditsetting.obj		\
@@ -83,23 +82,47 @@ LIBS_1		=			\
 		shell32.lib		\
 		comctl32.lib		\
 		wtsapi32.lib		\
-		$(OUT_DIR)\mayu.lib	\
+		$(OUT_DIR_EXE)\yamy$(MAYU_ARCH).lib	\
 
-EXTRADEP_1	= $(OUT_DIR)\mayu.lib
+EXTRADEP_1	= $(OUT_DIR_EXE)\yamy$(MAYU_ARCH).lib
 
-# mayu.dll	###############################################################
+# yamy.dll	###############################################################
 
-TARGET_2	= $(OUT_DIR)\mayu.dll
+TARGET_2	= $(OUT_DIR_EXE)\yamy$(MAYU_ARCH).dll
 OBJS_2		= $(OUT_DIR)\hook.obj $(OUT_DIR)\stringtool.obj
 SRCS_2		= hook.cpp stringtool.cpp
 LIBS_2		= $(guixlibsmt) imm32.lib
 
 
-# mayu.lib	###############################################################
+# yamy.lib	###############################################################
 
-TARGET_3	= $(OUT_DIR)\mayu.lib
-DLL_3		= $(OUT_DIR)\mayu.dll
+TARGET_3	= $(OUT_DIR_EXE)\yamy$(MAYU_ARCH).lib
+DLL_3		= $(OUT_DIR_EXE)\yamy$(MAYU_ARCH).dll
 
+
+# yamyd		###############################################################
+
+!if "$(MAYU_ARCH)" == "32"
+TARGET_4	= $(OUT_DIR_EXE)\yamyd$(MAYU_ARCH)
+OBJS_4		= $(OUT_DIR)\yamyd.obj
+
+SRCS_4		= yamyd.cpp
+LIBS_4		= user32.lib $(OUT_DIR_EXE)\yamy$(MAYU_ARCH).lib
+
+EXTRADEP_4	= $(OUT_DIR_EXE)\yamy$(MAYU_ARCH).lib
+!endif
+
+# yamy.exe	###############################################################
+
+!if "$(MAYU_ARCH)" == "32"
+TARGET_5	= $(OUT_DIR_EXE)\yamy.exe
+OBJS_5		= $(OUT_DIR)\yamy.obj
+
+SRCS_5		= yamy.cpp
+LIBS_5		= user32.lib
+
+RES_5		= $(OUT_DIR)\mayu.res
+!endif
 
 # distribution	###############################################################
 
@@ -153,6 +176,8 @@ DISTRIB_DRIVER	= d_win9x\mayud.vxd
 DISTRIB		=			\
 		$(TARGET_1)		\
 		$(TARGET_2)		\
+		$(TARGET_4)		\
+		$(TARGET_5)		\
 		s\$(OUT_DIR)\setup.exe	\
 		$(DISTRIB_SETTINGS)	\
 		$(DISTRIB_MANUAL)	\
@@ -174,19 +199,22 @@ GENIEXPRESS	= perl tools/geniexpress
 
 # rules		###############################################################
 
-all:		boost $(OUT_DIR) $(TARGET_1) $(TARGET_2) $(TARGET_3)
+all:		boost $(OUT_DIR) $(OUT_DIR_EXE) $(TARGET_1) $(TARGET_2) $(TARGET_3) $(TARGET_4) $(TARGET_5)
 
 $(OUT_DIR):
 		if not exist "$(OUT_DIR)\\" $(MKDIR) $(OUT_DIR)
+
+$(OUT_DIR_EXE):
+		if not exist "$(OUT_DIR_EXE)\\" $(MKDIR) $(OUT_DIR_EXE)
 
 functions.h:	engine.h tools/makefunc
 		$(MAKEFUNC) < engine.h > functions.h
 
 clean::
-		-$(RM) $(TARGET_1) $(TARGET_2) $(TARGET_3)
+		-$(RM) $(TARGET_1) $(TARGET_2) $(TARGET_3) $(TARGET_4) $(TARGET_5)
 		-$(RM) $(OUT_DIR)\*.obj
-		-$(RM) $(OUT_DIR)\*.res $(OUT_DIR)\*.exp
-		-$(RM) mayu.aps mayu.opt $(OUT_DIR)\*.pdb
+		-$(RM) $(OUT_DIR)\*.res $(OUT_DIR_EXE)\*.exp
+		-$(RM) mayu.aps mayu.opt $(OUT_DIR_EXE)\*.pdb
 		-$(RM) *~ $(CLEAN)
 		-$(RMDIR) $(OUT_DIR)
 
@@ -196,18 +224,11 @@ depend::
 
 distrib:
 		-@echo "we need cygwin tool"
-		-rm -f mayu-$(VERSION) 
-		-ln -s . mayu-$(VERSION)
-		-bash -c "tar cvjf mayu-$(VERSION)-src.tar.bz2 `$(GETCVSFILES) | sed 's/^./mayu-$(VERSION)/'`"
-		-rm -f mayu-$(VERSION) 
-		-$(GENIEXPRESS) \
-			mayu-$(VERSION)-$(DISTRIB_OS).exe \
-			"MADO TSUKAI NO YUUTSU $(VERSION) $(TARGETOS)" \
-			setup.exe $(DISTRIB) > __mayu__.sed
-		-$(UNIX2DOS) $(DISTRIB_SETTINGS) $(DISTRIB_CONTRIBS)
-		-$(IEXPRESS) /N __mayu__.sed
-		-$(DOS2UNIX) $(DISTRIB_SETTINGS) $(DISTRIB_CONTRIBS)
-		-$(RM) __mayu__.sed
+		-rm -f yamy-$(VERSION).zip
+		zip yamy-$(VERSION).zip yamy.ini 104.mayu 109.mayu default.mayu emacsedit.mayu 104on109.mayu 109on104.mayu dot.mayu workaround.mayu workaround.reg readme.txt
+		cd $(OUT_DIR_EXE)
+		zip ../yamy-$(VERSION).zip yamy.exe yamy32 yamy64 yamy32.dll yamy64.dll yamyd32
+		cd ..
 
 srcdesc::
 		@$(ECHO) USE DOC++ 3.4.4 OR HIGHER
@@ -253,7 +274,7 @@ $(OUT_DIR)\mayu.obj: compiler_specific.h compiler_specific_func.h d\ioctl.h \
  dlginvestigate.h dlglog.h dlgsetting.h dlgversion.h driver.h engine.h \
  errormessage.h focus.h function.h functions.h hook.h keyboard.h keymap.h \
  mayu.h mayuipc.h mayurc.h misc.h msgstream.h multithread.h parser.h \
- registry.h setting.h stringtool.h target.h windowstool.h
+ registry.h setting.h stringtool.h target.h windowstool.h vk2tchar.h
 $(OUT_DIR)\parser.obj: compiler_specific.h errormessage.h misc.h parser.h \
  stringtool.h
 $(OUT_DIR)\registry.obj: array.h compiler_specific.h misc.h registry.h \
@@ -270,3 +291,4 @@ $(OUT_DIR)\windowstool.obj: array.h compiler_specific.h misc.h stringtool.h \
  windowstool.h
 $(OUT_DIR)\hook.obj: compiler_specific.h hook.h misc.h stringtool.h
 $(OUT_DIR)\stringtool.obj: array.h compiler_specific.h misc.h stringtool.h
+$(OUT_DIR)\yamyd.obj: mayu.h hook.h

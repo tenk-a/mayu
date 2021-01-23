@@ -15,6 +15,16 @@ define KBD108
 # 101/102/104/105/107/108 US keyboard definition
 #
 
+def key Drag				= E1-0x00
+def key LButton				= E1-0x01
+def key RButton				= E1-0x02
+def key MButton				= E1-0x03
+def key WheelForward			= E1-0x04
+def key WheelBackward			= E1-0x05
+def key XButton1			= E1-0x06
+def key XButton2			= E1-0x07
+def key TiltRight			= E1-0x08
+def key TiltLeft			= E1-0x09
 def key Esc Escape			=    0x01
 def key _1				=    0x02 # 1!
 def key _2				=    0x03 # 2@
@@ -65,6 +75,7 @@ def key L				=    0x26
 def key Semicolon			=    0x27 # ;:
 def key Apostrophe Quote		=    0x28 # '"
 def key GraveAccent BackQuote		=    0x29 # `~
+def key E0GraveAccent E0BackQuote	= E0-0x29 # `~
 def key LeftShift LShift		=    0x2a
 # def ignore				= E0-0x2a # what is this? (ignore)
 def key ReverseSolidus BackSlash	=    0x2b # \|
@@ -83,12 +94,14 @@ def key FullStop Period			=    0x34 # .>
 def key Solidus Slash			=    0x35 # /?
 def key NumSolidus NumSlash		= E0-0x35 # Numpad /
 def key RightShift RShift		=    0x36
+def key E0RightShift E0RShift		= E0-0x36
 def key NumAsterisk NumMultiply		=    0x37 # Numpad *
 def key PrintScreen Snapshot		= E0-0x37
 def key LeftAlt LAlt LMenu		=    0x38
 def key RightAlt RAlt RMenu		= E0-0x38
 def key Space				=    0x39
 def key CapsLock Capital Caps		=    0x3a # CapsLock
+def key E0CapsLock E0Capital E0Caps	= E0-0x3a # CapsLock
 def key F1				=    0x3b
 def key F2				=    0x3c
 def key F3				=    0x3d
@@ -157,6 +170,10 @@ def mod Shift	= LShift RShift
 def mod Alt	= LAlt RAlt
 def mod Control	= LControl RControl
 def mod Windows	= LWindows RWindows
+mod shift += E0RShift
+key *E0RShift = *LShift
+key *E0CapsLock = *CapsLock
+key *E0GraveAccent = *GraveAccent
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

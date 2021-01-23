@@ -27,6 +27,10 @@
 #define IDS_mayuSymbols                 27
 #define IDS_version                     28
 #define IDS_homepage                    29
+#define IDS_cannotInvoke                30
+#define IDS_cannotPermitStandardUser    31
+#define IDS_escapeNlsKeysFailed         32
+#define IDS_escapeNlsKeysRetry          33
 #define IDC_CURSOR_target               101
 #define IDD_DIALOG_editSetting          102
 #define IDD_DIALOG_investigate          103
@@ -73,10 +77,11 @@
 #define ID_MENUITEM_help                40006
 #define ID_MENUITEM_disable             40007
 #define ID_MENUITEM_log                 40008
+#define ID_MENUITEM_check               40009
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        103

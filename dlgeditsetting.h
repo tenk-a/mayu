@@ -9,16 +9,19 @@
 
 
 /// dialog procedure of "Edit Setting" dialog box
+#ifdef MAYU64
+INT_PTR CALLBACK dlgEditSetting_dlgProc(
+#else
 BOOL CALLBACK dlgEditSetting_dlgProc(
-  HWND i_hwnd, UINT i_message, WPARAM i_wParam, LPARAM i_lParam);
+#endif
+	HWND i_hwnd, UINT i_message, WPARAM i_wParam, LPARAM i_lParam);
 
 /// parameters for "Edit Setting" dialog box
-class DlgEditSettingData
-{
+class DlgEditSettingData {
 public:
-  tstringi m_name;				/// setting name
-  tstringi m_filename;				/// filename of setting
-  tstringi m_symbols;		/// symbol list (-Dsymbol1;-Dsymbol2;-D...)
+	tstringi m_name;				/// setting name
+	tstringi m_filename;				/// filename of setting
+	tstringi m_symbols;		/// symbol list (-Dsymbol1;-Dsymbol2;-D...)
 };
 
 
