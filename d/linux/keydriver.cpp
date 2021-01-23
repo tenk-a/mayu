@@ -1,4 +1,4 @@
-// userƒ‚[ƒh‚Å“®ì‚·‚éƒL[ƒ{[ƒhƒhƒ‰ƒCƒo
+// userãƒ¢ãƒ¼ãƒ‰ã§å‹•ä½œã™ã‚‹ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ‰ãƒ©ã‚¤ãƒ.
 // 2008/01/31
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +28,7 @@ using namespace std;
 static int g_epoll_fd = -1;
 static int g_uinput_fd = -1;
 
-#define EVDEV_MINORS	32
+#define EVDEV_MINORS    32
 static int g_envdev_key_fds[EVDEV_MINORS];
 static int g_envdev_key_fds_count = 0;
 
@@ -43,7 +43,7 @@ static bool add_fd_to_epoll(int fd)
 {
   if (g_epoll_fd < 0)
     return false;
-  
+
   epoll_event e = {0};
   e.events = EPOLLIN;
   e.data.fd = fd;
@@ -64,11 +64,11 @@ static bool is_keyboard_device(int fd)
 {
   uint8_t evtype_bitmask[EV_MAX/8 + 1];
   struct input_id devinfo;
-	
+
   // check bustype
   if (ioctl(fd, EVIOCGID, &devinfo) != 0)
   {
-    //‚È‚ñ‚¼
+    //ãªã‚“ã
     fprintf(stderr, "error: EVIOCGID ioctl failed.\n");
     return false;
   }
@@ -79,17 +79,17 @@ static bool is_keyboard_device(int fd)
   case BUS_USB:
   case BUS_I8042:
   case BUS_ADB:
-    break;					// ok
+    break;                  // ok
   default:
-    return false;			// unmatch bus type
+    return false;           // unmatch bus type
   }
 
   // check ev_bit
   if (ioctl(fd, EVIOCGBIT(0, sizeof(evtype_bitmask)), evtype_bitmask) > 0)
   {
-    // EV_SYN, EV_KEY, EV_REP ‚È‚ç‚¨‚‹
+    // EV_SYN, EV_KEY, EV_REP ãªã‚‰ãŠï½‹
     if (test_bit(EV_SYN, evtype_bitmask) && test_bit(EV_KEY, evtype_bitmask) && test_bit(EV_REP, evtype_bitmask))
-    {				
+    {
       return true;
     }
   }
@@ -110,7 +110,7 @@ static int open_event_device(int dev_num)
     fd = open(path, O_RDONLY | O_NDELAY);
     if (fd >= 0)
       break;
-  }	
+  }
   if (fd == -1)
   {
     return -1;
@@ -123,7 +123,7 @@ static int open_event_device(int dev_num)
     return -1;
   }
 
-  //evdev‚ÌƒfƒoƒCƒX‚Å–³‚¢‚È‚çæ‚èˆµ‚í‚È‚¢
+  //evdevã®ãƒ‡ãƒã‚¤ã‚¹ã§ç„¡ã„ãªã‚‰å–ã‚Šæ‰±ã‚ãªã„
   if (version != EV_VERSION)
   {
     close(fd);
@@ -132,11 +132,11 @@ static int open_event_device(int dev_num)
   return fd;
 }
 
-// ƒI[ƒvƒ“‚µ‚½ƒfƒoƒCƒX‚ÌŒÂ”‚ğ•Ô‚·
+// ã‚ªãƒ¼ãƒ—ãƒ³ã—ãŸãƒ‡ãƒã‚¤ã‚¹ã®å€‹æ•°ã‚’è¿”ã™
 static int open_keyboard()
 {
   int i, fd;
-	
+
   for (i = 0;i < EVDEV_MINORS; i++)
   {
     fd = open_event_device(i);
@@ -168,7 +168,7 @@ static void close_keyboard()
   g_envdev_key_fds_count = 0;
 }
 
-// ƒL[ƒR[ƒho—Í—p‚ÌƒL[ƒ{[ƒh‚ğ”jŠü
+// ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰å‡ºåŠ›ç”¨ã®ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚’ç ´æ£„
 static void destroy_uinput_keyboard()
 {
   if (g_uinput_fd != -1)
@@ -179,7 +179,7 @@ static void destroy_uinput_keyboard()
   }
 }
 
-// ƒL[ƒR[ƒho—Í—p‚ÌƒL[ƒ{[ƒh‚ğì¬
+// ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰å‡ºåŠ›ç”¨ã®ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚’ä½œæˆ
 static int create_uinput_keyboard()
 {
   struct uinput_user_dev uinp = {{0}};
@@ -189,7 +189,7 @@ static int create_uinput_keyboard()
   const char* uinput_path[] = {"/dev/input/uinput", "/dev/uinput"};
 
   destroy_uinput_keyboard();
-  // input device‚ğŠJ‚­
+  // input deviceã‚’é–‹ã
   for (i = 0; i < array_size(uinput_path); i++)
   {
     g_uinput_fd = open(uinput_path[i], O_RDWR);
@@ -213,14 +213,14 @@ static int create_uinput_keyboard()
     }
     return -1;
   }
-	
+
   strncpy(uinp.name, "mayu uinpt", UINPUT_MAX_NAME_SIZE);
   uinp.id.vendor = 1;
   uinp.id.bustype = BUS_I8042;
-  //	uinp.id.bustype = BUS_USB;
+  //    uinp.id.bustype = BUS_USB;
   uinp.id.product = 1;
   uinp.id.version = 4;
-  // uinput device‚ğì¬
+  // uinput deviceã‚’ä½œæˆ
   ret = ioctl(g_uinput_fd, UI_SET_EVBIT, EV_KEY);
   if(ioctl(g_uinput_fd, UI_SET_EVBIT, EV_SYN) == -1)fprintf(stderr, "%d:ioctl\n", __LINE__);
   ioctl(g_uinput_fd, UI_SET_EVBIT, EV_REP);
@@ -231,14 +231,14 @@ static int create_uinput_keyboard()
     ioctl(g_uinput_fd, UI_SET_KEYBIT, i);
   }
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_MOUSE);
-  //	ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_TOUCH);
+  //    ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_TOUCH);
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_MOUSE);
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_LEFT);
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_MIDDLE);
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_RIGHT);
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_FORWARD);
   ioctl(g_uinput_fd, UI_SET_KEYBIT, BTN_BACK);
-	
+
   write(g_uinput_fd, &uinp, sizeof(uinp));
 
   ret = ioctl(g_uinput_fd, UI_DEV_CREATE);
@@ -265,7 +265,7 @@ static bool open_udev_usb_monitors(udev*& udev, udev_monitor*& mon, int& fd)
     udev = NULL;
     return false;
   }
-        
+
   udev_monitor_filter_add_match_subsystem_devtype(mon, "usb", "usb_device");
   udev_monitor_enable_receiving(mon);
   fd = udev_monitor_get_fd(mon);
@@ -288,7 +288,7 @@ static void close_udev_usb_monitors(udev*& udev, udev_monitor*& mon, int& fd)
     udev_unref(udev);
     udev = NULL;
   }
-  // close‚Ì•K—v‚Í‚ ‚é‚Ì‚©?
+  // closeã®å¿…è¦ã¯ã‚ã‚‹ã®ã‹?
   fd = -1;
 
   // usb
@@ -342,7 +342,7 @@ static bool is_divice_keyboard_with_vid_pid(libusb_context *usbctx, int vid, int
     libusb_device_descriptor devicedesc;
     if (libusb_get_device_descriptor(dev, &devicedesc) == 0)
     {
-      if (devicedesc.bDeviceClass == 0) // HID‚Í0
+      if (devicedesc.bDeviceClass == 0) // HIDã¯0
       {
         bool done = false;
         for (unsigned char confIndex = 0; confIndex < devicedesc.bNumConfigurations && !done; confIndex++)
@@ -382,17 +382,17 @@ static void close_keyboard_and_uinput()
   close_keyboard();
 }
 
-// ¸”s‚µ‚½‚È‚çƒGƒ‰[ƒR[ƒhA¬Œ÷‚È‚ç0‚ğ•Ô‚·
+// å¤±æ•—ã—ãŸãªã‚‰ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã€æˆåŠŸãªã‚‰0ã‚’è¿”ã™
 static int open_keyboard_and_uinput()
 {
-  int ret = open_keyboard(); // ƒI[ƒvƒ“‚É¬Œ÷‚µ‚½ƒfƒoƒCƒX‚ÌŒÂ”‚ª•Ô‚é
+  int ret = open_keyboard(); // ã‚ªãƒ¼ãƒ—ãƒ³ã«æˆåŠŸã—ãŸãƒ‡ãƒã‚¤ã‚¹ã®å€‹æ•°ãŒè¿”ã‚‹
   if (ret <= 0)
   {
     fprintf(stderr, "error: Cannot open any keyboard event devices. Do you run as root?\n");
     return -1;
   }
-	
-  ret = create_uinput_keyboard(); // ¬Œ÷‚µ‚½‚ç0‚ª•Ô‚é
+
+  ret = create_uinput_keyboard(); // æˆåŠŸã—ãŸã‚‰0ãŒè¿”ã‚‹
   if (ret < 0)
   {
     close_keyboard_and_uinput();
@@ -456,7 +456,7 @@ static int restart_keyboard()
   return ret;
 }
 
-//¬Œ÷‚È‚ç0‚ğ•Ô‚·
+//æˆåŠŸãªã‚‰0ã‚’è¿”ã™
 int send_input_event(int type, int code, int value)
 {
   int result;
@@ -464,12 +464,12 @@ int send_input_event(int type, int code, int value)
 
   if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
     return -1;
-	
+
   gettimeofday(&event.time, NULL);
   event.type = type;
   event.code = code;
   event.value = value;
-	
+
   result = write(g_uinput_fd, &event, sizeof(event));
   return (result < 0 ? errno :
           (result < (int)sizeof(event) ? -1 : 0));
@@ -479,12 +479,12 @@ bool send_keyboard_event(int code, KEY_EVENT_VAL value)
 {
   if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
     return false;
-	
+
   if (send_input_event(EV_KEY, code, value) < 0)
     return false;
 
-  send_input_event(EV_SYN, SYN_REPORT, 0); // ƒGƒ‰[‚ª”­¶‚µ‚Ä‚à–³‹
-	
+  send_input_event(EV_SYN, SYN_REPORT, 0); // ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¦ã‚‚ç„¡è¦–
+
   return true;
 }
 
@@ -493,12 +493,12 @@ bool receive_keyboard_event(struct input_event* event)
 {
   epoll_event epoll_e[EVDEV_MINORS + 1];
   struct input_event revent = {{0}};
-  bool try_to_repair = false;	
+  bool try_to_repair = false;
   bool loop_stop = false;
 
   if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
     return false;
-	
+
   while (!loop_stop)
   {
     int num_of_events = epoll_wait(g_epoll_fd, epoll_e, EVDEV_MINORS + 1, -1);
@@ -506,7 +506,7 @@ bool receive_keyboard_event(struct input_event* event)
     for (int i = 0; i < num_of_events; i++)
     {
       int event_fd = epoll_e[i].data.fd;
-      // udev‚ğƒ`ƒFƒbƒN
+      // udevã‚’ãƒã‚§ãƒƒã‚¯
       if (event_fd == g_udev_fd)
       {
         int vid = 0, pid = 0;
@@ -514,9 +514,9 @@ bool receive_keyboard_event(struct input_event* event)
         {
           if (is_divice_keyboard_with_vid_pid(g_usb_context, vid, pid))
           {
-            // ƒL[ƒ{[ƒhƒfƒoƒCƒX‚ğŠJ‚«’¼‚·
+            // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ‡ãƒã‚¤ã‚¹ã‚’é–‹ãç›´ã™
             restart_keyboard();
-            // Å‰‚©‚ç
+            // æœ€åˆã‹ã‚‰
             if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
             {
               return false;
@@ -526,24 +526,24 @@ bool receive_keyboard_event(struct input_event* event)
       }
       else
       {
-        // ƒf[ƒ^‚ª‘‚«‚Ü‚ê‚½ƒfƒoƒCƒX‚©‚ç“Ç‚İ‚Ş
+        // ãƒ‡ãƒ¼ã‚¿ãŒæ›¸ãè¾¼ã¾ã‚ŒãŸãƒ‡ãƒã‚¤ã‚¹ã‹ã‚‰èª­ã¿è¾¼ã‚€
         if (read(event_fd, &revent, sizeof(revent)) < (int)sizeof(revent))
-        {          
-          // ƒL[ƒ{[ƒh‚ªŠO‚³‚ê‚½‚ÉAENODEV‚ÌƒGƒ‰[‚É‚È‚é
+        {
+          // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãŒå¤–ã•ã‚ŒãŸæ™‚ã«ã€ENODEVã®ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹
           if (errno == ENODEV)
           {
             if (try_to_repair)
             {
-              // ŠJ‚«‚È‚¨‚µ‚Ä“Ç‚İ’¼‚µ‚Å‚à‘Ê–Ú‚¾‚Á‚½
+              // é–‹ããªãŠã—ã¦èª­ã¿ç›´ã—ã§ã‚‚é§„ç›®ã ã£ãŸ
               return false;
             }
             else
             {
-              // ó‘ÔC•œ
+              // çŠ¶æ…‹ä¿®å¾©
               try_to_repair = true;
-              // ƒL[ƒ{[ƒhƒfƒoƒCƒX‚ğŠJ‚«’¼‚·
+              // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ãƒ‡ãƒã‚¤ã‚¹ã‚’é–‹ãç›´ã™
               restart_keyboard();
-              // Å‰‚©‚ç
+              // æœ€åˆã‹ã‚‰
               if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
               {
                 return false;
@@ -558,43 +558,43 @@ bool receive_keyboard_event(struct input_event* event)
           }
         }
 
-        // “Ç‚İ‚İ¬Œ÷
+        // èª­ã¿è¾¼ã¿æˆåŠŸ
         try_to_repair = false;
 
-        // ƒL[ƒ{[ƒhƒCƒxƒ“ƒg‚È‚çhandler‚Ö’Ê’m
+        // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚¤ãƒ™ãƒ³ãƒˆãªã‚‰handlerã¸é€šçŸ¥
         if (revent.type == EV_KEY)
         {
           loop_stop = true;
           *event = revent;
           break;
         }
-        else if (revent.type == EV_SYN)	// –³‹
+        else if (revent.type == EV_SYN) // ç„¡è¦–
         {
         }
-        else if (revent.type == EV_MSC)	// –³‹
+        else if (revent.type == EV_MSC) // ç„¡è¦–
         {
         }
         else
         {
-          // ƒL[ƒ{[ƒhƒCƒxƒ“ƒgˆÈŠO‚ÍA‚»‚Ì‚Ü‚Üo—Í
+          // ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚¤ãƒ™ãƒ³ãƒˆä»¥å¤–ã¯ã€ãã®ã¾ã¾å‡ºåŠ›
           write(g_uinput_fd, &revent, sizeof(revent));
         }
       }
     }
-  }	
+  }
   return true;
 }
 
 void keyboard_grab_onoff(bool onoff)
 {
   int i;
-	
+
   if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
     return;
-	
+
   for (i = 0; i < g_envdev_key_fds_count; i++)
   {
-    if (ioctl(g_envdev_key_fds[i], EVIOCGRAB, (int)onoff) == -1)	//grabŠJn
+    if (ioctl(g_envdev_key_fds[i], EVIOCGRAB, (int)onoff) == -1)    //grabé–‹å§‹
       fprintf(stderr, "error: EVIOCGRAB ioctl failed\n");
   }
   g_grab_onoff = onoff;

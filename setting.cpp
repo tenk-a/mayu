@@ -79,7 +79,7 @@ static bool getFilenameFromRegistry(
     }
 #elif defined(__linux__) || defined(__APPLE__)
     // TODO:
-    // ‚Æ‚è‚ ‚¦‚¸Œˆ‚ß‘Å‚¿‚Å
+    // ã¨ã‚Šã‚ãˆãšæ±ºã‚æ‰“ã¡ã§
     if (o_name)
         *o_name = tstringi(_T("Home Directory"));
     if (o_filename)
@@ -126,7 +126,7 @@ void getHomeDirectories(HomeDirectories *o_pathes)
     if (GetModuleFileName(GetModuleHandle(NULL), buf, NUMBER_OF(buf)))
         o_pathes->push_back(pathRemoveFileSpec(buf));
 #elif defined(__linux__) || defined(__APPLE__)
-    const _TCHAR *home = _tgetenv(_T("HOME"));  // Œˆ‚ß‘Å‚¿
+    const _TCHAR *home = _tgetenv(_T("HOME"));  // æ±ºã‚æ‰“ã¡
     if (home)
         o_pathes->push_back(home);
     o_pathes->push_back(PKGDATADIR);
@@ -667,7 +667,7 @@ void SettingLoader::load_KEYMAP_DEFINITION(const Token *i_which)
             fd = createFunctionData(_T("KeymapParent"));
         ASSERT( fd );
 
-        // ŽQl : http://gcc.gnu.org/bugs.html#cxx_rvalbind
+        // å‚è€ƒ : http://gcc.gnu.org/bugs.html#cxx_rvalbind
         //    keySeq = m_setting->m_keySeqs.add(
         //       KeySeq(name->getString()).add(ActionFunction(fd)));
 

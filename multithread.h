@@ -28,7 +28,7 @@ public:
 ///
 class CriticalSection : public SyncObject
 {
-  CRITICAL_SECTION m_cs;			///
+  CRITICAL_SECTION m_cs;            ///
 
 public:
   ///
@@ -44,7 +44,7 @@ public:
 #elif defined(__linux__) || defined(__APPLE__)
 // TODO:
 
-//とりあえずシングルスレッドで動かすので Null Object
+//縺ｨ繧翫≠縺医★繧ｷ繝ｳ繧ｰ繝ｫ繧ｹ繝ｬ繝�繝峨〒蜍輔°縺吶�ｮ縺ｧ Null Object
 class CriticalSection : public SyncObject
 {
 public:
@@ -77,8 +77,8 @@ public:
 ///
 class Acquire
 {
-  SyncObject *m_so;	///
-  
+  SyncObject *m_so; ///
+
 public:
   ///
   Acquire(SyncObject *i_so) : m_so(i_so) { m_so->acquire(); }

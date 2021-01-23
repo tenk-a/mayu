@@ -10,7 +10,7 @@
 #  include <vector>
 
 
-/// Šeí Action ƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒX
+/// å„ç¨® Action ã‚¯ãƒ©ã‚¹ã®åŸºåº•ã‚¯ãƒ©ã‚¹
 class Action
 {
 public:
@@ -88,7 +88,7 @@ public:
 class ActionFunction : public Action
 {
 public:
-#if defined(__GNUC__)           // error ‘Îô
+#if defined(__GNUC__)           // error å¯¾ç­–
   class
 #endif
   FunctionData * const m_functionData;      /// function data
@@ -112,8 +112,8 @@ public:
 };
 
 
-/// Action‚ğ‘©‚Ë‚éƒNƒ‰ƒX
-/// İ’èƒtƒ@ƒCƒ‹“à‚Å‚Ì‰E•Ó‚ğ•\Œ»
+/// Actionã‚’æŸã­ã‚‹ã‚¯ãƒ©ã‚¹
+/// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«å†…ã§ã®å³è¾ºã‚’è¡¨ç¾
 class KeySeq
 {
 public:

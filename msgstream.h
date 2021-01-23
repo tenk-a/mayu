@@ -43,7 +43,7 @@ private:
   HWND m_hwnd;                  /** window handle for
                             notification */
 #elif defined(__linux__) || defined(__APPLE__)
-// TODO:ƒtƒ@ƒCƒ‹o—Í
+// TODO:ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
     int m_file;                 // file discriptor
 #endif
   UINT m_messageId;             /// messageid for notification

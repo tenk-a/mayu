@@ -16,7 +16,7 @@ def key F10			=	0x6d
 def key F11			=	0x67
 def key F12			=	0x6f
 
-def key HankakuZenkaku Kanji		=    0x32 # ”¼Šp/‘SŠp Š¿š
+def key HankakuZenkaku Kanji		=    0x32 # åŠè§’/å…¨è§’ æ¼¢å­—
 def key _1			=	0x12
 def key _2			=	0x13
 def key _3			=	0x14
@@ -72,18 +72,18 @@ def key M			=	0x2e
 def key Comma		=    0x2b # ,<
 def key FullStop Period					=    0x2f # .>
 def key Solidus Slash					=    0x2c # /?
-def key ReverseSolidus BackSlash		=    0x5e # __
+def key ReverseSolidus BackSlash		=    0x5e # ï¼¼_
 def key RightShift RShift				=    0x3c
 
-def key CapsLock										=    0x39 # ‰p” CapsLock Š¿š”Ô†
+def key CapsLock										=    0x39 # è‹±æ•° CapsLock æ¼¢å­—ç•ªå·
 def key LeftAlt LAlt LMenu LeftOption LOption			=    0x3a
 def key LeftCommand LCommand LeftWindows LWindows LWin	=	 0x37
-def key Eisuu				 	  			  			=    0x66 	# ‰p”
-def key Muhenkan NonConvert								=	 0x8b # –³•ÏŠ·
+def key Eisuu				 	  			  			=    0x66 	# è‹±æ•°
+def key Muhenkan NonConvert								=	 0x8b # ç„¡å¤‰æ›
 def key Space											=    0x31
-def key Kana											=    0x68 # ‚©‚È
-def key Henkan Convert									=    0x8a # •ÏŠ·(ŸŒó•â) ‘OŒó•â ‘SŒó•â
-def key Hiragana 										=    0x88 # ‚Ğ‚ç‚ª‚È ƒJƒ^ƒJƒi ƒ[ƒ}š
+def key Kana											=    0x68 # ã‹ãª
+def key Henkan Convert									=    0x8a # å¤‰æ›(æ¬¡å€™è£œ) å‰å€™è£œ å…¨å€™è£œ
+def key Hiragana 										=    0x88 # ã²ã‚‰ãŒãª ã‚«ã‚¿ã‚«ãƒŠ ãƒ­ãƒ¼ãƒå­—
 def key RightCommand RCommand RightWindows RWindows RWin	=	  0x36
 def key RightAlt RAlt RMenu RightOption ROption				=	  0x3d
 def key Applications Apps									=	  0x6e
@@ -105,29 +105,29 @@ def key Down				=	0x7d
 def key Right				=	0x7c
 
 def key NumLock					=    0x47
-def key NumSolidus NumSlash		=	 0x4b # ƒeƒ“ƒL[ /
-def key NumAsterisk NumMultiply	=    0x43 # ƒeƒ“ƒL[ *
-def key NumHyphenMinus NumMinus	=    0x4e # ƒeƒ“ƒL[ -
-def key Num7					=    0x59 # ƒeƒ“ƒL[ 7
-def key Num8					=    0x5b # ƒeƒ“ƒL[ 8
-def key Num9					=    0x5c # ƒeƒ“ƒL[ 9
-def key NumPlusSign NumPlus		=    0x45 # ƒeƒ“ƒL[ +
-def key Num4					=    0x56 # ƒeƒ“ƒL[ 4
-def key Num5					=    0x57 # ƒeƒ“ƒL[ 5
-def key Num6					=    0x58 # ƒeƒ“ƒL[ 6
-def key Num1					=    0x53 # ƒeƒ“ƒL[ 1
+def key NumSolidus NumSlash		=	 0x4b # ãƒ†ãƒ³ã‚­ãƒ¼ /
+def key NumAsterisk NumMultiply	=    0x43 # ãƒ†ãƒ³ã‚­ãƒ¼ *
+def key NumHyphenMinus NumMinus	=    0x4e # ãƒ†ãƒ³ã‚­ãƒ¼ -
+def key Num7					=    0x59 # ãƒ†ãƒ³ã‚­ãƒ¼ 7
+def key Num8					=    0x5b # ãƒ†ãƒ³ã‚­ãƒ¼ 8
+def key Num9					=    0x5c # ãƒ†ãƒ³ã‚­ãƒ¼ 9
+def key NumPlusSign NumPlus		=    0x45 # ãƒ†ãƒ³ã‚­ãƒ¼ +
+def key Num4					=    0x56 # ãƒ†ãƒ³ã‚­ãƒ¼ 4
+def key Num5					=    0x57 # ãƒ†ãƒ³ã‚­ãƒ¼ 5
+def key Num6					=    0x58 # ãƒ†ãƒ³ã‚­ãƒ¼ 6
+def key Num1					=    0x53 # ãƒ†ãƒ³ã‚­ãƒ¼ 1
 def key Num2					=    0x54
 def key Num3					=    0x55
 def key Num0					=    0x52
-def key NumFullStop NumPeriod	=    0x41 # ƒeƒ“ƒL[ .
+def key NumFullStop NumPeriod	=    0x41 # ãƒ†ãƒ³ã‚­ãƒ¼ .
 def key NumEnter NumReturn		=	 0x4c
-def key NumComma				=	0x5f # ƒeƒ“ƒL[ ,
-def key NumEqual				=	0x51 # ƒeƒ“ƒL[ =
+def key NumComma				=	0x5f # ãƒ†ãƒ³ã‚­ãƒ¼ ,
+def key NumEqual				=	0x51 # ãƒ†ãƒ³ã‚­ãƒ¼ =
 
 def mod Shift	= LShift RShift
-def mod Alt	= LAlt RAlt			# OptionƒL[
+def mod Alt	= LAlt RAlt			# Optionã‚­ãƒ¼
 def mod Control	= LControl RControl
-def mod Windows	= LWindows RWindows # CommandƒL[
+def mod Windows	= LWindows RWindows # Commandã‚­ãƒ¼
 
 # Key Sequence
 
