@@ -2638,7 +2638,7 @@ friend class FunctionData_EmacsEditKillLineFunc;
 friend class FunctionData_LogClear;
 friend class FunctionData_Recenter;
 friend class FunctionData_DirectSSTP;
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 friend class FunctionData_PlugIn;
 #endif
 friend class FunctionData_SetImeStatus;
@@ -2700,7 +2700,7 @@ FunctionCreator functionCreators[] = {
     { _T("LogClear"),              FunctionData_LogClear::create              },
     { _T("Recenter"),              FunctionData_Recenter::create              },
     { _T("DirectSSTP"),            FunctionData_DirectSSTP::create            },
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     { _T("PlugIn"),                FunctionData_PlugIn::create                },
  #endif
     { _T("SetImeStatus"),          FunctionData_SetImeStatus::create          },

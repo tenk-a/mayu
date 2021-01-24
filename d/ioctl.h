@@ -1,7 +1,7 @@
 #ifndef _IOCTL_H
 #define _IOCTL_H
 
-#if defined(_MSC_VER)
+#if 0 //defined(_MSC_VER)
 // Ioctl value
 #define IOCTL_MAYU_DETOUR_CANCEL    \
 CTL_CODE(FILE_DEVICE_KEYBOARD, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)

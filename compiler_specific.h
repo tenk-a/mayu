@@ -7,9 +7,8 @@
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#if 0 //defined(_MSC_VER)
 // Microsoft Visual C++ 6.0
-
-#if defined(_MSC_VER)
 
 // C4061 enum 'identifier' is not handled by case label
 // C4100 argument 'identifier' is not used
@@ -27,9 +26,8 @@
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#elif 0 //defined(__BORLANDC__)
 // Borland C++ 5.5.1
-
-#elif defined(__BORLANDC__)
 
 // W8004 'identifier' is assigned a value that is never used in function
 // W8022 'identifier' hides virtual function 'function'
@@ -47,7 +45,7 @@
  # pragma warn -8070
  # pragma warn -8084
 
- # ifdef _UNICODE
+ # ifdef UNICODE
 extern wchar_t * *_wargv;
  # endif
 
@@ -68,16 +66,14 @@ int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE i_hPrevInstance,
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#elif 0 //defined(__CYGWIN__)
 // Cygwin 1.1 (gcc 2.95.2)
-
-#elif defined(__CYGWIN__)
 //#    error "I don't know the details of this compiler... Plz hack."
  # define stati64_t stat
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#elif 0 //defined(__WATCOMC__)
 // Watcom C++
-
-#elif defined(__WATCOMC__)
  # error "I don't know the details of this compiler... Plz hack."
 
 

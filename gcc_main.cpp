@@ -8,7 +8,7 @@
 #include "errormessage.h"
 #include "function.h"
 #include "mayu.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  # include "mayurc.h"
 #endif
 #include "msgstream.h"

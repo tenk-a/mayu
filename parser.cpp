@@ -172,7 +172,7 @@ bool Parser::getLine(tstringi *o_line)
     while (m_ptr != m_end)
         switch (*m_ptr) {
         case _T('\n'):
-     #ifdef UNICODE
+     #if 0 //def UNICODE
         case 0x2028:
         //case _T('\x2028'):    //  (U+2028)
      #endif
@@ -207,15 +207,16 @@ static bool isSymbolChar(_TCHAR i_c)
     if ( i_c == _T('\0') )
         return false;
 
-    if (  _istlead(i_c)
-       || _istalpha(i_c)
+    if (  _istalpha(i_c)
        || _istdigit(i_c)
-       || _istlead(i_c) )
-    {
+     #if 0 //def USE_MBC
+       || _istlead(i_c)
+     #endif
+    ) {
         return true;
     }
 
- #ifdef UNICODE
+ #if 0 //def UNICODE
     if ( 0x80 <= i_c && _istgraph(i_c) )
         return true;
  #endif // UNICODE
@@ -223,7 +224,7 @@ static bool isSymbolChar(_TCHAR i_c)
     if ( _istpunct(i_c) )
         return !!_tcschr(_T("-+/?_\\"), i_c);
 
- #ifdef UNICODE
+ #if 0 //def UNICODE
     // check arrows
     if ( _tcschr(_T("\x2190\x2191\x2192\x2193"), i_c) ) {
         return true;
@@ -322,13 +323,15 @@ bool Parser::getLine(std::vector<Token> *o_tokens)
                 while (*t != _T('\0') && *t != q[0]) {
                     if ( *t == _T('\\') && *(t + 1) )
                         t++;
+                 #if 0 //def USE_MBC
                     if ( _istlead(*t) && *(t + 1) )
                         t++;
+                 #endif
                     t++;
                 }
 
                 tstring str = interpretMetaCharacters(tokenStart, t - tokenStart, q, isRegexp);
-             #ifdef _MBCS
+             #if 0 //def _MBCS
                 if (isRegexp)
                     str = guardRegexpFromMbcs( str.c_str() );
              #endif
@@ -355,15 +358,17 @@ bool Parser::getLine(std::vector<Token> *o_tokens)
                         else
                             break;
                     }
+                 #if 0 //def USE_MBC
                     if ( _istlead(*t) && *(t + 1) )
                         t++;
+                 #endif
                     t++;
                 }
 
                 if (t == tokenStart) {
                     ErrorMessage e;
                     e << _T("invalid character ");
-                 #ifdef UNICODE
+                 #if 0 //def UNICODE
                     e << _T("U+");
                     e << std::hex;  // << std::setw(4) << std::setfill(_T('0'));
                     e << (int) (wchar_t) *t;

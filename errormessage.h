@@ -37,7 +37,7 @@ public:
         return *this;
     }
 
- #ifdef UNICODE
+ #if 0 //def UNICODE
     /// add message
     template<>
     ErrorMessage & operator <<(const std::string &i_value)

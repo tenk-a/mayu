@@ -33,7 +33,7 @@ public:
                 m_log.setDebugLevel(1);
         }
 
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         newSetting->m_symbols.insert("WINDOWS");
      #elif defined(__linux__)
         newSetting->m_symbols.insert("LINUX");

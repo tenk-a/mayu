@@ -6,7 +6,7 @@
 
 #include "misc.h"
 #include "compiler_specific_func.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "dlginvestigate.h"
  #include "dlglog.h"
  #include "dlgsetting.h"
@@ -14,30 +14,30 @@
 #endif
 #include "engine.h"
 #include "errormessage.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "focus.h"
 #endif
 #include "function.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "hook.h"
 #endif
 #include "mayu.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "mayurc.h"
 #endif
 #include "msgstream.h"
 #include "multithread.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "registry.h"
 #endif
 #include "setting.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "target.h"
  #include "windowstool.h"
  #include <process.h>
 #endif
 #include <time.h>
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include <commctrl.h>
  #include <wtsapi32.h>
 #endif
@@ -55,7 +55,7 @@ _TCHAR**    __targv;
 
 ///
 class Mayu {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND            m_hwndTaskTray;             ///< tasktray window
     HWND            m_hwndLog;                  ///< log dialog
     HWND            m_hwndInvestigate;          ///< investigate dialog
@@ -79,7 +79,7 @@ class Mayu {
     time_t          m_startTime;                ///< mayu started at ...
 
 private:
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// register class for tasktray
     ATOM Register_tasktray()
     {
@@ -560,7 +560,7 @@ private:
         }
 
         if ( !SettingLoader(&m_log, &m_log).load(newSetting) ) {
-         #if defined(WIN32)
+         #if 0 //defined(WIN32)
             ShowWindow(m_hwndLog, SW_SHOW);
             SetForegroundWindow(m_hwndLog);
          #endif
@@ -573,7 +573,7 @@ private:
         m_log << _T("successfully loaded.") << std::endl;
 
         while ( !m_engine.setSetting(newSetting) ) {
-         #if defined(WIN32)
+         #if 0 //defined(WIN32)
             Sleep(1000);
 
          #elif defined(__linux__)
@@ -587,7 +587,7 @@ private:
     }
 
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     // show message (a baloon from the task tray icon)
     void showHelpMessage(bool i_doesShow = true)
     {
@@ -636,7 +636,7 @@ private:
         _TCHAR starttimebuf[1024];
         _TCHAR timebuf[1024];
 
-     #ifdef __BORLANDC__
+     #if 0 //def __BORLANDC__
       #pragma message("\t\t****\tAfter std::ostream() is called,  ")
       #pragma message("\t\t****\tstrftime(... \"%%#c\" ...) fails.")
       #pragma message("\t\t****\tWhy ? Bug of Borland C++ 5.5.1 ? ")
@@ -656,7 +656,7 @@ private:
      #ifndef NDEBUG
         m_log << _T(" (DEBUG)");
      #endif
-     #ifdef _UNICODE
+     #ifdef UNICODE
         m_log << _T(" (UNICODE)");
      #endif
         m_log << std::endl;
@@ -682,7 +682,7 @@ private:
 public:
     ///
     Mayu()
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         : m_hwndTaskTray(NULL)
         , m_hwndLog(NULL)
         , m_WM_TaskbarRestart( RegisterWindowMessage( _T("TaskbarCreated") ) )
@@ -699,7 +699,7 @@ public:
     {
         time(&m_startTime);
 
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         CHECK_TRUE( Register_focus() );
         CHECK_TRUE( Register_target() );
         CHECK_TRUE( Register_tasktray() );
@@ -756,7 +756,7 @@ public:
 
         m_engine.start();
 
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         // show tasktray icon
         m_tasktrayIcon[0]          = loadSmallIcon(IDI_ICON_mayu_disabled);
         m_tasktrayIcon[1]          = loadSmallIcon(IDI_ICON_mayu);
@@ -790,7 +790,7 @@ public:
     ///
     ~Mayu()
     {
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         // first, detach log from edit control to avoid deadlock
         m_log.detach();
 
@@ -820,7 +820,7 @@ public:
     }
 
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// message loop
     WPARAM messageLoop()
     {
@@ -849,7 +849,7 @@ public:
 };
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Functions
 
@@ -908,7 +908,7 @@ void convertRegistry()
 #endif
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 /// main
 int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE /* i_hPrevInstance */,
                      LPTSTR /* i_lpszCmdLine */, int /* i_nCmdShow */)
@@ -919,7 +919,7 @@ int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE /* i_hPrevInstance */,
     CHECK_TRUE( _tsetlocale( LC_ALL, _T("") ) );
 
     // common controls
- #if defined(_WIN95)
+ #if 0 //defined(_WIN95)
     InitCommonControls();
  #else
     INITCOMMONCONTROLSEX icc;

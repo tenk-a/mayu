@@ -1,24 +1,27 @@
 #pragma once
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include <tchar.h>
-#elif defined(__GNUC__)
- #if defined(UNICODE)
+#elif 1 //defined(__GNUC__)
+ #if 0 //defined(UNICODE)
   typedef wchar_t       _TCHAR;
   #define _T(x)         L ## x
- #elif defined(_MBCS)
+ #elif 0 //defined(_MBCS)
   typedef char          _TCHAR;
+  #define USE_MBS
  #else //contain        _SBCS
   typedef char          _TCHAR;
   typedef _TCHAR        TCHAR;
   #define _tcsicmp      strcasecmp
   #define _T(x)         x
   #define _sntprintf    snprintf
+  //#define USE_MBS
  #endif
 
 // _T functions
 
 // TODO:
+#if 0 //def USE_MBS
 #if 1
 // UTF8 環境のみ対応ということにして、文字の2バイト目以降は0x80以上なので とりあえず falseで十分...
 inline bool _ismbblead(unsigned char /*c*/)
@@ -35,6 +38,7 @@ inline bool _ismbblead(unsigned char c)
     ;
 }
 #endif
+#endif
 
  #define _istalpha(c)   isalpha(c)
  #define _istdigit(c)   isdigit(c)
@@ -47,5 +51,7 @@ inline bool _ismbblead(unsigned char c)
  #define _tcstol        strtol
  #define _tfopen        fopen
  #define _tstati64      stat
- #define _istlead       _ismbblead
+ #if 0 //def USE_MBS
+  #define _istlead      _ismbblead
+ #endif
 #endif

@@ -36,7 +36,7 @@ public:
     typedef std::basic_streambuf<T, TR>     Super;  ///<
 
 private:
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND m_hwnd;                                    ///< window handle for notification
  #elif defined(__linux__) || defined(__APPLE__)
     // TODO:ファイル出力
@@ -60,14 +60,14 @@ private:
 public:
     ///
     basic_msgbuf(
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         UINT    i_messageId,
         HWND    i_hwnd = 0
      #elif defined(__linux__) || defined(__APPLE__)
         int     i_file
      #endif
     ) :
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         m_hwnd(i_hwnd)
         , m_messageId(i_messageId)
         ,
@@ -91,7 +91,7 @@ public:
     }
 
     /// attach/detach a window
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     basic_msgbuf *attach(HWND i_hwnd)
     {
         Acquire a(&m_cs);
@@ -136,7 +136,7 @@ public:
     }
  #endif
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// get window handle
     HWND getHwnd() const { return m_hwnd; }
     /// is a window attached ?
@@ -190,8 +190,8 @@ public:
     {
         T * begin  = basic_streambuf<T, TR>::pbase();
         T * end    = basic_streambuf<T, TR>::pptr();
+     #if 0 //def USE_MBC
         T * i;
-
         for (i = begin; i < end; ++i) {
             if ( _istlead(*i) )
                 ++i;
@@ -199,7 +199,6 @@ public:
         if (i == end) {
             if (m_msgDebugLevel <= m_debugLevel)
                 m_str += String(begin, end - begin);
-
             this->setp(m_buf, m_buf + SIZE);
         } else { // end < i
             if (m_msgDebugLevel <= m_debugLevel)
@@ -209,7 +208,11 @@ public:
             this->setp(m_buf, m_buf + SIZE);
             basic_streambuf<T, TR>::pbump(1);
         }
-
+     #else
+        if (m_msgDebugLevel <= m_debugLevel)
+            m_str += String(begin, end - begin);
+        this->setp(m_buf, m_buf + SIZE);
+     #endif
         return TR::not_eof(0);
     }
 
@@ -231,7 +234,7 @@ public:
     /// end writing
     virtual void release()
     {
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         if ( !m_str.empty() )
             PostMessage( m_hwnd, m_messageId, 0, reinterpret_cast<LPARAM>(this) );
 
@@ -261,13 +264,13 @@ private:
 public:
     ///
     explicit basic_omsgstream(
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         UINT    i_messageId,
         HWND    i_hwnd = 0
      #endif
     )   : Super(&m_streamBuf)
         , m_streamBuf(
-         #if defined(WIN32)
+         #if 0 //defined(WIN32)
               i_messageId,
               i_hwnd
          #elif defined(__linux__) || defined(__APPLE__)
@@ -282,7 +285,7 @@ public:
     ///
     StreamBuf *rdbuf() const { return const_cast<StreamBuf *>(&m_streamBuf); }
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// attach a msg control
     void attach(HWND i_hwnd) { m_streamBuf.attach(i_hwnd); }
  #else
@@ -290,7 +293,7 @@ public:
  #endif
     /// detach a msg control
     void detach() { m_streamBuf.detach(); }
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// get window handle of the msg control
     HWND getHwnd() const { return m_streamBuf.getHwnd(); }
     /// is the msg control attached ?

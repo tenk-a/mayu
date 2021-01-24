@@ -6,9 +6,8 @@
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#if 0 //defined(_MSC_VER)
 // Microsoft Visual C++ 6.0
-
-#if defined(_MSC_VER)
 
 // get compiler version string
 tstring getCompilerVersionString()
@@ -25,9 +24,8 @@ tstring getCompilerVersionString()
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#elif 0 //defined(__BORLANDC__)
 // Borland C++ 5.5.1
-
-#elif defined(__BORLANDC__)
 
 // get compiler version string
 tstring getCompilerVersionString()
@@ -44,9 +42,8 @@ tstring getCompilerVersionString()
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Linux GCC
-
 #elif defined(__linux__) || defined(__APPLE__)
+// Linux GCC
 
 // get compiler version string
 tstring getCompilerVersionString()
@@ -54,7 +51,11 @@ tstring getCompilerVersionString()
     TCHAR buf[200];
 
     _sntprintf(buf, NUMBER_OF(buf),
+             #ifdef __clang__
+               _T("clang")      // TODO:
+             #else
                _T("GCC")        // TODO:
+             #endif
     );
     return tstring(buf);
 }

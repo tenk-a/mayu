@@ -14,7 +14,7 @@
 #include <stdio.h>      // for snprintf
 #include <string.h>     // for stricmp
 
-#ifdef __CYGWIN__
+#if 0 //def __CYGWIN__
 namespace std {
     typedef basic_string<wchar_t>   wstring;    // !!
 }
@@ -128,8 +128,9 @@ inline size_t tcslcpy(unsigned char *o_dest, const unsigned char *i_src, size_t 
 inline size_t tcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize) {
     return wcslcpy(o_dest, i_src, i_destSize);
 }
-// escape regexp special characters in MBCS trail bytes
+#if 0 //def _MBCS // escape regexp special characters in MBCS trail bytes
 std::string     guardRegexpFromMbcs(const char *i_str);
+#endif
 /// converter
 std::wstring    to_wstring(const std::string &i_str);
 /// converter

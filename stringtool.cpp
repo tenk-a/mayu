@@ -5,7 +5,7 @@
 #include "stringtool.h"
 #include "array.h"
 #include <locale>
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include <malloc.h>
  #include <mbstring.h>
 #endif
@@ -171,12 +171,14 @@ size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
 
     // Copy as many bytes as will fit
     for (--n; *s && 0 < n; --n) {
+     #if 0 //def USE_MBS
         if ( _ismbblead(*s) ) {
             if ( !(s[1] && 2 <= n) )
                 break;
             *d++ = *s++;
             --n;
         }
+     #endif
         *d++ = *s++;
     }
     *d = '\0';
@@ -201,17 +203,20 @@ tostream & operator <<(tostream &i_ost, const tstringq &i_data)
         case _T('\v'): i_ost << _T("\\v");  break;
         case _T('"') : i_ost << _T("\\\""); break;
         default:
+         #if 0 //def USE_MBC
             if ( _istlead(*s) ) {
                 _TCHAR buf[3] = { s[0], s[1], 0 };
                 i_ost << buf;
                 ++s;
-            } else if ( _istprint(*s) ) {
+            } else
+         #endif
+            if ( _istprint(*s) ) {
                 _TCHAR buf[2] = { *s, 0 };
                 i_ost << buf;
             } else {
                 i_ost << _T("\\x");
                 _TCHAR buf[5];
-             #ifdef _UNICODE
+             #if 0 //def UNICODE
                 _sntprintf(buf, NUMBER_OF(buf), _T("%04x"), *s);
              #else
                 _sntprintf(buf, NUMBER_OF(buf), _T("%02x"), *s);
@@ -240,8 +245,10 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
 
     while (i_str < end && *i_str) {
         if ( *i_str != _T('\\') ) {
+         #if 0 //def USE_MBC
             if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
                 *d++ = *i_str++;
+         #endif
             *d++ = *i_str++;
         } else if ( *(i_str + 1) != _T('\0') ) {
             i_str++;
@@ -347,8 +354,10 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
                 default:
                 case_default:
                     *d++   = _T('\\');
+                 #if 0 //def USE_MBC
                     if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
                         *d++ = *i_str++;
+                 #endif
                     *d++   = *i_str++;
                     break;
                 }
@@ -361,7 +370,7 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 // add session id to i_str
 tstring addSessionId(const _TCHAR *i_str)
 {
@@ -377,7 +386,7 @@ tstring addSessionId(const _TCHAR *i_str)
 #endif
 
 
-#ifdef _MBCS
+#if 0 //def _MBCS
 // escape regexp special characters in MBCS trail bytes
 std::string guardRegexpFromMbcs(const char *i_str)
 {
@@ -433,9 +442,11 @@ tstring toLower(const tstring &i_str)
 {
     tstring str(i_str);
     for (size_t i = 0; i < str.size(); ++i) {
+      #if 0 //def USE_MBS
         if ( _ismbblead(str[i]) )
             ++i;
         else
+      #endif
             str[i] = tolower((u_int8)str[i]);
     }
     return str;

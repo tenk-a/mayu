@@ -132,7 +132,7 @@ extern bool getTypeValue(ModifierLockType *o_type, const tstring &i_name);
 
 ///
 enum ShowCommandType {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     ShowCommandType_hide               = SW_HIDE,               ///
     ShowCommandType_maximize           = SW_MAXIMIZE,           ///
     ShowCommandType_minimize           = SW_MINIMIZE,           ///
@@ -148,7 +148,7 @@ enum ShowCommandType {
  #endif
 };
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 /// stream output
 extern tostream&    operator<<(tostream &i_ost, ShowCommandType i_data);
 // get value of ShowCommandType

@@ -3,17 +3,17 @@
 
 
 #include "vkeytable.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include <ime.h>
 #endif
 
 
 // Vkey table (terminated by NULL)
 const VKeyTable g_vkeyTable[] = {
-    #if defined(WIN32)
+    #if 0 //defined(WIN32)
      #define VK(name)   { VK_ ## name,  _T(# name) }
     #elif defined(__linux__) || defined(__APPLE__)
-     #define VK(name)   { (u_int8) - 1, _T(# name) }
+     #define VK(name)   { (u_int8)-1, _T(# name) }
     #endif
 
     /*
@@ -24,7 +24,7 @@ const VKeyTable g_vkeyTable[] = {
     VK(CANCEL),                     // 0x03
     VK(MBUTTON),                    // 0x04    /* NOT contiguous with L & RBUTTON */
 
- #if (_WIN32_WINNT >= 0x0500)
+ #if 0 //(_WIN32_WINNT >= 0x0500)
     VK(XBUTTON1),                   // 0x05    /* NOT contiguous with L & RBUTTON */
     VK(XBUTTON2),                   // 0x06    /* NOT contiguous with L & RBUTTON */
  #endif /* _WIN32_WINNT >= 0x0500 */
@@ -205,7 +205,7 @@ const VKeyTable g_vkeyTable[] = {
     VK(RCONTROL),                   // 0xA3
     VK(LMENU),                      // 0xA4
     VK(RMENU),                      // 0xA5
- #if (_WIN32_WINNT >= 0x0500)
+ #if 0 //(_WIN32_WINNT >= 0x0500)
     VK(BROWSER_BACK),               // 0xA6
     VK(BROWSER_FORWARD),            // 0xA7
     VK(BROWSER_REFRESH),            // 0xA8
@@ -262,11 +262,11 @@ const VKeyTable g_vkeyTable[] = {
     VK(OEM_102),                    // 0xE2 //  "<>" or "\|" on RT 102-key kbd.
     VK(ICO_HELP),                   // 0xE3 //  Help key on ICO
     VK(ICO_00),                     // 0xE4 //  00 key on ICO
- #if (WINVER >= 0x0400)
+ #if 0 //(WINVER >= 0x0400)
     VK(PROCESSKEY),                 // 0xE5
  #endif /* WINVER >= 0x0400 */
     VK(ICO_CLEAR),                  // 0xE6
- #if (_WIN32_WINNT >= 0x0500)
+ #if 0 //(_WIN32_WINNT >= 0x0500)
     VK(PACKET),                     // 0xE7
  #endif /* _WIN32_WINNT >= 0x0500 */
 

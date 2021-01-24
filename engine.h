@@ -11,7 +11,7 @@
 #include <set>
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 enum {
     ///
     WM_APP_engineNotify = WM_APP + 110,
@@ -44,7 +44,7 @@ private:
     class FocusOfThread {
 public:
         DWORD           m_threadId;                         ///< thread id
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         HWND            m_hwndFocus;                        ///< window that has focus on the thread
      #endif
         tstringi        m_className;                        ///< class name of hwndFocus
@@ -56,7 +56,7 @@ public:
         ///
         FocusOfThread()
             : m_threadId(0)
-         #if defined(WIN32)
+         #if 0 //defined(WIN32)
             , m_hwndFocus(NULL)
          #endif
             , m_isConsole(false) { }
@@ -92,7 +92,7 @@ public:
     public:
         bool    m_doForceReset;                                                 ///<
     private:
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         ///
         HGLOBAL makeNewKillLineBuf(const _TCHAR *i_data, int *i_retval);
      #elif defined(__linux__) || defined(__APPLE__)
@@ -110,7 +110,7 @@ public:
         /// EmacsEditKillLinePred
         int     pred();
     };
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// window positon for &amp;WindowHMaximize, &amp;WindowVMaximize
     class WindowPosition {
     public:
@@ -149,13 +149,13 @@ private:
     CriticalSection             m_cs;                           ///< criticalSection
 
     // setting
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND                        m_hwndAssocWindow;              ///< associated window (we post message to it)
  #endif
     Setting *volatile           m_setting;                      ///< setting
 
     // engine thread state
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HANDLE                      m_device;                       ///< mayu device
  #elif defined(__linux__)
  #elif defined(__APPLE__)
@@ -163,7 +163,7 @@ private:
  #endif
     tstring                     m_mayudVersion;                 ///< version of mayud.sys
     bool                        m_didMayuStartDevice;           ///< Did the mayu start the mayu-device ?
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HANDLE                      m_threadEvent;                  /**< 1. thread has been started
                                                                      2. thread is about to end*/
   #if defined(_WINNT)
@@ -182,7 +182,7 @@ private:
     bool volatile               m_isLogMode;                    ///< is logging mode ?
     bool volatile               m_isEnabled;                    ///< is enabled  ?
     bool volatile               m_isSynchronizing;              ///< is synchronizing ?
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HANDLE                      m_eSync;                        ///< event for synchronization
  #elif defined(__linux__)
     // TODO:
@@ -217,17 +217,17 @@ private:
     FocusOfThreads /*volatile*/ m_focusOfThreads;               ///<
     FocusOfThread *volatile     m_currentFocusOfThread;         ///<
     FocusOfThread               m_globalFocus;                  ///<
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND                        m_hwndFocus;                    ///< current focus window
  #endif
     DetachedThreadIds           m_detachedThreadIds;            ///<
     // for functions
     KeymapPtrList               m_keymapPrefixHistory;          ///< for &amp;KeymapPrevPrefix
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     EmacsEditKillLine           m_emacsEditKillLine;            ///< for &amp;EmacsEditKillLine
  #endif
     const ActionFunction *      m_afShellExecute;               ///< for &amp;ShellExecute
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     WindowPositions             m_windowPositions;              ///<
     WindowsWithAlpha            m_windowsWithAlpha;             ///<
  #endif
@@ -426,7 +426,7 @@ private:
                                const tregex &               i_name,
                                const StrExprArg &           i_protocol,
                                const std::list<tstringq> &  i_headers);
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// PlugIn
     void        funcPlugIn(FunctionParam *      i_param,
                            const StrExprArg &   i_dllName,
@@ -468,7 +468,7 @@ public:
     void disable() { m_isEnabled = false; }
     ///
     bool getIsEnabled() const { return m_isEnabled; }
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// associated window
     void setAssociatedWndow(HWND i_hwnd) { m_hwndAssocWindow = i_hwnd; }
     /// associated window
@@ -476,7 +476,7 @@ public:
  #endif
     /// setting
     bool    setSetting(Setting *i_setting);
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// focus
     bool    setFocus(HWND i_hwndFocus, DWORD i_threadId,
                      const tstringi &i_className,
@@ -486,7 +486,7 @@ public:
     bool    setLockState(bool i_isNumLockToggled, bool i_isCapsLockToggled,
                          bool i_isScrollLockToggled, bool i_isKanaLockToggled,
                          bool i_isImeLockToggled, bool i_isImeCompToggled);
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// show
     void    checkShow(HWND i_hwnd);
     bool    setShow(bool i_isMaximized, bool i_isMinimized, bool i_isMDI);
@@ -499,7 +499,7 @@ public:
     void    shellExecute();
     /// get help message
     void    getHelpMessages(tstring *o_helpMessage, tstring *o_helpTitle);
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     /// command notify
     void    commandNotify(HWND i_hwnd, UINT i_message, WPARAM i_wParam, LPARAM i_lParam);
  #endif
@@ -516,7 +516,7 @@ public:
 class FunctionParam {
 public:
     bool                    m_isPressed;    ///< is key pressed ?
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND                    m_hwnd;         ///<
  #endif
     Engine::Current         m_c;            ///< new context

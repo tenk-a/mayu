@@ -4,7 +4,7 @@
 #ifndef _MULTITHREAD_H
 #define _MULTITHREAD_H
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include <windows.h>
 #elif defined(__linux__)
 #elif defined(__APPLE__)
@@ -22,7 +22,7 @@ public:
     virtual void    release()  = 0;
 };
 
-# if defined(_MSC_VER)
+# if 0 //defined(_MSC_VER)
 ///
 class CriticalSection : public SyncObject {
     CRITICAL_SECTION m_cs;  ///

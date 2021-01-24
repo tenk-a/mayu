@@ -122,7 +122,7 @@ private:
     void        load_ARGUMENT(ModifierLockType *o_arg);                             ///< &lt;ARGUMENT_LOCK&gt;
     void        load_ARGUMENT(ToggleType *o_arg);                                   ///< &lt;ARGUMENT&gt;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     void        load_ARGUMENT(ShowCommandType *o_arg);                              ///&lt;ARGUMENT_SHOW_WINDOW&gt;
  #endif
     void        load_ARGUMENT(TargetWindowType *o_arg);                             ///< &lt;ARGUMENT_TARGET_WINDOW_TYPE&gt;

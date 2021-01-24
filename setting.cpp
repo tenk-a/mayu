@@ -4,17 +4,17 @@
 
 #include "misc.h"
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "dlgsetting.h"
 #endif
 #include "errormessage.h"
 #include "mayu.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "mayurc.h"
  #include "registry.h"
 #endif
 #include "setting.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "windowstool.h"
 #endif
 #include "vkeytable.h"
@@ -46,7 +46,7 @@ namespace Event {
 // get mayu filename
 static bool getFilenameFromRegistry(tstringi *o_name, tstringi *o_filename, Setting::Symbols *o_symbols)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     Registry        reg(MAYU_REGISTRY_ROOT);
     int             index;
     reg.read(_T(".mayuIndex"), &index, 0);
@@ -95,7 +95,7 @@ static bool getFilenameFromRegistry(tstringi *o_name, tstringi *o_filename, Sett
 // get home directory path
 void getHomeDirectories(HomeDirectories *o_pathes)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     tstringi    filename;
 
     if ( getFilenameFromRegistry(NULL, &filename, NULL) && !filename.empty() ) {
@@ -817,7 +817,7 @@ void SettingLoader::load_ARGUMENT(ToggleType *o_arg)
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 // &lt;ARGUMENT_SHOW_WINDOW&gt;
 void SettingLoader::load_ARGUMENT(ShowCommandType *o_arg)
 {
@@ -1293,7 +1293,7 @@ static bool prefixSortPred(const tstringi &i_a, const tstringi &i_b)
 
 
 /*
-   _UNICODE: read file (UTF-16 LE/BE, UTF-8, locale specific multibyte encoding)
+   UNICODE: read file (UTF-16 LE/BE, UTF-8, locale specific multibyte encoding)
    _MBCS: read file
   */
 bool readFile(tstring *o_data, const tstringi &i_filename)
@@ -1334,7 +1334,7 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
     buf.get()[sbuf.st_size] = 0;            // mbstowcs() requires null
     // terminated string
 
- #ifdef _UNICODE
+ #if 0 //def UNICODE
     //
     if (buf.get()[0] == 0xffU && buf.get()[1] == 0xfeU && sbuf.st_size % 2 == 0)
     // UTF-16 Little Endien
@@ -1429,7 +1429,7 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
 
       not_UTF_8:;
     }
- #endif // _UNICODE
+ #endif // UNICODE
 
     // assume ascii
     o_data->resize( static_cast<size_t>(sbuf.st_size) );
@@ -1549,7 +1549,7 @@ bool SettingLoader::isReadable(const tstringi& i_filename, int i_debugLevel) con
     if ( i_filename.empty() )
         return false;
 
- #ifdef UNICODE
+ #if 0 //def UNICODE
     tifstream   ist( to_string(i_filename).c_str() );
  #else
     tifstream   ist( i_filename.c_str() );
@@ -1668,7 +1668,7 @@ bool SettingLoader::getFilename(const tstringi &i_name, tstringi *o_path,
         if ( !i_name.empty() )
             return false;   // called by 'include'
 
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         if ( !DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIALOG_setting), NULL, dlgSetting_dlgProc) )
             return false;
      #endif

@@ -5,23 +5,17 @@
 #ifndef _DRIVER_H
 #define _DRIVER_H
 
-#if defined(_MSC_VER)
- # if defined(_WINNT)
-
-  #  include <winioctl.h>
-
-/// mayu device file name
-  #  define MAYU_DEVICE_FILE_NAME _T("\\\\.\\MayuDetour1")
-///
-  #  define MAYU_DRIVER_NAME _T("mayud")
-
- # elif defined(_WIN95)
-
-///
-  #  define MAYU_DEVICE_FILE_NAME _T("\\\\.\\mayud.vxd")
-
- # endif
-
+#if 0 //defined(_MSC_VER)
+ #if defined(_WINNT)
+  #include <winioctl.h>
+  /// mayu device file name
+  #define MAYU_DEVICE_FILE_NAME _T("\\\\.\\MayuDetour1")
+  ///
+  #define MAYU_DRIVER_NAME _T("mayud")
+ #elif 0 //defined(_WIN95)
+  ///
+  #define MAYU_DEVICE_FILE_NAME _T("\\\\.\\mayud.vxd")
+ #endif
 #endif
 
 /// Ioctl value

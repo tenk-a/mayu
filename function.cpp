@@ -3,21 +3,21 @@
 
 
 #include "engine.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "hook.h"
  #include "mayurc.h"
 #endif
 #include "mayu.h"
 #include "misc.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "registry.h"
 #endif
 #include "vkeytable.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "windowstool.h"
 #endif
 #include <algorithm>
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include <process.h>
 #endif
 
@@ -73,7 +73,7 @@ bool getTypeValue(T *o_type, const tstringi &i_name, const TypeTable<T> *i_table
 // stream output
 tostream & operator <<(tostream &i_ost, VKey i_data)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (i_data & VKey_extended)
         i_ost << _T("E-");
 
@@ -303,7 +303,7 @@ bool getTypeValue(ModifierLockType *o_type, const tstring &i_name)
 typedef TypeTable<ShowCommandType>  TypeTable_ShowCommandType;
 
 static const TypeTable_ShowCommandType  g_showCommandTypeTable[] = {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     { ShowCommandType_hide,            _T("hide")                       },
     { ShowCommandType_maximize,        _T("maximize")                   },
     { ShowCommandType_minimize,        _T("minimize")                   },
@@ -544,7 +544,7 @@ FunctionData *createFunctionData(const tstring &i_name)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // misc. functions
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 
 //
 bool getSuitableWindow(FunctionParam *i_param, HWND *o_hwnd)
@@ -655,7 +655,7 @@ static void closeClipboard(HGLOBAL i_hdata, HGLOBAL i_hdataNew = NULL)
 // at that time, confirm if it is the result of the previous kill-line
 void Engine::EmacsEditKillLine::func()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if ( !m_buf.empty() ) {
         HGLOBAL         g;
         const _TCHAR *  text = getTextFromClipboard(&g);
@@ -677,7 +677,7 @@ void Engine::EmacsEditKillLine::func()
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 /** if the text of the clipboard is
     @doc
     <pre>
@@ -734,7 +734,7 @@ HGLOBAL Engine::EmacsEditKillLine::makeNewKillLineBuf(const _TCHAR *i_data, int 
 // EmacsEditKillLinePred
 int Engine::EmacsEditKillLine::pred()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HGLOBAL         g;
     const _TCHAR *  text   = getTextFromClipboard(&g);
     int             retval;
@@ -883,7 +883,7 @@ void Engine::funcKeymap(FunctionParam *i_param, const Keymap *i_keymap)
 // sync
 void Engine::funcSync(FunctionParam *i_param)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (i_param->m_isPressed)
         generateModifierEvents(i_param->m_af->m_modifier);
 
@@ -903,7 +903,7 @@ void Engine::funcSync(FunctionParam *i_param)
     m_isSynchronizing                  = true;
   #if defined(_WINNT)
     generateKeyEvent(sync, false, false);
-  #elif defined(_WIN95)
+  #elif 0 //defined(_WIN95)
     generateKeyEvent(sync, true, false);
   #else
     #error
@@ -996,7 +996,7 @@ void Engine::funcUndefined(FunctionParam *i_param)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     MessageBeep(MB_OK);
  #elif defined(__linux__)
     // TODO:
@@ -1020,7 +1020,7 @@ void Engine::funcPostMessage(FunctionParam *i_param, ToWindowType i_window,
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     int     window = static_cast<int>(i_window);
     HWND    hwnd   = i_param->m_hwnd;
 
@@ -1060,7 +1060,7 @@ void Engine::funcShellExecute(FunctionParam *   i_param,
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     m_afShellExecute = i_param->m_af;
     PostMessage(m_hwndAssocWindow, WM_APP_engineNotify, EngineNotify_shellExecute, 0);
  #elif defined(__linux__) || defined(__APPLE__)
@@ -1072,7 +1072,7 @@ void Engine::funcShellExecute(FunctionParam *   i_param,
 // shell execute
 void Engine::shellExecute()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     Acquire a(&m_cs);
 
     FunctionData_ShellExecute * fd = reinterpret_cast<FunctionData_ShellExecute *>(m_afShellExecute->m_functionData);
@@ -1124,7 +1124,7 @@ void Engine::shellExecute()
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 struct EnumWindowsForSetForegroundWindowParam {
     const FunctionData_SetForegroundWindow *m_fd;
     HWND                                    m_hwnd;
@@ -1139,7 +1139,7 @@ public:
 #endif
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 
 /// enum windows for SetForegroundWindow
 static BOOL CALLBACK enumWindowsForSetForegroundWindow(HWND i_hwnd, LPARAM i_lParam)
@@ -1179,7 +1179,7 @@ void Engine::funcSetForegroundWindow(FunctionParam *i_param, const tregex &, Log
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     EnumWindowsForSetForegroundWindowParam
             ep( static_cast<const FunctionData_SetForegroundWindow *>( i_param->m_af->m_functionData) );
     EnumWindows( enumWindowsForSetForegroundWindow, reinterpret_cast<LPARAM>(&ep) );
@@ -1199,7 +1199,7 @@ void Engine::funcLoadSetting(FunctionParam *i_param, const StrExprArg &i_name)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if ( !i_name.eval().empty() ) {
         // set MAYU_REGISTRY_ROOT\.mayuIndex which name is same with i_name
         Registry    reg(MAYU_REGISTRY_ROOT);
@@ -1245,7 +1245,7 @@ void Engine::funcLoadSetting(FunctionParam *i_param, const StrExprArg &i_name)
 // virtual key
 void Engine::funcVK(FunctionParam *i_param, VKey i_vkey)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     long    key        = static_cast<long>(i_vkey);
     BYTE    vkey       = static_cast<BYTE>(i_vkey);
     bool    isExtended = !!(key & VKey_extended);
@@ -1289,7 +1289,7 @@ void Engine::funcWait(FunctionParam *i_param, int i_milliSecond)
 
     m_isSynchronizing  = true;
     m_cs.release();
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     Sleep(i_milliSecond);
  #elif defined(__linux__)
     // TODO:
@@ -1307,7 +1307,7 @@ void Engine::funcInvestigateCommand(FunctionParam *i_param)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     Acquire a(&m_log, 0);
     g_hookData->m_doesNotifyCommand = !g_hookData->m_doesNotifyCommand;
 
@@ -1322,7 +1322,7 @@ void Engine::funcInvestigateCommand(FunctionParam *i_param)
 // show mayu dialog box
 void Engine::funcMayuDialog(FunctionParam *i_param, MayuDialogType i_dialog, ShowCommandType i_showCommand)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (!i_param->m_isPressed)
         return;
 
@@ -1352,7 +1352,7 @@ void Engine::funcHelpMessage(FunctionParam *i_param, const StrExprArg &i_title, 
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     m_helpTitle    = i_title.eval();
     m_helpMessage  = i_message.eval();
     bool doesShow = !(i_title.eval().size() == 0 && i_message.eval().size() == 0);
@@ -1367,7 +1367,7 @@ void Engine::funcHelpVariable(FunctionParam *i_param, const StrExprArg &i_title)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     _TCHAR buf[20];
     _sntprintf(buf, NUMBER_OF(buf), _T("%d"), m_variable);
 
@@ -1381,7 +1381,7 @@ void Engine::funcHelpVariable(FunctionParam *i_param, const StrExprArg &i_title)
 // raise window
 void Engine::funcWindowRaise(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableMdiWindow(i_param, &hwnd, &i_twt) )
@@ -1395,7 +1395,7 @@ void Engine::funcWindowRaise(FunctionParam* i_param, TargetWindowType i_twt)
 // lower window
 void Engine::funcWindowLower(FunctionParam *i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableMdiWindow(i_param, &hwnd, &i_twt) )
@@ -1409,7 +1409,7 @@ void Engine::funcWindowLower(FunctionParam *i_param, TargetWindowType i_twt)
 // minimize window
 void Engine::funcWindowMinimize(FunctionParam *i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableMdiWindow(i_param, &hwnd, &i_twt) )
@@ -1423,7 +1423,7 @@ void Engine::funcWindowMinimize(FunctionParam *i_param, TargetWindowType i_twt)
 // maximize window
 void Engine::funcWindowMaximize(FunctionParam *i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableMdiWindow(i_param, &hwnd, &i_twt) )
@@ -1439,7 +1439,7 @@ void Engine::funcWindowHVMaximize(FunctionParam *   i_param,
                                   BooleanType       i_isHorizontal,
                                   TargetWindowType  i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND                        hwnd;
     RECT                        rc, rcd;
 
@@ -1510,7 +1510,7 @@ void Engine::funcWindowHVMaximize(FunctionParam *   i_param,
 // maximize window horizontally
 void Engine::funcWindowHMaximize(FunctionParam* i_param, TargetWindowType i_twt)
 {
-#if defined(WIN32)
+#if 0 //defined(WIN32)
     funcWindowHVMaximize(i_param, BooleanType_true, i_twt);
 #endif
 }
@@ -1519,7 +1519,7 @@ void Engine::funcWindowHMaximize(FunctionParam* i_param, TargetWindowType i_twt)
 // maximize window virtically
 void Engine::funcWindowVMaximize(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowHVMaximize(i_param, BooleanType_false, i_twt);
  #endif
 }
@@ -1528,7 +1528,7 @@ void Engine::funcWindowVMaximize(FunctionParam* i_param, TargetWindowType i_twt)
 // move window
 void Engine::funcWindowMove(FunctionParam *i_param, int i_dx, int i_dy, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowMoveTo(i_param, GravityType_C, i_dx, i_dy, i_twt);
  #endif
 }
@@ -1539,7 +1539,7 @@ void Engine::funcWindowMoveTo(FunctionParam *i_param,
                               GravityType i_gravityType,
                               int i_dx, int i_dy, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND    hwnd;
     RECT    rc, rcd;
 
@@ -1562,7 +1562,7 @@ void Engine::funcWindowMoveTo(FunctionParam *i_param,
 // move window visibly
 void Engine::funcWindowMoveVisibly(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND    hwnd;
     RECT    rc, rcd;
 
@@ -1587,7 +1587,7 @@ void Engine::funcWindowMoveVisibly(FunctionParam* i_param, TargetWindowType i_tw
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 
 struct EnumDisplayMonitorsForWindowMonitorToParam {
     std::vector<HMONITOR>       m_monitors;
@@ -1635,7 +1635,7 @@ static BOOL CALLBACK enumDisplayMonitorsForWindowMonitorTo(HMONITOR i_hmon,
 void Engine::funcWindowMonitorTo(FunctionParam *i_param, WindowMonitorFromType i_fromType, int i_monitor,
                                  BooleanType i_adjustPos, BooleanType i_adjustSize)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND        hwnd;
 
     if ( !getSuitableWindow(i_param, &hwnd) )
@@ -1715,7 +1715,7 @@ void Engine::funcWindowMonitorTo(FunctionParam *i_param, WindowMonitorFromType i
 void Engine::funcWindowMonitor(FunctionParam *i_param, int i_monitor,
                                BooleanType i_adjustPos, BooleanType i_adjustSize)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowMonitorTo(i_param, WindowMonitorFromType_primary, i_monitor, i_adjustPos, i_adjustSize);
  #endif
 }
@@ -1724,7 +1724,7 @@ void Engine::funcWindowMonitor(FunctionParam *i_param, int i_monitor,
 //
 void Engine::funcWindowClingToLeft(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowMoveTo(i_param, GravityType_W, 0, 0, i_twt);
  #endif
 }
@@ -1733,7 +1733,7 @@ void Engine::funcWindowClingToLeft(FunctionParam* i_param, TargetWindowType i_tw
 //
 void Engine::funcWindowClingToRight(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowMoveTo(i_param, GravityType_E, 0, 0, i_twt);
  #endif
 }
@@ -1742,7 +1742,7 @@ void Engine::funcWindowClingToRight(FunctionParam* i_param, TargetWindowType i_t
 //
 void Engine::funcWindowClingToTop(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowMoveTo(i_param, GravityType_N, 0, 0, i_twt);
  #endif
 }
@@ -1751,7 +1751,7 @@ void Engine::funcWindowClingToTop(FunctionParam* i_param, TargetWindowType i_twt
 //
 void Engine::funcWindowClingToBottom(FunctionParam* i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcWindowMoveTo(i_param, GravityType_S, 0, 0, i_twt);
  #endif
 }
@@ -1760,7 +1760,7 @@ void Engine::funcWindowClingToBottom(FunctionParam* i_param, TargetWindowType i_
 // close window
 void Engine::funcWindowClose(FunctionParam *i_param, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableMdiWindow(i_param, &hwnd, &i_twt) )
@@ -1773,7 +1773,7 @@ void Engine::funcWindowClose(FunctionParam *i_param, TargetWindowType i_twt)
 // toggle top-most flag of the window
 void Engine::funcWindowToggleTopMost(FunctionParam *i_param)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableWindow(i_param, &hwnd) )
@@ -1796,7 +1796,7 @@ void Engine::funcWindowIdentify(FunctionParam *i_param)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     _TCHAR  className[GANA_MAX_ATOM_LENGTH];
     bool    ok = false;
 
@@ -1847,7 +1847,7 @@ void Engine::funcWindowIdentify(FunctionParam *i_param)
 // set alpha blending parameter to the window
 void Engine::funcWindowSetAlpha(FunctionParam *i_param, int i_alpha)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
   #if defined(_WINNT)
     HWND hwnd;
 
@@ -1896,7 +1896,7 @@ void Engine::funcWindowSetAlpha(FunctionParam *i_param, int i_alpha)
 // redraw the window
 void Engine::funcWindowRedraw(FunctionParam *i_param)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND hwnd;
 
     if ( !getSuitableWindow(i_param, &hwnd) )
@@ -1911,7 +1911,7 @@ void Engine::funcWindowRedraw(FunctionParam *i_param)
 void Engine::funcWindowResizeTo(FunctionParam *i_param, int i_width,
                                 int i_height, TargetWindowType i_twt)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HWND    hwnd;
     RECT    rc, rcd;
 
@@ -1939,7 +1939,7 @@ void Engine::funcMouseMove(FunctionParam *i_param, int i_dx, int i_dy)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     POINT pt;
     GetCursorPos(&pt);
     SetCursorPos(pt.x + i_dx, pt.y + i_dy);
@@ -1957,7 +1957,7 @@ void Engine::funcMouseWheel(FunctionParam *i_param, int i_delta)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     mouse_event(MOUSEEVENTF_WHEEL, 0, 0, i_delta, 0);
  #elif defined(__linux__)
     // TODO:
@@ -1973,7 +1973,7 @@ void Engine::funcClipboardChangeCase(FunctionParam *i_param, BooleanType i_doesC
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     HGLOBAL         hdata;
     const _TCHAR *  text       = getTextFromClipboard(&hdata);
     HGLOBAL         hdataNew   = NULL;
@@ -1987,9 +1987,11 @@ void Engine::funcClipboardChangeCase(FunctionParam *i_param, BooleanType i_doesC
                 _TCHAR *dataEnd = dataNew + size;
                 while (dataNew < dataEnd && *dataNew) {
                     _TCHAR c = *dataNew;
+                 #if 0 //def USE_MBC
                     if ( _istlead(c) )
                         dataNew += 2;
                     else
+                 #endif
                         *dataNew++ = i_doesConvertToUpperCase ? _totupper(c) : _totlower(c);
                 }
                 GlobalUnlock(hdataNew);
@@ -2004,7 +2006,7 @@ void Engine::funcClipboardChangeCase(FunctionParam *i_param, BooleanType i_doesC
 // convert the contents of the Clipboard to upper case
 void Engine::funcClipboardUpcaseWord(FunctionParam *i_param)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcClipboardChangeCase(i_param, BooleanType_true);
  #endif
 }
@@ -2013,7 +2015,7 @@ void Engine::funcClipboardUpcaseWord(FunctionParam *i_param)
 // convert the contents of the Clipboard to lower case
 void Engine::funcClipboardDowncaseWord(FunctionParam *i_param)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     funcClipboardChangeCase(i_param, BooleanType_false);
  #endif
 }
@@ -2022,7 +2024,7 @@ void Engine::funcClipboardDowncaseWord(FunctionParam *i_param)
 // set the contents of the Clipboard to the string
 void Engine::funcClipboardCopy(FunctionParam *i_param, const StrExprArg &i_text)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (!i_param->m_isPressed)
         return;
 
@@ -2044,7 +2046,7 @@ void Engine::funcClipboardCopy(FunctionParam *i_param, const StrExprArg &i_text)
 //
 void Engine::funcEmacsEditKillLinePred(FunctionParam *i_param, const KeySeq *i_keySeq1, const KeySeq *i_keySeq2)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     m_emacsEditKillLine.m_doForceReset = false;
 
     if (!i_param->m_isPressed)
@@ -2072,7 +2074,7 @@ void Engine::funcEmacsEditKillLineFunc(FunctionParam *i_param)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     m_emacsEditKillLine.func();
     m_emacsEditKillLine.m_doForceReset = false;
  #endif
@@ -2085,7 +2087,7 @@ void Engine::funcLogClear(FunctionParam *i_param)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     PostMessage(getAssociatedWndow(), WM_APP_engineNotify, EngineNotify_clearLog, 0);
  #endif
 }
@@ -2097,7 +2099,7 @@ void Engine::funcRecenter(FunctionParam *i_param)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (m_hwndFocus) {
         UINT WM_MAYU_MESSAGE = RegisterWindowMessage( addSessionId(WM_MAYU_MESSAGE_NAME).c_str() );
         PostMessage(m_hwndFocus, WM_MAYU_MESSAGE, MayuMessage_funcRecenter, 0);
@@ -2112,7 +2114,7 @@ void Engine::funcSetImeStatus(FunctionParam *i_param, ToggleType i_toggle)
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (m_hwndFocus) {
         UINT    WM_MAYU_MESSAGE    = RegisterWindowMessage( addSessionId(WM_MAYU_MESSAGE_NAME).c_str() );
         int     status             = -1;
@@ -2138,7 +2140,7 @@ void Engine::funcSetImeStatus(FunctionParam *i_param, ToggleType i_toggle)
 // set IME open status
 void Engine::funcSetImeString(FunctionParam *i_param, const StrExprArg &i_data)
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
   #if defined(_WINNT)
     if (!i_param->m_isPressed)
         return;
@@ -2163,7 +2165,7 @@ void Engine::funcSetImeString(FunctionParam *i_param, const StrExprArg &i_data)
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 
 // Direct SSTP Server
 class DirectSSTPServer {
@@ -2200,7 +2202,7 @@ public:
 
     bool operator ()(const MR &i_what)
     {
-     #ifdef _UNICODE
+     #ifdef UNICODE
         tstring id(     to_wstring( std::string(i_what[1].first, i_what[1].second) ) );
         tstring member( to_wstring( std::string(i_what[2].first, i_what[2].second) ) );
         tstring value(  to_wstring( std::string(i_what[3].first, i_what[3].second) ) );
@@ -2233,7 +2235,7 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
     if (!i_param->m_isPressed)
         return;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     // check Direct SSTP server exist ?
     if ( HANDLE hm = OpenMutex( MUTEX_ALL_ACCESS, FALSE, _T("sakura") ) ) {
         CloseHandle(hm);
@@ -2305,14 +2307,14 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
     _sntprintf( buf, NUMBER_OF(buf), _T("HWnd: %d\r\n"), reinterpret_cast<int>(m_hwndAssocWindow) );
     request   += buf;
 
- #ifdef _UNICODE
+ #ifdef UNICODE
     request   += _T("Charset: UTF-8\r\n");
  #else
     request   += _T("Charset: Shift_JIS\r\n");
  #endif
     request   += _T("\r\n");
 
- #ifdef _UNICODE
+ #ifdef UNICODE
     std::string request_UTF_8 = to_UTF_8(request);
  #endif
 
@@ -2323,7 +2325,7 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
         if ( std::regex_match(i->second.m_name, what, i_name) ) {
             COPYDATASTRUCT  cd;
             cd.dwData  = 9801;
-         #ifdef _UNICODE
+         #ifdef UNICODE
             cd.cbData  = request_UTF_8.size();
             cd.lpData  = (void *) request_UTF_8.c_str();
          #else
@@ -2344,7 +2346,7 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 namespace shu {
 
 class PlugIn {
@@ -2513,7 +2515,7 @@ public:
 
 const Engine *StrExpr::s_engine = NULL;
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // StrExprClipboard
 class StrExprClipboard : public StrExpr {
@@ -2619,7 +2621,7 @@ StrExprArg::StrExprArg(const tstringq &i_symbol, Type i_type)
         break;
 
     case Builtin:
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         if ( i_symbol == _T("Clipboard") )
             m_expr = new StrExprClipboard(i_symbol);
         else

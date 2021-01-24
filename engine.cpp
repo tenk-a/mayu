@@ -6,7 +6,7 @@
 
 #include "engine.h"
 #include "errormessage.h"
-#if defined(WIN32)
+#if 0 //defined(WIN32)
  #include "hook.h"
  #include "mayurc.h"
  #include "windowstool.h"
@@ -14,7 +14,7 @@
 
 #include <iomanip>
 
-#if defined(_MSC_VER)
+#if 0 //defined(_MSC_VER)
  #include <process.h>
 #elif defined(__linux__)
  #include <pthread.h>
@@ -27,7 +27,7 @@
 #endif
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 /// check focus window
 void Engine::checkFocusWindow()
 {
@@ -322,7 +322,7 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
         Key *sync = m_setting->m_keyboard.getSyncKey();
 
         if (!isAlreadyReleased || i_key == sync) {
-         #if defined(WIN32) || defined(__APPLE__)
+         #if /*defined(WIN32) ||*/ defined(__APPLE__)
             KEYBOARD_INPUT_DATA kid    = { 0, 0, 0, 0, 0 };
             const ScanCode *    sc     = i_key->getScanCodes();
 
@@ -334,10 +334,10 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
                     kid.Flags |= KEYBOARD_INPUT_DATA::BREAK;
 
                 DWORD len;
-             #if defined(_WINNT)
+             #if 0 //defined(_WINNT)
                 WriteFile(m_device, &kid, sizeof (kid), &len, &m_ol);
                 CHECK_TRUE( GetOverlappedResult(m_device, &m_ol, &len, TRUE) );
-             #elif defined(_WIN95)
+             #elif 0 //defined(_WIN95)
                 DeviceIoControl(m_device, 2, &kid, sizeof (kid), NULL, 0, &len, NULL);
              #elif defined(__APPLE__)
                 write( m_device, &kid, sizeof (kid) );
@@ -519,7 +519,7 @@ void Engine::generateActionEvents(const Current &i_c, const Action *i_a,
 
             FunctionParam           param;
             param.m_isPressed      = i_doPress;
-         #if defined(WIN32)
+         #if 0 //defined(WIN32)
             param.m_hwnd           = m_currentFocusOfThread->m_hwndFocus;
          #endif
             param.m_c              = i_c;
@@ -643,7 +643,7 @@ void Engine::beginGeneratingKeyboardEvents(const Current &i_c, bool i_isModifier
     else if (!isPhysicallyPressed)  // when (2)
         m_currentKeymap = m_currentFocusOfThread->m_keymaps.front();
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     // for m_emacsEditKillLine function
     m_emacsEditKillLine.m_doForceReset     = !i_isModifier;
  #endif
@@ -659,7 +659,7 @@ void Engine::beginGeneratingKeyboardEvents(const Current &i_c, bool i_isModifier
     if (!isPhysicallyPressed)
         generateEvents(cnew, cnew.m_keymap, &Event::after_key_up);
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     // for m_emacsEditKillLine function
     if (m_emacsEditKillLine.m_doForceReset)
         m_emacsEditKillLine.reset();
@@ -695,7 +695,7 @@ void Engine::keyboardHandler(void *i_this)
 void Engine::keyboardHandler()
 {
     // initialize ok
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     CHECK_TRUE( SetEvent(m_threadEvent) );
  #elif defined(__linux__)
     // TODO:
@@ -705,7 +705,7 @@ void Engine::keyboardHandler()
     // loop
     Key key;
     while (!m_doForceTerminate) {
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         KEYBOARD_INPUT_DATA kid;
         DWORD               len;
       #if defined(_WINNT)
@@ -771,7 +771,7 @@ void Engine::keyboardHandler()
             Acquire a(&m_log, 1);
             m_log << _T("end ReadFile();") << std::endl;
         }
-      #elif defined(_WIN95)
+      #elif 0 //defined(_WIN95)
         if ( !DeviceIoControl(m_device, 1, NULL, 0, &kid, sizeof (kid), &len, NULL) ) {
             continue; // TODO
         }
@@ -839,7 +839,7 @@ void Engine::keyboardHandler()
         {   // 設定ファイルが読み込まれていないか、Disableの時は受けたものをただ入力するだけ.
             if (m_isLogMode) {
                 Key key;
-             #if defined(WIN32) || defined(__APPLE__)
+             #if /*defined(WIN32) ||*/ defined(__APPLE__)
                 key.addScanCode( ScanCode(kid.MakeCode, kid.Flags) );
              #elif defined(__linux__)
                 key.addScanCode( ScanCode(ievent.code, ievent.value == KEY_EVENT_BREAK ? ScanCode::BREAK : 0) );
@@ -847,10 +847,10 @@ void Engine::keyboardHandler()
                 outputToLog(&key, ModifiedKey(), 0);
 
             } else {
-             #if defined(_WINNT)
+             #if 0 //defined(_WINNT)
                 WriteFile(m_device, &kid, sizeof (kid), &len, &m_ol);
                 GetOverlappedResult(m_device, &m_ol, &len, TRUE);
-             #elif defined(_WIN95)
+             #elif 0 //defined(_WIN95)
                 DeviceIoControl(m_device, 2, &kid, sizeof (kid), NULL, 0, &len, NULL);
              #elif defined(__linux__)
                 send_keyboard_event( ievent.code, static_cast<KEY_EVENT_VAL>(ievent.value) );
@@ -867,10 +867,10 @@ void Engine::keyboardHandler()
         Acquire a(&m_cs);
 
         if (!m_currentFocusOfThread || !m_currentKeymap) {
-         #if defined(_WINNT)
+         #if 0 //defined(_WINNT)
             WriteFile(m_device, &kid, sizeof (kid), &len, &m_ol);
             GetOverlappedResult(m_device, &m_ol, &len, TRUE);
-         #elif defined(_WIN95)
+         #elif 0 //defined(_WIN95)
             DeviceIoControl(m_device, 2, &kid, sizeof (kid), NULL, 0, &len, NULL);
          #elif defined(__linux__)
             send_keyboard_event( ievent.code, static_cast<KEY_EVENT_VAL>(ievent.value) );
@@ -896,7 +896,7 @@ void Engine::keyboardHandler()
         c.m_i       = m_currentFocusOfThread->m_keymaps.begin();
 
         // search key
-     #if defined(WIN32) || defined(__APPLE__)
+     #if /*defined(WIN32) ||*/ defined(__APPLE__)
         key.addScanCode( ScanCode(kid.MakeCode, kid.Flags) );
      #elif defined(__linux__)
         key.addScanCode( ScanCode(ievent.code, ievent.value == KEY_EVENT_BREAK ? ScanCode::BREAK : 0) );
@@ -1022,10 +1022,10 @@ void Engine::keyboardHandler()
         updateLastPressedKey(isPhysicallyPressed ? c.m_mkey.m_key : NULL);
     }
 
- #if defined(_WINNT)
+ #if 0 //defined(_WINNT)
   break_while:
  #endif
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     CHECK_TRUE( SetEvent(m_threadEvent) );
  #elif defined(__linux__)
     // TODO:
@@ -1036,7 +1036,7 @@ void Engine::keyboardHandler()
 
 Engine::Engine(tomsgstream &i_log)
     : m_cs()
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
       , m_hwndAssocWindow(NULL)
       , m_device(INVALID_HANDLE_VALUE)
       , m_threadEvent(NULL)
@@ -1090,14 +1090,14 @@ Engine::Engine(tomsgstream &i_log)
         m_currentLock.release( static_cast<Modifier::Type>(i) );
 
     if ( !open() ) {
-     #if defined(WIN32)
+     #if 0 //defined(WIN32)
         throw ErrorMessage() << loadString(IDS_driverNotInstalled);
      #elif defined(__linux__) || defined(__APPLE__)
         throw ErrorMessage() << _T("error: Failed to open special files.");
      #endif
     }
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     {
         TCHAR   versionBuf[256];
         DWORD   length = 0;
@@ -1126,10 +1126,10 @@ Engine::Engine(tomsgstream &i_log)
 bool Engine::open()
 {
     // open mayu m_device
- #if defined(_WINNT)
+ #if 0 //defined(_WINNT)
     m_device   = CreateFile(MAYU_DEVICE_FILE_NAME, GENERIC_READ | GENERIC_WRITE,
                             0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
- #elif defined(_WIN95)
+ #elif 0 //defined(_WIN95)
     m_device   = CreateFile(MAYU_DEVICE_FILE_NAME, 0, 0, NULL, CREATE_NEW, FILE_FLAG_DELETE_ON_CLOSE, NULL);
     if (m_device != INVALID_HANDLE_VALUE) {
         return true;
@@ -1167,7 +1167,7 @@ bool Engine::open()
 /// close mayu device
 void Engine::close()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (m_device != INVALID_HANDLE_VALUE) {
         CHECK_TRUE( CloseHandle(m_device) );
     }
@@ -1186,7 +1186,7 @@ void Engine::close()
 /// start keyboard handler thread
 void Engine::start()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     CHECK_TRUE( m_threadEvent = CreateEvent(NULL, FALSE, FALSE, NULL) );
   #if defined(_WINNT)
     CHECK_TRUE( m_readEvent = CreateEvent(NULL, FALSE, FALSE, NULL) );
@@ -1212,14 +1212,14 @@ void Engine::start()
 /// stop keyboard handler thread
 void Engine::stop()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     if (m_threadEvent) {
         m_doForceTerminate     = true;
         do {
          #if defined(_WINNT)
             m_interruptThreadReason = InterruptThreadReason_Terminate;
             SetEvent(m_interruptThreadEvent);
-         #elif defined(_WIN95)
+         #elif 0 //defined(_WIN95)
             DeviceIoControl(m_device, 3, NULL, 0, NULL, 0, NULL, NULL);
          #endif
             //DWORD buf;
@@ -1260,7 +1260,7 @@ void Engine::stop()
 
 bool Engine::pause()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
   #if defined(_WINNT)
     if (m_device != INVALID_HANDLE_VALUE) {
         do {
@@ -1279,7 +1279,7 @@ bool Engine::pause()
 
 bool Engine::resume()
 {
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
   #if defined(_WINNT)
     if (m_device == INVALID_HANDLE_VALUE) {
         if ( !open() ) {
@@ -1301,14 +1301,14 @@ bool Engine::resume()
 Engine::~Engine()
 {
     stop();
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     CHECK_TRUE( CloseHandle(m_eSync) );
  #endif
 
     // close m_device
     close();
 
- #if defined(_WINNT)
+ #if 0 //defined(_WINNT)
     // destroy named pipe for &SetImeString
     DisconnectNamedPipe(m_hookPipe);
     CHECK_TRUE( CloseHandle(m_hookPipe) );
@@ -1343,7 +1343,7 @@ bool Engine::setSetting(Setting *i_setting)
     }
 
     m_setting                              = i_setting;
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     g_hookData->m_correctKanaLockHandling  = m_setting->m_correctKanaLockHandling;
  #endif
 
@@ -1363,14 +1363,14 @@ bool Engine::setSetting(Setting *i_setting)
 
     m_currentFocusOfThread = &m_globalFocus;
     setCurrentKeymap( m_globalFocus.m_keymaps.front() );
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     m_hwndFocus = NULL;
  #endif
     return true;
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 
 void Engine::checkShow(HWND i_hwnd)
 {
@@ -1525,7 +1525,7 @@ bool Engine::setLockState(bool  i_isNumLockToggled,
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 /// show
 bool Engine::setShow(bool i_isMaximized, bool i_isMinimized,
                      bool i_isMDI)
@@ -1567,7 +1567,7 @@ bool Engine::syncNotify()
     if (!m_isSynchronizing)
         return false;
 
- #if defined(WIN32)
+ #if 0 //defined(WIN32)
     CHECK_TRUE( SetEvent(m_eSync) );
  #endif
     return true;
@@ -1594,7 +1594,7 @@ void Engine::getHelpMessages(tstring *o_helpMessage, tstring *o_helpTitle)
 }
 
 
-#if defined(WIN32)
+#if 0 //defined(WIN32)
 /// command notify
 void Engine::commandNotify(HWND i_hwnd, UINT i_message, WPARAM i_wParam, LPARAM i_lParam)
 {
