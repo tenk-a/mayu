@@ -13,11 +13,13 @@
 #endif
 #include <cassert>
 
-#include "wintypes.h"
+//#include "wintypes.h"
+#include <stdint.h>
 
 #include <iostream>
 using namespace std;
 
+#if 0
 typedef unsigned char       u_char;     /// unsigned char
 typedef unsigned short      u_short;    /// unsigned short
 typedef unsigned long       u_long;     /// unsigned long
@@ -38,6 +40,7 @@ typedef unsigned long long  u_int64;    /// unsigned 64bit
 
 #if defined(__linux__) || defined(__APPLE__)
 typedef long long           _int64;     /// signed 64bit
+#endif
 #endif
 
 #ifdef NDEBUG
@@ -66,6 +69,7 @@ typedef long long           _int64;     /// signed 64bit
 /// max length of global atom
 #define GANA_MAX_ATOM_LENGTH    256
 
+#if 0
 #undef MAX
 /// redefine MAX macro
 #define MAX(a, b)               ( ( (b) < (a) ) ? (a) : (b) )
@@ -73,5 +77,6 @@ typedef long long           _int64;     /// signed 64bit
 #undef MIN
 /// redefine MIN macro
 #define MIN(a, b)               ( ( (a) < (b) ) ? (a) : (b) )
+#endif
 
 #endif // !_MISC_H

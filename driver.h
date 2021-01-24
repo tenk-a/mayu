@@ -21,8 +21,8 @@
 /// Ioctl value
 #include "d/ioctl.h"
 
-#include "wintypes.h"                           // linux and mac
-
+//#include "wintypes.h"           // linux and mac
+#include <stdint.h>
 
 /// derived from w2kddk/inc/ntddkbd.h
 class KEYBOARD_INPUT_DATA {
@@ -46,20 +46,20 @@ public:
 public:
     /** Unit number.  E.g., for \Device\KeyboardPort0 the unit is '0', for
         \Device\KeyboardPort1 the unit is '1', and so on. */
-    USHORT  UnitId;
+    uint16_t UnitId;
 
     /** The "make" scan code (key depression). */
-    USHORT  MakeCode;
+    uint16_t MakeCode;
 
     /** The flags field indicates a "break" (key release) and other miscellaneous
         scan code information defined above. */
-    USHORT  Flags;
+    uint16_t Flags;
 
     ///
-    USHORT  Reserved;
+    uint16_t Reserved;
 
     /** Device-specific additional information for the event. */
-    ULONG   ExtraInformation;
+    uint32_t ExtraInformation;
 };
 
 

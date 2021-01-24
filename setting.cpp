@@ -728,7 +728,7 @@ void SettingLoader::load_ARGUMENT(VKey *o_arg)
 
     while (true) {
         if ( t->isNumber() ) {
-            vkey |= static_cast<BYTE>( t->getNumber() );
+            vkey |= static_cast<uint8_t>( t->getNumber() );
             break;
         } else if ( *t == _T("E-") ) {
             vkey |= VKey_extended;
@@ -1326,7 +1326,7 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
         return false;
 
     // read file
-    Array<BYTE>         buf(static_cast<size_t>(sbuf.st_size) + 1);
+    Array<uint8_t>       buf(static_cast<size_t>(sbuf.st_size) + 1);
     if (fread(buf.get(), static_cast<size_t>(sbuf.st_size), 1, fp) != 1) {
         fclose(fp);
         return false;
@@ -1341,7 +1341,7 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
     {
         size_t  size   = static_cast<size_t>(sbuf.st_size) / 2;
         o_data->resize(size);
-        BYTE *  p      = buf.get();
+        uint8_t*  p    = buf.get();
 
         for (size_t i = 0; i < size; ++i) {
             wchar_t c = static_cast<wchar_t>(*p++);
@@ -1359,7 +1359,7 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
     {
         size_t  size   = static_cast<size_t>(sbuf.st_size) / 2;
         o_data->resize(size);
-        BYTE *  p      = buf.get();
+        uint8_t*  p    = buf.get();
 
         for (size_t i = 0; i < size; ++i) {
             wchar_t c = static_cast<wchar_t>(*p++) << 8;
@@ -1385,8 +1385,8 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
     // try UTF-8
     {
         Array<wchar_t>  wbuf( static_cast<size_t>(sbuf.st_size) );
-        BYTE *          f                                          = buf.get();
-        BYTE *          end                                        = buf.get() + sbuf.st_size;
+        uint8_t*        f                                          = buf.get();
+        uint8_t*        end                                        = buf.get() + sbuf.st_size;
         wchar_t *       d                                          = wbuf.get();
         enum { STATE_1, STATE_2of2, STATE_2of3, STATE_3of3 } state = STATE_1;
 

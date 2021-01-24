@@ -2,7 +2,6 @@
 // engine.cpp
 
 #include "misc.h"
-#include "wintypes.h"
 
 #include "engine.h"
 #include "errormessage.h"
@@ -333,11 +332,12 @@ void Engine::generateKeyEvent(Key *i_key, bool i_doPress, bool i_isByAssign)
                 if (!i_doPress)
                     kid.Flags |= KEYBOARD_INPUT_DATA::BREAK;
 
-                DWORD len;
              #if 0 //defined(_WINNT)
+                DWORD len;
                 WriteFile(m_device, &kid, sizeof (kid), &len, &m_ol);
                 CHECK_TRUE( GetOverlappedResult(m_device, &m_ol, &len, TRUE) );
              #elif 0 //defined(_WIN95)
+                DWORD len;
                 DeviceIoControl(m_device, 2, &kid, sizeof (kid), NULL, 0, &len, NULL);
              #elif defined(__APPLE__)
                 write( m_device, &kid, sizeof (kid) );
@@ -809,7 +809,7 @@ void Engine::keyboardHandler()
             continue;
 
         KEYBOARD_INPUT_DATA kid;
-        DWORD               len;
+        size_t              len;
         len = ::read( m_device, &kid, sizeof (kid) );
 
         if ( len < sizeof (kid) ) {
@@ -1559,6 +1559,7 @@ bool Engine::setShow(bool i_isMaximized, bool i_isMinimized,
 #endif
 
 
+#if 0 //defined(WIN32)
 /// sync
 bool Engine::syncNotify()
 {
@@ -1582,6 +1583,7 @@ bool Engine::threadDetachNotify(DWORD i_threadId)
     m_detachedThreadIds.push_back(i_threadId);
     return true;
 }
+#endif
 
 
 /// get help message

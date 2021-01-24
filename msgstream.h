@@ -42,7 +42,7 @@ private:
     // TODO:ファイル出力
     int             m_file;                         ///< file discriptor
  #endif
-    UINT            m_messageId;                    ///< messageid for notification
+    uint32_t        m_messageId;                    ///< messageid for notification
     T *             m_buf;                          ///< for streambuf
     String          m_str;                          ///< for notification
     CriticalSection m_cs;                           ///< lock

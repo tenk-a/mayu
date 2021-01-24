@@ -43,27 +43,28 @@ private:
     /// focus of a thread
     class FocusOfThread {
 public:
-        DWORD           m_threadId;                         ///< thread id
+        bool            m_isConsole;                        ///< is hwndFocus console ?
      #if 0 //defined(WIN32)
+        DWORD           m_threadId;                         ///< thread id
         HWND            m_hwndFocus;                        ///< window that has focus on the thread
      #endif
         tstringi        m_className;                        ///< class name of hwndFocus
         tstringi        m_titleName;                        ///< title name of hwndFocus
-        bool            m_isConsole;                        ///< is hwndFocus console ?
         KeymapPtrList   m_keymaps;                          ///< keymaps
 
 public:
         ///
         FocusOfThread()
-            : m_threadId(0)
+            : m_isConsole(false)
          #if 0 //defined(WIN32)
+            , m_threadId(0)
             , m_hwndFocus(NULL)
          #endif
-            , m_isConsole(false) { }
+        { }
     };
-    typedef std::map<DWORD /*ThreadId*/, FocusOfThread>     FocusOfThreads;     ///<
+    typedef std::map<uint32_t/*ThreadId*/, FocusOfThread>   FocusOfThreads;     ///<
 
-    typedef std::list<DWORD /*ThreadId*/>                   DetachedThreadIds;  ///<
+    typedef std::list<uint32_t/*ThreadId*/>                 DetachedThreadIds;  ///<
 
     /// current status in generateKeyboardEvents
     class Current {
@@ -315,6 +316,7 @@ private:
     void        funcUndefined(FunctionParam* i_param);
     /// ignore
     void        funcIgnore(FunctionParam* i_param);
+ #if 0 //defined(WIN32)
     /// post message
     void        funcPostMessage(FunctionParam* i_param, ToWindowType i_window,
                                 UINT i_message, WPARAM i_wParam, LPARAM i_lParam);
@@ -328,6 +330,8 @@ private:
                                         const tregex &i_windowClassName,
                                         LogicalOperatorType i_logicalOp = LogicalOperatorType_and,
                                         const tregex &i_windowTitleName = tregex( _T(".*") ) );
+ #else // TODO:
+ #endif
     /// load setting
     void        funcLoadSetting( FunctionParam* i_param, const StrExprArg &i_name = StrExprArg() );
     /// virtual key
@@ -491,10 +495,12 @@ public:
     void    checkShow(HWND i_hwnd);
     bool    setShow(bool i_isMaximized, bool i_isMinimized, bool i_isMDI);
  #endif
+ #if 0 //defined(WIN32)
     /// sync
     bool    syncNotify();
     /// thread detach notify
-    bool    threadDetachNotify(DWORD i_threadId);
+    bool    threadDetachNotify(uint32_t i_threadId);
+ #endif
     /// shell execute
     void    shellExecute();
     /// get help message

@@ -34,11 +34,11 @@ Token::Token(int i_value, const tstringi &i_display)
 
 
 Token::Token(const tstringi &i_value, bool i_isValueQuoted, bool i_isRegexp)
-    : m_type(i_isRegexp ? Type_regexp : Type_string),
-    m_isValueQuoted(i_isValueQuoted),
-    m_numericValue(0),
-    m_stringValue(i_value),
-    m_data(0)
+    : m_type(i_isRegexp ? Type_regexp : Type_string)
+    , m_isValueQuoted(i_isValueQuoted)
+    , m_numericValue(0)
+    , m_stringValue(i_value)
+    , m_data(0)
 {
 }
 

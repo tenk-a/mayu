@@ -25,17 +25,16 @@ public:
     };
 
 public:
-    USHORT  m_scan;                             ///
-    USHORT  m_flags;                            ///
+    uint16_t m_scan;                            ///
+    uint16_t m_flags;                           ///
 
 public:
     ///
     ScanCode() : m_scan(0), m_flags(0) { }
     ///
-    ScanCode(USHORT i_scan, USHORT i_flags) : m_scan(i_scan), m_flags(i_flags) { }
+    ScanCode(uint16_t i_scan, uint16_t i_flags) : m_scan(i_scan), m_flags(i_flags) { }
     ///
-    bool operator ==(const ScanCode &i_sc) const
-    {
+    bool operator ==(const ScanCode &i_sc) const {
         return ( m_scan == i_sc.m_scan && (E0E1 & m_flags) == (E0E1 & i_sc.m_flags) );
     }
 
@@ -131,7 +130,7 @@ public:
 ///
 class Modifier {
     ///
-    typedef u_int64  MODIFIERS;
+    typedef uint64_t MODIFIERS;
     ///
     MODIFIERS   m_modifiers;
     ///
@@ -197,55 +196,45 @@ public:
     ///
     Modifier &off(Type i_type) { return release(i_type); }
     ///
-    Modifier &press(Type i_type)
-    { m_modifiers |= ( ( MODIFIERS(1) ) << i_type ); return care(i_type); }
+    Modifier &press(Type i_type) { m_modifiers |= ( ( MODIFIERS(1) ) << i_type ); return care(i_type); }
     ///
-    Modifier &release(Type i_type)
-    { m_modifiers &= ~( ( MODIFIERS(1) ) << i_type ); return care(i_type); }
+    Modifier &release(Type i_type) { m_modifiers &= ~( ( MODIFIERS(1) ) << i_type ); return care(i_type); }
     ///
-    Modifier &care(Type i_type)
-    { m_dontcares &= ~( ( MODIFIERS(1) ) << i_type ); return *this; }
+    Modifier &care(Type i_type) { m_dontcares &= ~( ( MODIFIERS(1) ) << i_type ); return *this; }
     ///
-    Modifier &dontcare(Type i_type)
-    { m_dontcares |= ( ( MODIFIERS(1) ) << i_type ); return *this; }
+    Modifier &dontcare(Type i_type) { m_dontcares |= ( ( MODIFIERS(1) ) << i_type ); return *this; }
     /// set all modifiers to dontcare
     Modifier &dontcare() { m_dontcares = ~MODIFIERS(0); return *this; }
 
     ///
     Modifier &on(Type i_type, bool i_isOn) { return press(i_type, i_isOn); }
     ///
-    Modifier &press(Type i_type, bool i_isPressed)
-    { return i_isPressed ? press(i_type) : release(i_type); }
+    Modifier &press(Type i_type, bool i_isPressed) { return i_isPressed ? press(i_type) : release(i_type); }
     ///
-    Modifier &care(Type i_type, bool i_doCare)
-    { return i_doCare ? care(i_type) : dontcare(i_type); }
+    Modifier &care(Type i_type, bool i_doCare) { return i_doCare ? care(i_type) : dontcare(i_type); }
 
     ///
-    bool operator ==(const Modifier &i_m) const
-    { return m_modifiers == i_m.m_modifiers && m_dontcares == i_m.m_dontcares; }
+    bool operator ==(const Modifier &i_m) const {return m_modifiers==i_m.m_modifiers && m_dontcares==i_m.m_dontcares;}
 
     /// add m's modifiers where this dontcare
     void add(const Modifier &i_m);
     //Modifier &operator+=(const Modifier &i_m);
 
     /// does match. (except dontcare modifiers) (is the m included in the *this set ?)
-    bool doesMatch(const Modifier &i_m) const { return ( (m_modifiers | m_dontcares) == (i_m.m_modifiers | m_dontcares) ); }
+    bool doesMatch(const Modifier &i_m) const { return ((m_modifiers|m_dontcares) == (i_m.m_modifiers|m_dontcares)); }
 
     ///
     bool isOn(Type i_type) const { return isPressed(i_type); }
     ///
-    bool isPressed(Type i_type) const
-    { return !!( m_modifiers & ( ( MODIFIERS(1) ) << i_type ) ); }
+    bool isPressed(Type i_type) const { return !!( m_modifiers & ( ( MODIFIERS(1) ) << i_type ) ); }
     ///
-    bool isDontcare(Type i_type) const
-    { return !!( m_dontcares & ( ( MODIFIERS(1) ) << i_type ) ); }
+    bool isDontcare(Type i_type) const { return !!( m_dontcares & ( ( MODIFIERS(1) ) << i_type ) ); }
 
     /// stream output
     friend tostream & operator <<(tostream &i_ost, const Modifier &i_m);
 
     /// <
-    bool operator <(const Modifier &i_m) const
-    {
+    bool operator <(const Modifier &i_m) const {
         return m_modifiers < i_m.m_modifiers || (m_modifiers == i_m.m_modifiers && m_dontcares < i_m.m_dontcares);
     }
 };
@@ -269,18 +258,15 @@ public:
     ///
     ModifiedKey(const Modifier &i_modifier, Key *i_key) : m_modifier(i_modifier), m_key(i_key) { }
     ///
-    bool operator ==(const ModifiedKey &i_mk) const
-    { return m_modifier == i_mk.m_modifier && m_key == i_mk.m_key; }
+    bool operator ==(const ModifiedKey &i_mk) const { return m_modifier == i_mk.m_modifier && m_key == i_mk.m_key; }
     ///
-    bool operator !=(const ModifiedKey &i_mk) const
-    { return !operator ==(i_mk); }
+    bool operator !=(const ModifiedKey &i_mk) const { return !operator ==(i_mk); }
 
     /// stream output
     friend tostream & operator <<(tostream &i_ost, const ModifiedKey &i_mk);
 
     /// <
-    bool operator <(const ModifiedKey &i_mk) const
-    {
+    bool operator <(const ModifiedKey &i_mk) const {
         return *m_key < *i_mk.m_key || (!(*i_mk.m_key < *m_key) && m_modifier < i_mk.m_modifier);
     }
 };
@@ -304,11 +290,11 @@ private:
     typedef std::map<tstringi, Key *>   Aliases;        /// key name aliases
     ///
     class Substitute {
-public:
+    public:
         ModifiedKey m_mkeyFrom;
         ModifiedKey m_mkeyTo;
 
-public:
+    public:
     Substitute(const ModifiedKey &  i_mkeyFrom, const ModifiedKey & i_mkeyTo)
             : m_mkeyFrom(i_mkeyFrom)
             , m_mkeyTo(i_mkeyTo)

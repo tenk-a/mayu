@@ -1,6 +1,6 @@
 #pragma once
 
-#if 1 //!defined(WIN32)
+#if 0 //!defined(WIN32)
 
 typedef int             INT;
 typedef unsigned int    UINT;

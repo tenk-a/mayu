@@ -83,7 +83,7 @@ tostream & operator <<(tostream &i_ost, VKey i_data)
     if (i_data & VKey_pressed)
         i_ost << _T("D-");
 
-    u_int8              code = i_data & ~(VKey_extended | VKey_released | VKey_pressed);
+    uint8_t             code = i_data & ~(VKey_extended | VKey_released | VKey_pressed);
     const VKeyTable *   vkt;
 
     for (vkt = g_vkeyTable; vkt->m_name; ++vkt)
@@ -977,7 +977,7 @@ void Engine::funcVariable(FunctionParam *i_param, int i_mag, int i_inc)
 void Engine::funcRepeat(FunctionParam *i_param, const KeySeq *i_keySeq, int i_max)
 {
     if (i_param->m_isPressed) {
-        int end = MIN(m_variable, i_max);
+        int end = std::min(m_variable, i_max);
 
         for (int i = 0; i < end - 1; ++i)
             generateKeySeqEvents(i_param->m_c, i_keySeq, Part_all);
@@ -1013,6 +1013,7 @@ void Engine::funcIgnore(FunctionParam *)
 }
 
 
+#if 0 //defined(WIN32)
 // post message
 void Engine::funcPostMessage(FunctionParam *i_param, ToWindowType i_window,
                              UINT i_message, WPARAM i_wParam, LPARAM i_lParam)
@@ -1047,8 +1048,11 @@ void Engine::funcPostMessage(FunctionParam *i_param, ToWindowType i_window,
         PostMessage(hwnd, i_message, i_wParam, i_lParam);
  #endif
 }
+#elif defined(__linux__) || defined(__APPLE__)
+    // TODO:
+#endif
 
-
+#if 0 //defined(WIN32)
 // ShellExecute
 void Engine::funcShellExecute(FunctionParam *   i_param,
                               const             StrExprArg & /*i_operation*/,
@@ -1067,7 +1071,9 @@ void Engine::funcShellExecute(FunctionParam *   i_param,
     // TODO:
  #endif
 }
-
+#elif defined(__linux__) || defined(__APPLE__)
+    // TODO:
+#endif
 
 // shell execute
 void Engine::shellExecute()
@@ -1173,6 +1179,7 @@ static BOOL CALLBACK enumWindowsForSetForegroundWindow(HWND i_hwnd, LPARAM i_lPa
 
 #endif
 
+#if 0 //defined(WIN32)
 /// SetForegroundWindow
 void Engine::funcSetForegroundWindow(FunctionParam *i_param, const tregex &, LogicalOperatorType , const tregex &)
 {
@@ -1191,7 +1198,9 @@ void Engine::funcSetForegroundWindow(FunctionParam *i_param, const tregex &, Log
     }
  #endif
 }
-
+#elif defined(__linux__) || defined(__APPLE__)
+ // TODO:
+#endif
 
 // load setting
 void Engine::funcLoadSetting(FunctionParam *i_param, const StrExprArg &i_name)

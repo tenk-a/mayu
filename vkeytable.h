@@ -13,7 +13,7 @@
 /// define virtual key code and its name
 class VKeyTable {
 public:
-    u_int8          m_code;             ///< VKey code
+    uint8_t         m_code;             ///< VKey code
     const _TCHAR *  m_name;             ///< VKey name
 };
 

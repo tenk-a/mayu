@@ -447,7 +447,7 @@ tstring toLower(const tstring &i_str)
             ++i;
         else
       #endif
-            str[i] = tolower((u_int8)str[i]);
+            str[i] = tolower((uint8_t)str[i]);
     }
     return str;
 }
