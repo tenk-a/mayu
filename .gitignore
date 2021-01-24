@@ -11,3 +11,6 @@ config.status
 config.h
 Makefile
 stamp-*
+tmp
+sav
+bak
