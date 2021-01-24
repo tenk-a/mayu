@@ -3,7 +3,7 @@
 
 
 #ifndef _COMPILER_SPECIFIC_FUNC_H
-#  define _COMPILER_SPECIFIC_FUNC_H
+#define _COMPILER_SPECIFIC_FUNC_H
 
 #include "misc.h"
 #include "stringtool.h"

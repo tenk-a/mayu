@@ -4,6 +4,7 @@
 *.tmp
 *.sav
 *.cache
+*.o
 .deps
 err.txt
 config.log
