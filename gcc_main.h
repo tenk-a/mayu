@@ -11,7 +11,8 @@
 extern int      __argc;
 extern _TCHAR** __targv;
 
-class Mayu {
+class Mayu
+{
     Setting*    m_setting;          ///< current setting
     time_t      m_startTime;        ///< mayu started at ...
     tomsgstream m_log;              ///< log stream (output to log dialog's edit)
@@ -25,7 +26,8 @@ public:
         Setting *newSetting = new Setting;
 
         // check args
-        for (int i = 1; i < __argc; ++i) {
+        for (int i = 1; i < __argc; ++i)
+        {
             // set symbol
             if ( __targv[i][0] == _T('-') && __targv[i][1] == _T('D') )
                 newSetting->m_symbols.insert(__targv[i] + 2);
@@ -42,7 +44,8 @@ public:
      #endif
 
         // load setting
-        if ( !SettingLoader(&m_log, &m_log).load(newSetting) ) {
+        if ( !SettingLoader(&m_log, &m_log).load(newSetting) )
+        {
             delete newSetting;
             Acquire a(&m_log, 0);
             m_log << _T("error: failed to load.") << std::endl;
@@ -51,7 +54,8 @@ public:
 
         m_log << _T("successfully loaded.") << std::endl;
 
-        while ( !m_engine.setSetting(newSetting) ) {
+        while ( !m_engine.setSetting(newSetting) )
+        {
          #if defined(__linux__)
             sleep(1);
          #elif defined(__APPLE__)
@@ -78,8 +82,10 @@ public:
         HomeDirectories pathes;
         ggetHomeDirectories(&pathes);
         for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++i)
+        {
             if ( SetCurrentDirectory( i->c_str() ) )
                 break;
+        }
      #endif
     }
 

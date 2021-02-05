@@ -25,10 +25,12 @@
 #include <stdint.h>
 
 /// derived from w2kddk/inc/ntddkbd.h
-class KEYBOARD_INPUT_DATA {
+class KEYBOARD_INPUT_DATA
+{
 public:
     ///
-    enum {
+    enum
+    {
         /// key release flag
         BREAK                          = 1,
         /// extended key flag

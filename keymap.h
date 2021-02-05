@@ -11,18 +11,22 @@
 
 
 /// 各種 Action クラスの基底クラス.
-class Action {
+class Action
+{
 public:
     ///
-    enum Type {
-        Type_key,               ///
-        Type_keySeq,            ///
-        Type_function,          ///
+    enum Type
+    {
+        Type_key,               ///<
+        Type_keySeq,            ///<
+        Type_function,          ///<
     };
 
-private: Action(const Action &i_action);
+private:
+    Action(const Action &i_action);
 
-public: Action() { }
+public:
+    Action() { }
     ///
     virtual ~Action() { }
     ///
@@ -42,7 +46,8 @@ tostream& operator <<(tostream &i_ost, const Action &i_action);
 
 
 ///
-class ActionKey : public Action {
+class ActionKey : public Action
+{
 public:
     ///
     const ModifiedKey   m_modifiedKey;
@@ -65,9 +70,10 @@ public:
 class KeySeq;
 
 ///
-class ActionKeySeq : public Action {
+class ActionKeySeq : public Action
+{
 public:
-    KeySeq *const       m_keySeq;           ///
+    KeySeq *const       m_keySeq;           ///<
 
 private:
     ActionKeySeq(const ActionKeySeq &i_actionKeySeq);
@@ -85,7 +91,8 @@ public:
 
 
 ///
-class ActionFunction : public Action {
+class ActionFunction : public Action
+{
 public:
     FunctionData * const m_functionData;    ///< function data
     const Modifier      m_modifier;         ///< modifier for &Sync
@@ -108,7 +115,8 @@ public:
 
 
 /// Actionを束ねるクラス. 設定ファイル内での右辺を表現.
-class KeySeq {
+class KeySeq
+{
 public:
     typedef std::vector<Action *>  Actions; ///<
 private:
@@ -148,8 +156,7 @@ public:
         if (m_mode < i_mode)
             m_mode = i_mode;
 
-        ASSERT( m_mode == Modifier::Type_KEYSEQ
-              || m_mode == Modifier::Type_ASSIGN);
+        ASSERT( m_mode == Modifier::Type_KEYSEQ || m_mode == Modifier::Type_ASSIGN);
     }
     ///
     Modifier::Type getMode() const { return m_mode; }
@@ -157,23 +164,27 @@ public:
 
 
 ///
-class Keymap {
+class Keymap
+{
 public:
     ///
-    enum Type {
+    enum Type
+    {
         Type_keymap,                        ///< this is keymap
         Type_windowAnd,                     ///< this is window &amp;&amp;
         Type_windowOr,                      ///< this is window ||
     };
     ///
-    enum AssignOperator {
+    enum AssignOperator
+    {
         AO_new,                             ///< =
         AO_add,                             ///< +=
         AO_sub,                             ///< -=
         AO_overwrite,                       ///< !, !!
     };
     ///
-    enum AssignMode {
+    enum AssignMode
+    {
         AM_notModifier,                     ///<    not modifier
         AM_normal,                          ///<    normal modifier
         AM_true,                            ///< !  true modifier(doesn't generate scan code)
@@ -182,12 +193,13 @@ public:
     };
 
     /// key assignment
-    class KeyAssignment {
-public:
-        ModifiedKey m_modifiedKey;          ///
-        KeySeq *    m_keySeq;               ///
+    class KeyAssignment
+    {
+    public:
+        ModifiedKey m_modifiedKey;          ///<
+        KeySeq *    m_keySeq;               ///<
 
-public:
+    public:
         ///
         KeyAssignment(const ModifiedKey &i_modifiedKey, KeySeq *i_keySeq)
             : m_modifiedKey(i_modifiedKey), m_keySeq(i_keySeq) { }
@@ -199,16 +211,18 @@ public:
     };
 
     /// modifier assignments
-    class ModAssignment {
+    class ModAssignment
+    {
     public:
-        AssignOperator  m_assignOperator;                       ///
-        AssignMode      m_assignMode;                           ///
-        Key *           m_key;                                  ///
+        AssignOperator  m_assignOperator;                       ///<
+        AssignMode      m_assignMode;                           ///<
+        Key *           m_key;                                  ///<
     };
-    typedef std::list<ModAssignment>        ModAssignments;     ///
+    typedef std::list<ModAssignment>        ModAssignments;     ///<
 
     /// parameter for describe();
-    class DescribeParam {
+    class DescribeParam
+    {
     private:
         typedef std::list<ModifiedKey>      DescribedKeys;
         typedef std::list<const Keymap *>   DescribedKeymap;
@@ -226,12 +240,13 @@ public:
 private:
     /// key assignments (hashed by first scan code)
     typedef std::list<KeyAssignment>        KeyAssignments;
-    enum {
-        HASHED_KEY_ASSIGNMENT_SIZE = 32,        ///
+    enum
+    {
+        HASHED_KEY_ASSIGNMENT_SIZE = 32,        ///<
     };
 
 private:
-    KeyAssignments          m_hashedKeyAssignments[HASHED_KEY_ASSIGNMENT_SIZE]; ///
+    KeyAssignments          m_hashedKeyAssignments[HASHED_KEY_ASSIGNMENT_SIZE]; ///<
 
     /// modifier assignments
     ModAssignments          m_modAssignments[Modifier::Type_ASSIGN];
@@ -287,12 +302,13 @@ extern tostream &operator   <<(tostream &i_ost, const Keymap *i_keymap);
 
 
 ///
-class Keymaps {
+class Keymaps
+{
 public:
-    typedef std::list<Keymap *>     KeymapPtrList;  ///
+    typedef std::list<Keymap *>     KeymapPtrList;  ///<
 
 private:
-    typedef std::list<Keymap>       KeymapList;     ///
+    typedef std::list<Keymap>       KeymapList;     ///<
 
 private:
     KeymapList m_keymapList;                        ///< pointer into keymaps may exist
@@ -314,12 +330,13 @@ public:
 
 
 ///
-class KeySeqs {
+class KeySeqs
+{
 private:
-    typedef std::list<KeySeq>       KeySeqList;     ///
+    typedef std::list<KeySeq>   KeySeqList;         ///<
 
 private:
-    KeySeqList m_keySeqList;                        ///
+    KeySeqList                  m_keySeqList;       ///<
 
 public:
     /// add a named keyseq (name can be empty)

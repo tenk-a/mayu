@@ -54,7 +54,8 @@ _TCHAR**    __targv;
 // Mayu
 
 ///
-class Mayu {
+class Mayu
+{
  #if 0 //defined(WIN32)
     HWND            m_hwndTaskTray;             ///< tasktray window
     HWND            m_hwndLog;                  ///< log dialog
@@ -66,7 +67,8 @@ class Mayu {
     bool            m_canUseTasktrayBaloon;     ///<
     HMENU           m_hMenuTaskTray;            ///< tasktray menu
     bool            m_isSettingDialogOpened;    ///< is setting dialog opened ?
-    enum {
+    enum
+    {
         WM_APP_taskTrayNotify  = WM_APP + 101,  ///<
         WM_APP_msgStreamNotify = WM_APP + 102,  ///<
         ID_TaskTrayIcon        = 1,             ///<
@@ -100,7 +102,8 @@ private:
     /// notify handler
     BOOL notifyHandler(COPYDATASTRUCT *cd)
     {
-        switch (cd->dwData) {
+        switch (cd->dwData)
+        {
         case Notify::Type_setFocus:
         case Notify::Type_name:
             {
@@ -126,7 +129,8 @@ private:
                 HWND hwnd   = getToplevelWindow(n->m_hwnd, &isMDI);
                 RECT rc;
 
-                if (isMDI) {
+                if (isMDI)
+                {
                     getChildWindowRect(hwnd, &rc);
                     m_log << _T("MDI Window Position/Size: (")
                           << rc.left << _T(", ") << rc.top << _T(") / (")
@@ -162,9 +166,12 @@ private:
                                       n->m_isImeCompToggled);
              #if 0
                 Acquire a(&m_log, 0);
-                if (n->m_isKanaLockToggled) {
+                if (n->m_isKanaLockToggled)
+                {
                     m_log << _T("Notify::Type_lockState Kana on  : ");
-                } else {
+                }
+                else
+                {
                     m_log << _T("Notify::Type_lockState Kana off : ");
                 }
                 m_log << n->m_debugParam << ", "
@@ -175,7 +182,7 @@ private:
 
         case Notify::Type_sync:
             {
-                m_engine.syncNot        // destroy ify();
+                m_engine.syncNotify();  // destroy
                 break;
             }
 
@@ -196,7 +203,8 @@ private:
         case Notify::Type_show:
             {
                 NotifyShow *n = (NotifyShow *) cd->lpData;
-                switch (n->m_show) {
+                switch (n->m_show)
+                {
                 case NotifyShow::Show_Maximized:
                     m_engine.setShow(true, false, n->m_isMDI);
                     break;
@@ -228,16 +236,21 @@ private:
     {
         Mayu *This = reinterpret_cast<Mayu *>( GetWindowLong(i_hwnd, 0) );
 
-        if (!This) {
-            switch (i_message) {
+        if (!This)
+        {
+            switch (i_message)
+            {
             case WM_CREATE:
                 This = reinterpret_cast<Mayu *>(reinterpret_cast<CREATESTRUCT *>(i_lParam)->lpCreateParams);
                 SetWindowLong(i_hwnd, 0, (long) This);
                 return 0;
             }
 
-        } else {
-            switch (i_message) {
+        }
+        else
+        {
+            switch (i_message)
+            {
             case WM_COPYDATA:
                 {
                     COPYDATASTRUCT *cd;
@@ -255,7 +268,8 @@ private:
             case WM_WTSSESSION_CHANGE:
                 {
                     const char *m = "";
-                    switch (i_wParam) {
+                    switch (i_wParam)
+                    {
                      #ifndef WTS_CONSOLE_CONNECT       // WinUser.h
                       #define WTS_CONSOLE_CONNECT       0x1
                       #define WTS_CONSOLE_DISCONNECT    0x2
@@ -268,7 +282,7 @@ private:
                      #endif
                     case WTS_CONSOLE_CONNECT:
                         m   = "WTS_CONSOLE_CONNECT";
-                        if ( !This->m_engine.resume() )
+                        if (!This->m_engine.resume())
                             PostQuitMessage(0);
                         break;
                     case WTS_CONSOLE_DISCONNECT:
@@ -302,7 +316,8 @@ private:
             case WM_APP_taskTrayNotify:
                 {
                     if (i_wParam == ID_TaskTrayIcon)
-                        switch (i_lParam) {
+                        switch (i_lParam)
+                        {
                         case WM_RBUTTONUP:
                             {
                                 POINT       p;
@@ -328,7 +343,8 @@ private:
 
                                 tregex      getName( _T("^([^;]*);") );
 
-                                for (int index = 0;; index++) {
+                                for (int index = 0; ; index++)
+                                {
                                     _TCHAR          buf[100];
                                     _sntprintf(buf, NUMBER_OF(buf), _T(".mayu%d"), index);
                                     tstringi        dot_mayu;
@@ -338,7 +354,8 @@ private:
 
                                     tcmatch_results what;
 
-                                    if ( std::regex_search(dot_mayu, what, getName) ) {
+                                    if ( std::regex_search(dot_mayu, what, getName) )
+                                    {
                                         MENUITEMINFO    mii;
                                         std::memset( &mii, 0, sizeof (mii) );
                                         mii.cbSize     = sizeof (mii);
@@ -373,10 +390,13 @@ private:
                     int notify_code    = HIWORD(i_wParam);
                     int id             = LOWORD(i_wParam);
 
-                    if (notify_code == 0) { // menu
-                        switch (id) {
+                    if (notify_code == 0)   // menu
+                    {
+                        switch (id)
+                        {
                         default:
-                            if (ID_MENUITEM_reloadBegin <= id) {
+                            if (ID_MENUITEM_reloadBegin <= id)
+                            {
                                 Registry reg(MAYU_REGISTRY_ROOT);
                                 reg.write(_T(".mayuIndex"), id - ID_MENUITEM_reloadBegin);
                                 This->load();
@@ -404,7 +424,8 @@ private:
                             }
 
                         case ID_MENUITEM_setting:
-                            if (!This->m_isSettingDialogOpened) {
+                            if (!This->m_isSettingDialogOpened)
+                            {
                                 This->m_isSettingDialogOpened  = true;
                                 if ( DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIALOG_setting), NULL, dlgSetting_dlgProc))
                                     This->load();
@@ -448,7 +469,8 @@ private:
 
             case WM_APP_engineNotify:
                 {
-                    switch (i_wParam) {
+                    switch (i_wParam)
+                    {
                     case EngineNotify_shellExecute:
                         This->m_engine.shellExecute();
                         break;
@@ -468,7 +490,8 @@ private:
                             // show investigate/log window
                             int     sw     = (i_lParam & ~MayuDialogType_mask);
                             HWND    hwnd   = NULL;
-                            switch ( static_cast<MayuDialogType>(i_lParam & MayuDialogType_mask) ) {
+                            switch ( static_cast<MayuDialogType>(i_lParam & MayuDialogType_mask) )
+                            {
                             case MayuDialogType_investigate:
                                 hwnd   = This->m_hwndInvestigate;
                                 break;
@@ -476,9 +499,11 @@ private:
                                 hwnd   = This->m_hwndLog;
                                 break;
                             }
-                            if (hwnd) {
+                            if (hwnd)
+                            {
                                 ShowWindow(hwnd, sw);
-                                switch (sw) {
+                                switch (sw)
+                                {
                                 case SW_SHOWNORMAL:
                                 case SW_SHOWMAXIMIZED:
                                 case SW_SHOW:
@@ -514,7 +539,8 @@ private:
 
             case WM_APP_dlglogNotify:
                 {
-                    switch (i_wParam) {
+                    switch (i_wParam)
+                    {
                     case DlgLogNotify_logCleared:
                         This->showBanner(true);
                         break;
@@ -525,18 +551,23 @@ private:
                 }
 
             case WM_DESTROY:
-                if (This->m_usingSN) {
+                if (This->m_usingSN)
+                {
                     wtsUnRegisterSessionNotification(i_hwnd);
                     This->m_usingSN = false;
                 }
                 return 0;
 
             default:
-                if (i_message == This->m_WM_TaskbarRestart) {
-                    if ( This->showTasktrayIcon(true) ) {
+                if (i_message == This->m_WM_TaskbarRestart)
+                {
+                    if ( This->showTasktrayIcon(true) )
+                    {
                         Acquire a(&This->m_log, 0);
                         This->m_log << _T("Tasktray icon is updated.") << std::endl;
-                    } else {
+                    }
+                    else
+                    {
                         Acquire a(&This->m_log, 1);
                         This->m_log << _T("Tasktray icon already exists.") << std::endl;
                     }
@@ -554,12 +585,14 @@ private:
         Setting *newSetting = new Setting;
 
         // set symbol
-        for (int i = 1; i < __argc; ++i) {
+        for (int i = 1; i < __argc; ++i)
+        {
             if ( __targv[i][0] == _T('-') && __targv[i][1] == _T('D') )
                 newSetting->m_symbols.insert(__targv[i] + 2);
         }
 
-        if ( !SettingLoader(&m_log, &m_log).load(newSetting) ) {
+        if ( !SettingLoader(&m_log, &m_log).load(newSetting) )
+        {
          #if 0 //defined(WIN32)
             ShowWindow(m_hwndLog, SW_SHOW);
             SetForegroundWindow(m_hwndLog);
@@ -572,7 +605,8 @@ private:
 
         m_log << _T("successfully loaded.") << std::endl;
 
-        while ( !m_engine.setSetting(newSetting) ) {
+        while ( !m_engine.setSetting(newSetting) )
+        {
          #if 0 //defined(WIN32)
             Sleep(1000);
 
@@ -591,14 +625,18 @@ private:
     // show message (a baloon from the task tray icon)
     void showHelpMessage(bool i_doesShow = true)
     {
-        if (m_canUseTasktrayBaloon) {
-            if (i_doesShow) {
+        if (m_canUseTasktrayBaloon)
+        {
+            if (i_doesShow)
+            {
                 tstring helpMessage, helpTitle;
                 m_engine.getHelpMessages(&helpMessage, &helpTitle);
                 tcslcpy( m_ni.szInfo, helpMessage.c_str(), NUMBER_OF(m_ni.szInfo) );
                 tcslcpy( m_ni.szInfoTitle, helpTitle.c_str(), NUMBER_OF(m_ni.szInfoTitle) );
                 m_ni.dwInfoFlags = NIIF_INFO;
-            } else {
+            }
+            else
+            {
                 m_ni.szInfo[0] = m_ni.szInfoTitle[0] = _T('\0');
             }
 
@@ -613,16 +651,20 @@ private:
         m_ni.hIcon     = m_tasktrayIcon[m_engine.getIsEnabled() ? 1 : 0];
         m_ni.szInfo[0] = m_ni.szInfoTitle[0] = _T('\0');
 
-        if (i_doesAdd) {
+        if (i_doesAdd)
+        {
             // http://support.microsoft.com/kb/418138/JA/
             int guard = 60;
-            for (; !Shell_NotifyIcon(NIM_ADD, &m_ni) && 0 < guard; --guard) {
+            for (; !Shell_NotifyIcon(NIM_ADD, &m_ni) && 0 < guard; --guard)
+            {
                 if ( Shell_NotifyIcon(NIM_MODIFY, &m_ni) )
                     return true;
                 Sleep(1000);    // 1sec
             }
             return 0 < guard;
-        } else {
+        }
+        else
+        {
             return !!Shell_NotifyIcon(NIM_MODIFY, &m_ni);
         }
     }
@@ -671,9 +713,12 @@ private:
         m_log << modulebuf << std::endl;
         m_log << _T("------------------------------------------------------------") << std::endl;
 
-        if (i_isCleared) {
+        if (i_isCleared)
+        {
             m_log << _T("log was cleared at ") << timebuf << std::endl;
-        } else {
+        }
+        else
+        {
             m_log << _T("log begins at ") << timebuf << std::endl;
         }
     }
@@ -710,8 +755,10 @@ public:
         getHomeDirectories(&pathes);
 
         for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++i)
+        {
             if ( SetCurrentDirectory( i->c_str() ) )
                 break;
+        }
       #endif
 
         // create windows, dialogs
@@ -769,10 +816,13 @@ public:
         tstring tip = loadString(IDS_mayu);
         tcslcpy( m_ni.szTip, tip.c_str(), NUMBER_OF(m_ni.szTip) );
 
-        if (m_canUseTasktrayBaloon) {
+        if (m_canUseTasktrayBaloon)
+        {
             m_ni.cbSize    = sizeof (m_ni);
             m_ni.uFlags   |= NIF_INFO;
-        } else {
+        }
+        else
+        {
             m_ni.cbSize = NOTIFYICONDATA_V1_SIZE;
         }
         showTasktrayIcon(true);
@@ -828,7 +878,8 @@ public:
         load();
 
         MSG msg;
-        while ( 0 < GetMessage(&msg, NULL, 0, 0) ) {
+        while ( 0 < GetMessage(&msg, NULL, 0, 0) )
+        {
             if ( IsDialogMessage(m_hwndLog, &msg) )
                 continue;
             if ( IsDialogMessage(m_hwndInvestigate, &msg) )
@@ -861,18 +912,22 @@ void convertRegistry()
     bool doesAdd = false;
     DWORD index;
 
-    if ( reg.read(_T(".mayu"), &dot_mayu) ) {
+    if ( reg.read(_T(".mayu"), &dot_mayu) )
+    {
         reg.write( _T(".mayu0"), _T(";") + dot_mayu + _T(";") );
         reg.remove( _T(".mayu") );
         doesAdd    = true;
         index      = 0;
-    } else if ( !reg.read(_T(".mayu0"), &dot_mayu) ) {
+    }
+    else if ( !reg.read(_T(".mayu0"), &dot_mayu) )
+    {
         reg.write( _T(".mayu0"), loadString(IDS_readFromHomeDirectory) + _T(";;") );
         doesAdd    = true;
         index      = 1;
     }
 
-    if (doesAdd) {
+    if (doesAdd)
+    {
         Registry commonreg( HKEY_LOCAL_MACHINE, _T("Software\\GANAware\\mayu") );
         tstringi dir, layout;
 
@@ -881,7 +936,8 @@ void convertRegistry()
         {
             tstringi tmp = _T(";") + dir + _T("\\dot.mayu");
 
-            if ( layout == _T("109") ) {
+            if ( layout == _T("109") )
+            {
                 reg.write( _T(".mayu1"), loadString(IDS_109Emacs)      + tmp + _T(";-DUSE109")
                                                                                _T(";-DUSEdefault") );
                 reg.write( _T(".mayu2"), loadString(IDS_104on109Emacs) + tmp + _T(";-DUSE109")
@@ -890,7 +946,9 @@ void convertRegistry()
                 reg.write( _T(".mayu3"), loadString(IDS_109)           + tmp + _T(";-DUSE109") );
                 reg.write( _T(".mayu4"), loadString(IDS_104on109)      + tmp + _T(";-DUSE109")
                                                                                _T(";-DUSE104on109") );
-            } else {
+            }
+            else
+            {
                 reg.write( _T(".mayu1"), loadString(IDS_104Emacs)      + tmp + _T(";-DUSE104")
                                                                                _T(";-DUSEdefault") );
                 reg.write( _T(".mayu2"), loadString(IDS_109on104Emacs) + tmp + _T(";-DUSE104")
@@ -934,12 +992,14 @@ int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE /* i_hPrevInstance */,
     // is another mayu running ?
     HANDLE mutex = CreateMutex((SECURITY_ATTRIBUTES *)NULL, TRUE, addSessionId(MUTEX_MAYU_EXCLUSIVE_RUNNING).c_str());
 
-    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+    if (GetLastError() == ERROR_ALREADY_EXISTS)
+    {
         // another mayu already running
         tstring text   = loadString(IDS_mayuAlreadyExists);
         tstring title  = loadString(IDS_mayu);
 
-        if (g_hookData) {
+        if (g_hookData)
+        {
             UINT WM_TaskbarRestart = RegisterWindowMessage( _T("TaskbarCreated") );
             PostMessage(g_hookData->m_hwndTaskTray, WM_TaskbarRestart, 0, 0);
         }
@@ -961,9 +1021,12 @@ int WINAPI _tWinMain(HINSTANCE i_hInstance, HINSTANCE /* i_hPrevInstance */,
     }
 
     CHECK_FALSE( installHooks() );
-    try {
+    try
+    {
         Mayu().messageLoop();
-    } catch (ErrorMessage &i_e) {
+    }
+    catch (ErrorMessage &i_e)
+    {
         tstring title = loadString(IDS_mayu);
         MessageBox( (HWND) NULL, i_e.getMessage().c_str(), title.c_str(), MB_OK | MB_ICONSTOP );
     }

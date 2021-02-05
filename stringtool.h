@@ -15,7 +15,8 @@
 #include <string.h>     // for stricmp
 
 #if 0 //def __CYGWIN__
-namespace std {
+namespace std
+{
     typedef basic_string<wchar_t>   wstring;    // !!
 }
 #endif
@@ -37,8 +38,9 @@ typedef std::basic_stringstream<_TCHAR>     tstringstream;
 typedef std::basic_ifstream<_TCHAR>         tifstream;
 
 /// basic_regex for generic international text
-//typedef std::basic_regex<_TCHAR> tregex;
-class tregex : public std::basic_regex<_TCHAR> {
+//typedef boost::basic_regex<_TCHAR> tregex;
+class tregex : public std::basic_regex<_TCHAR>
+{
     typedef std::basic_regex<_TCHAR>        base_type;
 public:
     tregex() {}
@@ -49,13 +51,15 @@ public:
     tregex & operator =(std::string const &rhs) { tregex(rhs).swap(*this); return *this; }
     tregex & operator =(char const *rhs) { tregex(rhs).swap(*this); return *this; }
 
-    void assign(std::string const &pattern, std::regex_constants::syntax_option_type f) {
+    void assign(std::string const &pattern, std::regex_constants::syntax_option_type f)
+    {
         base_type::assign(pattern, f);
         m_pattern = pattern;
     }
     std::string const &str() const { return m_pattern; }
 
-    void swap(tregex &rhs) {
+    void swap(tregex &rhs)
+    {
         std::swap(*(base_type *) this, *(base_type *) &rhs);
         std::swap(m_pattern, rhs.m_pattern);
     }
@@ -68,7 +72,8 @@ private:
 typedef std::match_results<tstring::const_iterator>  tcmatch;
 
 /// string with custom stream output
-class tstringq : public tstring {
+class tstringq : public tstring
+{
 public:
     ///
     tstringq() { }
@@ -91,13 +96,16 @@ public:
 /// stream output
 extern tostream &operator <<(tostream &i_ost, const tstringq &i_data);
 
+
 /// identical to tcmatch except for str()
-class tcmatch_results : public tcmatch {
+class tcmatch_results : public tcmatch
+{
 public:
     /** returns match result as tstring.
         match_results<const _TCHAR *>::operator[]() returns a instance of
         sub_mtch<const _TCHAR *>.  So, we convert sub_mtch<const _TCHAR *> to
-        tstring. */
+        tstring.
+     */
     tstring str(tcmatch::size_type i_n) const
     {
         return static_cast<tstring>(static_cast<const tcmatch *>(this)->operator [](i_n) );
@@ -121,11 +129,13 @@ size_t  wcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize);
 /// copy
 inline size_t tcslcpy(char *o_dest, const char *i_src, size_t i_destSize) { return strlcpy(o_dest,i_src,i_destSize); }
 /// copy
-inline size_t tcslcpy(unsigned char *o_dest, const unsigned char *i_src, size_t i_destSize) {
+inline size_t tcslcpy(unsigned char *o_dest, const unsigned char *i_src, size_t i_destSize)
+{
     return mbslcpy(o_dest, i_src, i_destSize);
 }
 /// copy
-inline size_t tcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize) {
+inline size_t tcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize)
+{
     return wcslcpy(o_dest, i_src, i_destSize);
 }
 #if 0 //def _MBCS // escape regexp special characters in MBCS trail bytes
@@ -139,7 +149,8 @@ std::string     to_string(const std::wstring &i_str);
 std::string     to_UTF_8(const std::wstring &i_str);
 
 /// case insensitive string
-class tstringi : public tstring {
+class tstringi : public tstring
+{
 public:
     ///
     tstringi() { }

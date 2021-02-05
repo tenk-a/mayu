@@ -11,7 +11,8 @@
 
 
 /// this class contains all of loaded settings
-class Setting {
+class Setting
+{
 public:
     typedef std::set<tstringi>      Symbols;                                        ///<
     typedef std::list<Modifier>     Modifiers;                                      ///<
@@ -30,7 +31,8 @@ public:
 
 
 ///
-namespace Event {
+namespace Event
+{
 ///
 extern Key  prefixed;
 ///
@@ -43,7 +45,8 @@ extern Key *events[];
 
 
 ///
-class SettingLoader {
+class SettingLoader
+{
 
 #define FUNCTION_FRIEND
 #include "functions.h"
@@ -51,8 +54,9 @@ class SettingLoader {
 
 public:
     ///
-    class FunctionCreator {
-public:
+    class FunctionCreator
+    {
+    public:
         const _TCHAR *  m_name;                                                     ///<
         FunctionData *  m_creator;                                                  ///<
     };

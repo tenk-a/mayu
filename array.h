@@ -6,29 +6,31 @@
 
 #include <memory>
 
+
 ///
 template <class T, class Allocator = std::allocator<T> >
-class Array {
+class Array
+{
 public:
-    typedef typename Allocator::reference           reference;              ///
-    typedef typename Allocator::const_reference     const_reference;        ///
-    typedef typename Allocator::pointer             iterator;               ///
-    typedef typename Allocator::const_pointer       const_iterator;         ///
-    typedef typename Allocator::size_type           size_type;              ///
-    typedef typename Allocator::difference_type     difference_type;        ///
-    typedef T                                       value_type;             ///
-    typedef Allocator                               allocator_type;         ///
-    typedef typename Allocator::pointer             pointer;                ///
-    typedef typename Allocator::const_pointer       const_pointer;          ///
+    typedef typename Allocator::reference           reference;              ///<
+    typedef typename Allocator::const_reference     const_reference;        ///<
+    typedef typename Allocator::pointer             iterator;               ///<
+    typedef typename Allocator::const_pointer       const_iterator;         ///<
+    typedef typename Allocator::size_type           size_type;              ///<
+    typedef typename Allocator::difference_type     difference_type;        ///<
+    typedef T                                       value_type;             ///<
+    typedef Allocator                               allocator_type;         ///<
+    typedef typename Allocator::pointer             pointer;                ///<
+    typedef typename Allocator::const_pointer       const_pointer;          ///<
  #if 0
-    typedef std::reverse_iterator<iterator>         reverse_iterator;       ///
-    typedef std::reverse_iterator<const_iterator>   const_reverse_iterator; ///
+    typedef std::reverse_iterator<iterator>         reverse_iterator;       ///<
+    typedef std::reverse_iterator<const_iterator>   const_reverse_iterator; ///<
  #endif
 
 private:
-    Allocator   m_allocator;                                                ///
-    size_type   m_size;                                                     ///
-    pointer     m_buf;                                                      /// array buffer
+    Allocator   m_allocator;                                                ///<
+    size_type   m_size;                                                     ///<
+    pointer     m_buf;                                                      ///< array buffer
 
 public:
     /// constructor
@@ -36,7 +38,8 @@ public:
         : m_allocator(i_allocator)
         , m_size(0)
         , m_buf(NULL)
-    { }
+    {
+    }
 
     /// constructor
     explicit Array( size_type i_size, const T &i_value = T(), const Allocator &i_allocator = Allocator() )
@@ -59,15 +62,16 @@ public:
     }
 
     /// copy constructor
-    Array(const Array &i_o) : m_size(0), m_buf(NULL) { operator =(i_o); }
+    Array(const Array &i_o) : m_size(0), m_buf(NULL) { operator=(i_o); }
 
     /// destractor
     ~Array() { clear(); }
 
     ///
-    Array & operator =(const Array &i_o)
+    Array & operator=(const Array &i_o)
     {
-        if (&i_o != this) {
+        if (&i_o != this)
+        {
             clear();
             m_size = i_o.m_size;
             m_buf  = m_allocator.allocate(m_size, 0);
@@ -127,9 +131,12 @@ public:
     {
         ASSERT( m_size <= i_size );
 
-        if (!m_buf) {
+        if (!m_buf)
+        {
             resize(i_size, i_value);
-        } else {
+        }
+        else
+        {
             pointer buf = m_allocator.allocate(i_size, 0);
             std::uninitialized_copy(m_buf, m_buf + m_size, buf);
             std::uninitialized_fill_n(buf + m_size, i_size - m_size, i_value);
@@ -161,7 +168,8 @@ public:
     ///
     void swap(Array &i_o)
     {
-        if (&i_o != this) {
+        if (&i_o != this)
+        {
             pointer     buf    = m_buf;
             size_type   size   = m_size;
             m_buf      = i_o.m_buf;
@@ -174,7 +182,8 @@ public:
     ///
     void clear()
     {
-        if (m_buf) {
+        if (m_buf)
+        {
             for (size_type i = 0; i < m_size; i++)
                 m_allocator.destroy(&m_buf[i]);
             m_allocator.deallocate(m_buf, m_size);

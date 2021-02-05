@@ -10,8 +10,9 @@
 
 
 ///
-class ErrorMessage {
-    tstringstream m_ost;            ///
+class ErrorMessage
+{
+    tstringstream m_ost;            ///<
 
 public:
     ///
@@ -23,8 +24,7 @@ public:
     tstring getMessage() const { return m_ost.str(); }
 
     /// add message
-    template<class T>
-    ErrorMessage & operator <<(const T &i_value)
+    template<class T> ErrorMessage & operator <<(const T &i_value)
     {
         m_ost << i_value;
         return *this;
@@ -39,8 +39,7 @@ public:
 
  #if 0 //def UNICODE
     /// add message
-    template<>
-    ErrorMessage & operator <<(const std::string &i_value)
+    template<> ErrorMessage & operator <<(const std::string &i_value)
     {
         m_ost << to_wstring(i_value);
         return *this;
@@ -48,8 +47,7 @@ public:
 
     /// add message
     typedef const char  *const_char_ptr;
-    template<>
-    ErrorMessage & operator <<(const const_char_ptr &i_value)
+    template<> ErrorMessage & operator <<(const const_char_ptr &i_value)
     {
         m_ost << to_wstring(i_value);
         return *this;
@@ -69,11 +67,11 @@ inline tostream &operator <<(tostream &i_ost, const ErrorMessage &i_em)
 
 
 ///
-class WarningMessage : public ErrorMessage {
+class WarningMessage : public ErrorMessage
+{
 public:
     /// add message
-    template<class T>
-    WarningMessage & operator <<(const T &i_value)
+    template<class T> WarningMessage & operator <<(const T &i_value)
     {
         ErrorMessage::operator <<(i_value);
         return *this;

@@ -27,13 +27,14 @@
 #include "stringtool.h"
 
 
-namespace Event {
-
+namespace Event
+{
     Key     prefixed( _T("prefixed") );
     Key     before_key_down( _T("before-key-down") );
     Key     after_key_up( _T("after-key-up") );
 
-    Key*    events[] = {
+    Key*    events[] =
+    {
         &prefixed,
         &before_key_down,
         &after_key_up,
@@ -55,13 +56,13 @@ static bool getFilenameFromRegistry(tstringi *o_name, tstringi *o_filename, Sett
 
     tstringi        entry;
 
-    if ( !reg.read(buf, &entry) )
+    if (!reg.read(buf, &entry))
         return false;
 
     tregex          getFilename( _T("^([^;]*);([^;]*);(.*)$") );
     tcmatch_results getFilenameResult;
 
-    if ( !std::regex_match(entry, getFilenameResult, getFilename) )
+    if (!std::regex_match(entry, getFilenameResult, getFilename))
         return false;
 
     if (o_name)
@@ -70,12 +71,14 @@ static bool getFilenameFromRegistry(tstringi *o_name, tstringi *o_filename, Sett
     if (o_filename)
         *o_filename = getFilenameResult.str(2);
 
-    if (o_symbols) {
+    if (o_symbols)
+    {
         tstringi        symbols = getFilenameResult.str(3);
         tregex          symbol( _T("-D([^;]*)(.*)$") );
         tcmatch_results symbolResult;
 
-        while ( std::regex_search(symbols, symbolResult, symbol) ) {
+        while (std::regex_search(symbols, symbolResult, symbol))
+        {
             o_symbols->insert( symbolResult.str(1) );
             symbols = symbolResult.str(2);
         }
@@ -98,11 +101,12 @@ void getHomeDirectories(HomeDirectories *o_pathes)
  #if 0 //defined(WIN32)
     tstringi    filename;
 
-    if ( getFilenameFromRegistry(NULL, &filename, NULL) && !filename.empty() ) {
+    if (getFilenameFromRegistry(NULL, &filename, NULL) && !filename.empty())
+    {
         tregex          getPath( _T("^(.*[/\\\\])[^/\\\\]*$") );
         tcmatch_results getPathResult;
 
-        if ( std::regex_match(filename, getPathResult, getPath) )
+        if (std::regex_match(filename, getPathResult, getPath))
             o_pathes->push_back( getPathResult.str(1) );
     }
 
@@ -172,7 +176,8 @@ Token *SettingLoader::lookToken()
 // argument "("
 bool SettingLoader::getOpenParen(bool i_doesThrow, const _TCHAR *i_name)
 {
-    if ( !isEOL() && lookToken()->isOpenParen() ) {
+    if ( !isEOL() && lookToken()->isOpenParen() )
+    {
         getToken();
         return true;
     }
@@ -185,7 +190,8 @@ bool SettingLoader::getOpenParen(bool i_doesThrow, const _TCHAR *i_name)
 // argument ")"
 bool SettingLoader::getCloseParen(bool i_doesThrow, const _TCHAR *i_name)
 {
-    if ( !isEOL() && lookToken()->isCloseParen() ) {
+    if ( !isEOL() && lookToken()->isCloseParen() )
+    {
         getToken();
         return true;
     }
@@ -198,7 +204,8 @@ bool SettingLoader::getCloseParen(bool i_doesThrow, const _TCHAR *i_name)
 // argument ","
 bool SettingLoader::getComma(bool i_doesThrow, const _TCHAR *i_name)
 {
-    if ( !isEOL() && lookToken()->isComma() ) {
+    if ( !isEOL() && lookToken()->isComma() )
+    {
         getToken();
         return true;
     }
@@ -224,25 +231,25 @@ void SettingLoader::load_INCLUDE()
 // <SCAN_CODES>
 void SettingLoader::load_SCAN_CODES(Key *o_key)
 {
-    for (int j = 0; j < Key::MAX_SCAN_CODES_SIZE && !isEOL(); ++j) {
+    for (int j = 0; j < Key::MAX_SCAN_CODES_SIZE && !isEOL(); ++j)
+    {
         ScanCode sc;
         sc.m_flags = 0;
 
-        while (true) {
+        while (true)
+        {
             Token *t = getToken();
 
-            if ( t->isNumber() ) {
+            if ( t->isNumber() )
+            {
                 sc.m_scan = (u_char) t->getNumber();
                 o_key->addScanCode(sc);
                 break;
             }
 
-            if      ( *t == _T("E0-") )
-                sc.m_flags |= ScanCode::E0;
-            else if ( *t == _T("E1-") )
-                sc.m_flags |= ScanCode::E1;
-            else
-                throw ErrorMessage() << _T("`") << *t << _T("': invalid modifier.");
+            if      ( *t == _T("E0-") ) sc.m_flags |= ScanCode::E0;
+            else if ( *t == _T("E1-") ) sc.m_flags |= ScanCode::E1;
+            else    throw ErrorMessage() << _T("`") << *t << _T("': invalid modifier.");
         }
     }
 }
@@ -255,14 +262,17 @@ void SettingLoader::load_DEFINE_KEY()
     Key     key;
 
     // <KEY_NAMES>
-    if ( *t == _T('(') ) {
+    if ( *t == _T('(') )
+    {
         key.addName( getToken()->getString() );
         while ( t = getToken(), *t != _T(')') )
             key.addName( t->getString() );
 
         if ( *getToken() != _T("=") )
             throw ErrorMessage() << _T("there must be `=' after `)'.");
-    } else {
+    }
+    else
+    {
         key.addName( t->getString() );
         while ( t = getToken(), *t != _T("=") )
             key.addName( t->getString() );
@@ -291,7 +301,8 @@ void SettingLoader::load_DEFINE_MODIFIER()
     if ( *getToken() != _T("=") )
         throw ErrorMessage() << _T("there must be `=' after modifier name.");
 
-    while ( !isEOL() ) {
+    while ( !isEOL() )
+    {
         t = getToken();
         Key *key = m_setting->m_keyboard.searchKeyByNonAliasName( t->getString() );
 
@@ -342,7 +353,8 @@ void SettingLoader::load_DEFINE_SUBSTITUTE()
     typedef std::list<ModifiedKey>  AssignedKeys;
     AssignedKeys    assignedKeys;
 
-    do {
+    do
+    {
         ModifiedKey mkey;
         mkey.m_modifier    =
             load_MODIFIER(Modifier::Type_ASSIGN, m_defaultAssignModifier);
@@ -368,17 +380,22 @@ void SettingLoader::load_DEFINE_OPTION()
 {
     Token *t = getToken();
 
-    if ( *t == _T("KL-") ) {
+    if ( *t == _T("KL-") )
+    {
         if ( *getToken() != _T("=") )
             throw ErrorMessage() << _T("there must be `=' after `def option KL-'.");
         load_ARGUMENT(&m_setting->m_correctKanaLockHandling);
-    } else if ( *t == _T("delay-of") ) {
+    }
+    else if ( *t == _T("delay-of") )
+    {
         if ( *getToken() != _T("!!!") )
             throw ErrorMessage() << _T("there must be `!!!' after `def option delay-of'.");
         if ( *getToken() != _T("=") )
             throw ErrorMessage() << _T("there must be `=' after `def option delay-of !!!'.");
         load_ARGUMENT(&m_setting->m_oneShotRepeatableDelay);
-    } else {
+    }
+    else
+    {
         throw ErrorMessage() << _T("syntax error `def option ") << *t << _T("'.");
     }
 }
@@ -416,7 +433,8 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
     enum { PRESS, RELEASE, DONTCARE }   flag   = PRESS;
 
     int i;
-    for (i = i_mode; i < Modifier::Type_ASSIGN; ++i) {
+    for (i = i_mode; i < Modifier::Type_ASSIGN; ++i)
+    {
         i_modifier.dontcare( Modifier::Type(i) );
         isModifierSpecified.on( Modifier::Type(i) );
     }
@@ -424,14 +442,17 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
     Token*  t = NULL;
 
   continue_loop:
-    while ( !isEOL() ) {
+    while ( !isEOL() )
+    {
         t = lookToken();
 
-        struct LoadMod {
+        struct LoadMod
+        {
             const _TCHAR *  m_s;
             Modifier::Type  m_mt;
         };
-        const static LoadMod map[] = {
+        const static LoadMod map[] =
+        {
             // <BASIC_MODIFIER>
             { _T("S-"),    Modifier::Type_Shift           },
             { _T("A-"),    Modifier::Type_Alt             },
@@ -476,14 +497,17 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
             { _T("L9-"),   Modifier::Type_Lock9           }
         };
 
-        for (size_t i = 0; i < NUMBER_OF(map); ++i) {
-            if (*t == map[i].m_s) {
+        for (size_t i = 0; i < NUMBER_OF(map); ++i)
+        {
+            if (*t == map[i].m_s)
+            {
                 getToken();
                 Modifier::Type mt = map[i].m_mt;
                 if ( static_cast<int>(i_mode) <= static_cast<int>(mt) )
                     throw ErrorMessage() << _T("`") << *t << _T("': invalid modifier at this context.");
 
-                switch (flag) {
+                switch (flag)
+                {
                 case PRESS:     i_modifier.press(mt);       break;
                 case RELEASE:   i_modifier.release(mt);     break;
                 case DONTCARE:  i_modifier.dontcare(mt);    break;
@@ -491,7 +515,9 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
 
                 isModifierSpecified.on(mt);
                 flag = PRESS;
-                if (o_mode && *o_mode < mt) {
+	
+                if (o_mode && *o_mode < mt)
+                {
                     if (mt < Modifier::Type_BASIC)
                         *o_mode = Modifier::Type_BASIC;
                     else if (mt < Modifier::Type_KEYSEQ)
@@ -502,12 +528,15 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
                 goto continue_loop;
             }
         }
-        if ( *t == _T("*") ) {
+
+        if ( *t == _T("*") )
+        {
             getToken();
             flag = DONTCARE;
             continue;
         }
-        if ( *t == _T("~") ) {
+        if ( *t == _T("~") )
+        {
             getToken();
             flag = RELEASE;
             continue;
@@ -515,9 +544,12 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
         break;
     }
 
-    for (i = Modifier::Type_begin; i != Modifier::Type_end; ++i) {
-        if ( !isModifierSpecified.isOn( Modifier::Type(i) ) ) {
-            switch (flag) {
+    for (i = Modifier::Type_begin; i != Modifier::Type_end; ++i)
+    {
+        if ( !isModifierSpecified.isOn( Modifier::Type(i) ) )
+        {
+            switch (flag)
+            {
             case PRESS: break;
             case RELEASE:  i_modifier.release(  Modifier::Type(i) ); break;
             case DONTCARE: i_modifier.dontcare( Modifier::Type(i) ); break;
@@ -531,12 +563,19 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
     bool    isOnDown       = i_modifier.isOn(Modifier::Type_Down);
 
     if (isDontcareUp && isDontcareDown)
+    {
         ;
+    }
     else if (isDontcareUp)
+    {
         i_modifier.on(Modifier::Type_Up  , !isOnDown);
+    }
     else if (isDontcareDown)
+    {
         i_modifier.on(Modifier::Type_Down, !isOnUp);
-    else if (isOnUp == isOnDown) {
+    }
+    else if (isOnUp == isOnDown)
+    {
         i_modifier.dontcare(Modifier::Type_Up);
         i_modifier.dontcare(Modifier::Type_Down);
     }
@@ -573,11 +612,14 @@ void SettingLoader::load_KEYMAP_DEFINITION(const Token *i_which)
     bool            isKeymap2              = false;
     bool            doesLoadDefaultKeySeq  = false;
 
-    if ( !isEOL() ) {
+    if ( !isEOL() )
+    {
         Token *t = lookToken();
 
-        if ( *i_which == _T("window") ) {                   // <WINDOW>
-            if ( t->isOpenParen() ) {
+        if ( *i_which == _T("window") )     // <WINDOW>
+        {
+            if ( t->isOpenParen() )
+            {
                 // "(" <WINDOW_CLASS_NAME> "&&" <WINDOW_TITLE_NAME> ")"
                 // "(" <WINDOW_CLASS_NAME> "||" <WINDOW_TITLE_NAME> ")"
                 getToken();
@@ -596,16 +638,24 @@ void SettingLoader::load_KEYMAP_DEFINITION(const Token *i_which)
                 if ( !getToken()->isCloseParen() )
                     throw ErrorMessage() << _T("there must be `)'.");
 
-            } else if ( t->isRegexp() ) { // <WINDOW_CLASS_NAME>
+            }
+            else if ( t->isRegexp() )   // <WINDOW_CLASS_NAME>
+            {
                 getToken();
                 type               = Keymap::Type_windowAnd;
                 windowClassName    = t->getRegexp();
             }
-        } else if ( *i_which == _T("keymap") ) {
+        }
+        else if ( *i_which == _T("keymap") )
+        {
             ;
-        } else if ( *i_which == _T("keymap2") ) {
+        }
+        else if ( *i_which == _T("keymap2") )
+        {
             isKeymap2 = true;
-        } else {
+        }
+        else
+        {
             ASSERT(false);
         }
         if ( !isEOL() )
@@ -616,11 +666,13 @@ void SettingLoader::load_KEYMAP_DEFINITION(const Token *i_which)
         Keymap(type, name->getString(), windowClassName, windowTitleName, NULL, NULL)
     );
 
-    if (doesLoadDefaultKeySeq) {
+    if (doesLoadDefaultKeySeq)
+    {
         Token *t = lookToken();
 
         // <KEYMAP_PARENT>
-        if ( *t == _T(":") ) {
+        if ( *t == _T(":") )
+        {
             getToken();
             t              = getToken();
             parentKeymap   = m_setting->m_keymaps.searchByName( t->getString() );
@@ -628,7 +680,8 @@ void SettingLoader::load_KEYMAP_DEFINITION(const Token *i_which)
                 throw ErrorMessage() << _T("`") << *t << _T("': unknown keymap name.");
         }
 
-        if ( !isEOL() ) {
+        if ( !isEOL() )
+        {
             t      = getToken();
 
             if ( !( *t == _T("=>") || *t == _T("=") ) )
@@ -638,7 +691,8 @@ void SettingLoader::load_KEYMAP_DEFINITION(const Token *i_which)
         }
     }
 
-    if (keySeq == NULL) {
+    if (keySeq == NULL)
+    {
         FunctionData *  fd;
 
         if (type == Keymap::Type_keymap && !isKeymap2)
@@ -700,7 +754,8 @@ void SettingLoader::load_ARGUMENT(tstringq *o_arg)
 // &lt;ARGUMENT&gt;
 void SettingLoader::load_ARGUMENT(std::list<tstringq> *o_arg)
 {
-    while (true) {
+    while (true)
+    {
         if ( !lookToken()->isString() )
             return;
 
@@ -726,20 +781,31 @@ void SettingLoader::load_ARGUMENT(VKey *o_arg)
     Token * t      = getToken();
     int     vkey   = 0;
 
-    while (true) {
-        if ( t->isNumber() ) {
+    while (true)
+    {
+        if ( t->isNumber() )
+        {
             vkey |= static_cast<uint8_t>( t->getNumber() );
             break;
-        } else if ( *t == _T("E-") ) {
+        }
+        else if ( *t == _T("E-") )
+        {
             vkey |= VKey_extended;
-        } else if ( *t == _T("U-") ) {
+        }
+        else if ( *t == _T("U-") )
+        {
             vkey |= VKey_released;
-        } else if ( *t == _T("D-") ) {
+        }
+        else if ( *t == _T("D-") )
+        {
             vkey |= VKey_pressed;
-        } else {
+        }
+        else
+        {
             const VKeyTable *vkt;
 
-            for (vkt = g_vkeyTable; vkt->m_name; ++vkt) {
+            for (vkt = g_vkeyTable; vkt->m_name; ++vkt)
+            {
                 if (*t == vkt->m_name)
                     break;
             }
@@ -764,12 +830,16 @@ void SettingLoader::load_ARGUMENT(ToWindowType *o_arg)
 {
     Token *t = getToken();
 
-    if ( t->isNumber() ) {
-        if ( ToWindowType_toBegin <= t->getNumber() ) {
+    if ( t->isNumber() )
+    {
+        if ( ToWindowType_toBegin <= t->getNumber() )
+        {
             *o_arg = static_cast<ToWindowType>( t->getNumber() );
             return;
         }
-    } else if ( getTypeValue( o_arg, t->getString() ) ) {
+    }
+    else if ( getTypeValue( o_arg, t->getString() ) )
+    {
         return;
     }
 
@@ -886,15 +956,20 @@ void SettingLoader::load_ARGUMENT(const KeySeq * *o_arg)
     Token *         t      = getToken();
     const KeySeq * &keySeq = *o_arg;
 
-    if ( t->isOpenParen() ) {
+    if ( t->isOpenParen() )
+    {
         keySeq = load_KEY_SEQUENCE(_T(""), true);
         getToken(); // close paren
-    } else if ( *t == _T("$") ) {
+    }
+    else if ( *t == _T("$") )
+    {
         t      = getToken();
         keySeq = m_setting->m_keySeqs.searchByName( t->getString() );
         if (!keySeq)
             throw ErrorMessage() << _T("`$") << *t << _T("': unknown keyseq name.");
-    } else {
+    }
+    else
+    {
         throw ErrorMessage() << _T("`") << *t << _T("': it is not keyseq.");
     }
 }
@@ -906,7 +981,8 @@ void SettingLoader::load_ARGUMENT(StrExprArg *o_arg)
     Token *             t      = getToken();
     StrExprArg::Type    type   = StrExprArg::Literal;
 
-    if (*t == _T("$") && t->isQuoted() == false && lookToken()->getType() == Token::Type_string) {
+    if (*t == _T("$") && t->isQuoted() == false && lookToken()->getType() == Token::Type_string)
+    {
         type   = StrExprArg::Builtin;
         t      = getToken();
     }
@@ -929,28 +1005,35 @@ KeySeq *SettingLoader::load_KEY_SEQUENCE(const tstringi &i_name, bool i_isInPare
 {
     KeySeq keySeq(i_name);
 
-    while ( !isEOL() ) {
+    while ( !isEOL() )
+    {
         Modifier::Type  mode;
         Modifier        modifier   = load_MODIFIER(i_mode, m_defaultKeySeqModifier, &mode);
         keySeq.setMode(mode);
         Token *         t          = lookToken();
 
         if (t->isCloseParen() && i_isInParen)
+        {
             break;
-        else if ( t->isOpenParen() ) {
+        }
+        else if ( t->isOpenParen() )
+        {
             getToken(); // open paren
             KeySeq *        ks = load_KEY_SEQUENCE(_T(""), true, i_mode);
             getToken(); // close paren
             ActionKeySeq    aks(ks);
             keySeq.add(aks);
-        } else if ( *t == _T("$") ) { // <KEYSEQ_NAME>
+        }
+        else if ( *t == _T("$") )   // <KEYSEQ_NAME>
+        {
             getToken();
             t = getToken();
             KeySeq *        ks = m_setting->m_keySeqs.searchByName( t->getString() );
             if (ks == NULL)
                 throw ErrorMessage() << _T("`$") << *t << _T("': unknown keyseq name.");
 
-            if ( !ks->isCorrectMode(i_mode) ) {
+            if ( !ks->isCorrectMode(i_mode) )
+            {
                 throw ErrorMessage()
                     << _T("`$") << *t
                     << _T("': Some of R-, IL-, IC-, NL-, CL-, SL-, KL-, MAX-, MIN-, MMAX-, MMIN-, M0...M9- and L0...L9- are used in the keyseq.  They are prohibited in this context.");
@@ -959,7 +1042,9 @@ KeySeq *SettingLoader::load_KEY_SEQUENCE(const tstringi &i_name, bool i_isInPare
 
             ActionKeySeq    aks(ks);
             keySeq.add(aks);
-        } else if ( *t == _T("&") ) { // <FUNCTION_NAME>
+        }
+        else if ( *t == _T("&") )   // <FUNCTION_NAME>
+        {
             getToken();
             t = getToken();
 
@@ -971,7 +1056,9 @@ KeySeq *SettingLoader::load_KEY_SEQUENCE(const tstringi &i_name, bool i_isInPare
 
             af.m_functionData->load(this);
             keySeq.add(af);
-        } else {    // <KEYSEQ_MODIFIED_KEY_NAME>
+        }
+        else                        // <KEYSEQ_MODIFIED_KEY_NAME>
+        {
             ModifiedKey mkey;
             mkey.m_modifier    = modifier;
             mkey.m_key         = load_KEY_NAME();
@@ -993,14 +1080,16 @@ void SettingLoader::load_KEY_ASSIGN()
     ModifiedKey     mkey;
     mkey.m_modifier = load_MODIFIER(Modifier::Type_ASSIGN, m_defaultAssignModifier);
 
-    if ( *lookToken() == _T("=") ) {
+    if ( *lookToken() == _T("=") )
+    {
         getToken();
         m_defaultKeySeqModifier    = load_MODIFIER(Modifier::Type_KEYSEQ, m_defaultKeySeqModifier);
         m_defaultAssignModifier    = mkey.m_modifier;
         return;
     }
 
-    while (true) {
+    while (true)
+    {
         mkey.m_key         = load_KEY_NAME();
         assignedKeys.push_back(mkey);
 
@@ -1025,19 +1114,19 @@ void SettingLoader::load_EVENT_ASSIGN()
 {
     std::list<ModifiedKey>  assignedKeys;
 
-    ModifiedKey  mkey;
+    ModifiedKey mkey;
     mkey.m_modifier.dontcare();         //set all modifiers to dontcare
 
-    Token *     t = getToken();
-    Key * *     e;
-
-    for (e = Event::events; *e; ++e) {
-        if ( *t == (*e)->getName() ) {
+    Token*      t = getToken();
+    Key**       e;
+    for (e = Event::events; *e; ++e)
+    {
+        if ( *t == (*e)->getName() )
+        {
             mkey.m_key = *e;
             break;
         }
     }
-
     if (!*e)
         throw ErrorMessage() << _T("`") << *t << _T("': invalid event name.");
 
@@ -1047,7 +1136,7 @@ void SettingLoader::load_EVENT_ASSIGN()
         throw ErrorMessage() << _T("`=' is expected.");
 
     ASSERT(m_currentKeymap);
-    KeySeq *                keySeq = load_KEY_SEQUENCE();
+    KeySeq*     keySeq = load_KEY_SEQUENCE();
     m_currentKeymap->addAssignment(mkey, keySeq);
 }
 
@@ -1059,20 +1148,21 @@ void SettingLoader::load_MODIFIER_ASSIGNMENT()
     Token *         t = getToken();
     Modifier::Type  mt;
 
-    while (true) {
+    while (true)
+    {
         Keymap::AssignMode am = Keymap::AM_notModifier;
         if      (*t == _T("!")  ) am = Keymap::AM_true             , t = getToken();
         else if (*t == _T("!!") ) am = Keymap::AM_oneShot          , t = getToken();
         else if (*t == _T("!!!")) am = Keymap::AM_oneShotRepeatable, t = getToken();
 
         if      (*t == _T("shift")) mt = Modifier::Type_Shift;
-        else if (*t == _T("alt")  ||
-                 *t == _T("meta") ||
-                 *t == _T("menu") ) mt = Modifier::Type_Alt;
-        else if (*t == _T("control") ||
-                 *t == _T("ctrl") ) mt = Modifier::Type_Control;
-        else if (*t == _T("windows") ||
-                 *t == _T("win")  ) mt = Modifier::Type_Windows;
+        else if (*t == _T("alt")
+              || *t == _T("meta")
+              || *t == _T("menu") ) mt = Modifier::Type_Alt;
+        else if (*t == _T("control")
+              || *t == _T("ctrl") ) mt = Modifier::Type_Control;
+        else if (*t == _T("windows")
+              || *t == _T("win")  ) mt = Modifier::Type_Windows;
         else if (*t == _T("mod0") ) mt = Modifier::Type_Mod0;
         else if (*t == _T("mod1") ) mt = Modifier::Type_Mod1;
         else if (*t == _T("mod2") ) mt = Modifier::Type_Mod2;
@@ -1105,7 +1195,8 @@ void SettingLoader::load_MODIFIER_ASSIGNMENT()
     else throw ErrorMessage() << _T("`") << *t << _T("': is unknown operator.");
 
     // <ASSIGN_MODE>? <KEY_NAME>
-    while ( !isEOL() ) {
+    while ( !isEOL() )
+    {
         // <ASSIGN_MODE>?
         t = getToken();
         Keymap::AssignMode  am     = Keymap::AM_normal;
@@ -1158,7 +1249,8 @@ void SettingLoader::load_IF()
     Token * t    = getToken();  // <SYMBOL> or !
     bool    not_ = false;
 
-    if ( *t == _T("!") ) {
+    if ( *t == _T("!") )
+    {
         not_   = true;
         t      = getToken();                    // <SYMBOL>
     }
@@ -1174,17 +1266,23 @@ void SettingLoader::load_IF()
 
     m_canReadStack.push_back(doesRead);
 
-    if ( !isEOL() ) {
+    if ( !isEOL() )
+    {
         size_t len = m_canReadStack.size();
         load_LINE();
 
-        if ( len < m_canReadStack.size() ) {
+        if ( len < m_canReadStack.size() )
+        {
             bool r = m_canReadStack.back();
             m_canReadStack.pop_back();
             m_canReadStack[len - 1] = r && doesRead;
-        } else if ( len == m_canReadStack.size() ) {
+        }
+        else if ( len == m_canReadStack.size() )
+        {
             m_canReadStack.pop_back();
-        } else {
+        }
+        else
+        {
             ;   // `end' found
         }
     }
@@ -1201,7 +1299,8 @@ void SettingLoader::load_ELSE(bool i_isElseIf, const tstringi &i_token)
 
     m_canReadStack.push_back(doesRead);
 
-    if ( !isEOL() ) {
+    if ( !isEOL() )
+    {
         size_t len = m_canReadStack.size();
 
         if (i_isElseIf)
@@ -1209,13 +1308,18 @@ void SettingLoader::load_ELSE(bool i_isElseIf, const tstringi &i_token)
         else
             load_LINE();
 
-        if ( len < m_canReadStack.size() ) {
+        if ( len < m_canReadStack.size() )
+        {
             bool r = m_canReadStack.back();
             m_canReadStack.pop_back();
             m_canReadStack[len - 1] = doesRead && r;
-        } else if ( len == m_canReadStack.size() ) {
+        }
+        else if ( len == m_canReadStack.size() )
+        {
             m_canReadStack.pop_back();
-        } else {
+        }
+        else
+        {
             ;                                   // `end' found
         }
     }
@@ -1240,46 +1344,36 @@ void SettingLoader::load_LINE()
     Token *i_token = getToken();
 
     // <COND_SYMBOL>
-    if      ( *i_token == _T("if")
-            || *i_token == _T("and") )
-        load_IF();
-    else if ( *i_token == _T("else") )
-        load_ELSE( false, i_token->getString() );
-    else if ( *i_token == _T("elseif")
-            || *i_token == _T("elsif")
-            || *i_token == _T("elif")
-            || *i_token == _T("or") )
-        load_ELSE( true, i_token->getString() );
-    else if ( *i_token == _T("endif") )
-        load_ENDIF( _T("endif") );
-    else if ( 0 < m_canReadStack.size() && !m_canReadStack.back() ) {
+    if (       *i_token == _T("if")
+            || *i_token == _T("and")  )         load_IF();
+    else if (  *i_token == _T("else") )         load_ELSE( false, i_token->getString() );
+    else if (  *i_token == _T("elseif")
+            || *i_token == _T("elsif" )
+            || *i_token == _T("elif"  )
+            || *i_token == _T("or")   )         load_ELSE( true, i_token->getString() );
+    else if (  *i_token == _T("endif"))         load_ENDIF( _T("endif") );
+    else if (0 < m_canReadStack.size() && !m_canReadStack.back())
+    {
         while ( !isEOL() )
             getToken();
-    } else if ( *i_token == _T("define") )
-        load_DEFINE();
+    }
+    else if (  *i_token == _T("define") )       load_DEFINE();
     // <INCLUDE>
-    else if ( *i_token == _T("include") )
-        load_INCLUDE();
+    else if (  *i_token == _T("include"))       load_INCLUDE();
     // <KEYBOARD_DEFINITION>
-    else if ( *i_token == _T("def") )
-        load_KEYBOARD_DEFINITION();
+    else if (  *i_token == _T("def")    )       load_KEYBOARD_DEFINITION();
     // <KEYMAP_DEFINITION>
-    else if ( *i_token == _T("keymap")
+    else if (  *i_token == _T("keymap")
             || *i_token == _T("keymap2")
-            || *i_token == _T("window") )
-        load_KEYMAP_DEFINITION(i_token);
+            || *i_token == _T("window") )       load_KEYMAP_DEFINITION(i_token);
     // <KEY_ASSIGN>
-    else if ( *i_token == _T("key") )
-        load_KEY_ASSIGN();
+    else if (  *i_token == _T("key")    )       load_KEY_ASSIGN();
     // <EVENT_ASSIGN>
-    else if ( *i_token == _T("event") )
-        load_EVENT_ASSIGN();
+    else if (  *i_token == _T("event")  )       load_EVENT_ASSIGN();
     // <MODIFIER_ASSIGNMENT>
-    else if ( *i_token == _T("mod") )
-        load_MODIFIER_ASSIGNMENT();
+    else if (  *i_token == _T("mod")    )       load_MODIFIER_ASSIGNMENT();
     // <KEYSEQ_DEFINITION>
-    else if ( *i_token == _T("keyseq") )
-        load_KEYSEQ_DEFINITION();
+    else if (  *i_token == _T("keyseq") )       load_KEYSEQ_DEFINITION();
     else
         throw ErrorMessage() << _T("syntax error `") << *i_token << _T("'.");
 }
@@ -1313,7 +1407,6 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
     struct stati64_t    sbuf;
     if (_tstati64(i_filename.c_str(), &sbuf) < 0 || sbuf.st_size == 0)
         return false;
-
     // following check is needed to cast sbuf.st_size to size_t safely
     // this cast occurs because of above workaround for bcc
     if (sbuf.st_size > UINT_MAX)
@@ -1327,7 +1420,8 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
 
     // read file
     Array<uint8_t>       buf(static_cast<size_t>(sbuf.st_size) + 1);
-    if (fread(buf.get(), static_cast<size_t>(sbuf.st_size), 1, fp) != 1) {
+    if (fread(buf.get(), static_cast<size_t>(sbuf.st_size), 1, fp) != 1)
+    {
         fclose(fp);
         return false;
     }
@@ -1342,8 +1436,8 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
         size_t  size   = static_cast<size_t>(sbuf.st_size) / 2;
         o_data->resize(size);
         uint8_t*  p    = buf.get();
-
-        for (size_t i = 0; i < size; ++i) {
+        for (size_t i = 0; i < size; ++i)
+        {
             wchar_t c = static_cast<wchar_t>(*p++);
             c             |= static_cast<wchar_t>(*p++) << 8;
             (*o_data)[i]   = c;
@@ -1360,21 +1454,20 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
         size_t  size   = static_cast<size_t>(sbuf.st_size) / 2;
         o_data->resize(size);
         uint8_t*  p    = buf.get();
-
-        for (size_t i = 0; i < size; ++i) {
+        for (size_t i = 0; i < size; ++i)
+        {
             wchar_t c = static_cast<wchar_t>(*p++) << 8;
             c             |= static_cast<wchar_t>(*p++);
             (*o_data)[i]   = c;
         }
-
         fclose(fp);
         return true;
     }
 
     // try multibyte charset
     size_t wsize = mbstowcs(NULL, reinterpret_cast<char *>( buf.get() ), 0);
-
-    if ( wsize != size_t(-1) ) {
+    if ( wsize != size_t(-1) )
+    {
         Array<wchar_t> wbuf(wsize);
         mbstowcs(wbuf.get(), reinterpret_cast<char *>( buf.get() ), wsize);
         o_data->assign(wbuf.get(), wbuf.get() + wsize);
@@ -1390,18 +1483,27 @@ bool readFile(tstring *o_data, const tstringi &i_filename)
         wchar_t *       d                                          = wbuf.get();
         enum { STATE_1, STATE_2of2, STATE_2of3, STATE_3of3 } state = STATE_1;
 
-        while (f != end) {
-            switch (state) {
+        while (f != end)
+        {
+            switch (state)
+            {
             case STATE_1:
-                if ( !(*f & 0x80) ) {                   // 0xxxxxxx: 00-7F
+                if ( !(*f & 0x80) )                     // 0xxxxxxx: 00-7F
+                {
                     *d++ = static_cast<wchar_t>(*f++);
-                } else if ( (*f & 0xe0) == 0xc0 ) {     // 110xxxxx 10xxxxxx: 0080-07FF
+                }
+                else if ( (*f & 0xe0) == 0xc0 )         // 110xxxxx 10xxxxxx: 0080-07FF
+                {
                     *d     = ( (static_cast<wchar_t>(*f++) & 0x1f) << 6 );
                     state  = STATE_2of2;
-                } else if ( (*f & 0xf0) == 0xe0 ) {     // 1110xxxx 10xxxxxx 10xxxxxx: 0800 - FFFF
+                }
+                else if ( (*f & 0xf0) == 0xe0 )         // 1110xxxx 10xxxxxx 10xxxxxx: 0800 - FFFF
+                {
                     *d     = ( (static_cast<wchar_t>(*f++) & 0x0f) << 12 );
                     state  = STATE_2of3;
-                } else {
+                }
+                else
+                {
                     goto not_UTF_8;
                 }
                 break;
@@ -1448,8 +1550,8 @@ void SettingLoader::load(const tstringi &i_filename)
     m_currentFilename = i_filename;
 
     tstring data;
-
-    if ( !readFile(&data, m_currentFilename) ) {
+    if ( !readFile(&data, m_currentFilename) )
+    {
         Acquire a(m_soLog);
         *m_log << m_currentFilename << _T(" : error: file not found") << std::endl;
      #if 1
@@ -1460,8 +1562,10 @@ void SettingLoader::load(const tstringi &i_filename)
     }
 
     // prefix
-    if (m_prefixesRefCcount == 0) {
-        static const _TCHAR *prefixes[] = {
+    if (m_prefixesRefCcount == 0)
+    {
+        static const _TCHAR *prefixes[] =
+        {
             _T("="),    _T("=>"),    _T("&&"),    _T("||"),    _T(":"),     _T("$"),   _T("&"),
             _T("-="),   _T("+="),    _T("!!!"),   _T("!!"),    _T("!"),
             _T("E0-"),  _T("E1-"),                          // <SCAN_CODE_EXTENTION>
@@ -1490,13 +1594,18 @@ void SettingLoader::load(const tstringi &i_filename)
     Parser parser( data.c_str(), data.size() );
     parser.setPrefixes(m_prefixes);
 
-    while (true) {
-        try {
+    while (true)
+    {
+        try
+        {
             if ( !parser.getLine(&m_tokens) )
                 break;
             m_ti = m_tokens.begin();
-        } catch (ErrorMessage &e) {
-            if (m_log && m_soLog) {
+        }
+        catch (ErrorMessage &e)
+        {
+            if (m_log && m_soLog)
+            {
                 Acquire a(m_soLog);
                 *m_log  << m_currentFilename << _T("(") << parser.getLineNumber()
                         << _T(") : error: ") << e << std::endl;
@@ -1505,21 +1614,26 @@ void SettingLoader::load(const tstringi &i_filename)
             continue;
         }
 
-        try {
+        try
+        {
             load_LINE();
             if ( !isEOL() )
                 throw WarningMessage() << _T("back garbage is ignored.");
-        } catch (WarningMessage &w) {
-            if (m_log && m_soLog) {
+        }
+        catch (WarningMessage &w)
+        {
+            if (m_log && m_soLog)
+            {
                 Acquire a(m_soLog);
-                *m_log  << i_filename << _T("(") << parser.getLineNumber()
-                        << _T(") : warning: ") << w << std::endl;
+                *m_log  << i_filename << _T("(") << parser.getLineNumber() << _T(") : warning: ") << w << std::endl;
             }
-        } catch (ErrorMessage &e) {
-            if (m_log && m_soLog) {
+        }
+        catch (ErrorMessage &e)
+        {
+            if (m_log && m_soLog)
+            {
                 Acquire a(m_soLog);
-                *m_log  << i_filename << _T("(") << parser.getLineNumber()
-                        << _T(") : error: ") << e << std::endl;
+                *m_log  << i_filename << _T("(") << parser.getLineNumber() << _T(") : error: ") << e << std::endl;
             }
 
             m_isThereAnyError = true;
@@ -1532,7 +1646,8 @@ void SettingLoader::load(const tstringi &i_filename)
     if (m_prefixesRefCcount == 0)
         delete m_prefixes;
 
-    if ( 0 < m_canReadStack.size() ) {
+    if ( 0 < m_canReadStack.size() )
+    {
         Acquire a(m_soLog);
         *m_log  << m_currentFilename << _T("(") << parser.getLineNumber()
                 << _T(") : error: unbalanced `if'.  ")
@@ -1555,14 +1670,19 @@ bool SettingLoader::isReadable(const tstringi& i_filename, int i_debugLevel) con
     tifstream   ist( i_filename.c_str() );
  #endif
 
-    if ( ist.good() ) {
-        if (m_log && m_soLog) {
+    if ( ist.good() )
+    {
+        if (m_log && m_soLog)
+        {
             Acquire a(m_soLog, 0);
             *m_log << _T("  loading: ") << i_filename << std::endl;
         }
         return true;
-    } else {
-        if (m_log && m_soLog) {
+    }
+    else
+    {
+        if (m_log && m_soLog)
+        {
             Acquire a(m_soLog, i_debugLevel);
             *m_log << _T("not found: ") << i_filename << std::endl;
         }
@@ -1603,7 +1723,8 @@ bool SettingLoader::getFilenameFromRegistry(tstringi *o_path) const
     // set symbols
     Regexp      symbol( _T("-D([^;]*)") );
 
-    while ( symbol.doesMatch(options) ) {
+    while ( symbol.doesMatch(options) )
+    {
         m_setting->symbols.insert(symbol[1]);
         options = options.substr( symbol.subBegin(1) );
     }
@@ -1621,25 +1742,32 @@ bool SettingLoader::getFilename(const tstringi &i_name, tstringi *o_path,
     const tstringi &name           = i_name.empty() ? tstringi( _T(".mayu") ) : i_name;
     bool            isFirstTime    = true;
 
-    while (true) {
+    while (true)
+    {
         // find file from registry
-        if ( i_name.empty() ) {         // called not from 'include'
+        if ( i_name.empty() )           // called not from 'include'
+        {
             Setting::Symbols symbols;
 
-            if ( getFilenameFromRegistry(NULL, o_path, &symbols) ) {
-                if ( o_path->empty() ) {
+            if ( getFilenameFromRegistry(NULL, o_path, &symbols) )
+            {
+                if ( o_path->empty() )
+                {
                     // find file from home directory
                     HomeDirectories pathes;
                     getHomeDirectories(&pathes);
 
-                    for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++i) {
+                    for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++i)
+                    {
                         *o_path = *i + _T("\\") + name;
                         if ( isReadable(*o_path, i_debugLevel) )
                             goto add_symbols;
                     }
 
                     return false;
-                } else {
+                }
+                else
+                {
                     if ( !isReadable(*o_path, i_debugLevel) )
                         return false;
                 }
@@ -1658,7 +1786,8 @@ bool SettingLoader::getFilename(const tstringi &i_name, tstringi *o_path,
         HomeDirectories pathes;
         getHomeDirectories(&pathes);
 
-        for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++i) {
+        for (HomeDirectories::iterator i = pathes.begin(); i != pathes.end(); ++i)
+        {
             // *o_path = *i + _T("\\") + name;
             *o_path = *i + _T("/") + name;
             if ( isReadable(*o_path, i_debugLevel) )
@@ -1698,12 +1827,16 @@ bool SettingLoader::load(Setting *i_setting, const tstringi &i_filename)
     m_isThereAnyError  = false;
 
     tstringi        path;
-    if ( !getFilename(i_filename, &path) ) {
-        if ( i_filename.empty() ) {
+    if ( !getFilename(i_filename, &path) )
+    {
+        if ( i_filename.empty() )
+        {
             Acquire a(m_soLog);
             getFilename(i_filename, &path, 0);                  // show filenames
             return false;
-        } else {
+        }
+        else
+        {
             throw ErrorMessage() << _T("`") << i_filename << _T("': no such file or other error.");
         }
     }
@@ -1745,5 +1878,5 @@ bool SettingLoader::load(Setting *i_setting, const tstringi &i_filename)
 }
 
 
-std::vector<tstringi> *SettingLoader::m_prefixes;           // m_prefixes terminal symbol
-size_t SettingLoader::                m_prefixesRefCcount;  /* reference count of m_prefixes */
+std::vector<tstringi> *SettingLoader::m_prefixes;           ///< m_prefixes terminal symbol
+size_t                 SettingLoader::m_prefixesRefCcount;  ///< reference count of m_prefixes

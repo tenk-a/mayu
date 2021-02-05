@@ -30,7 +30,8 @@
 using namespace std;
 
 template<class T, size_t SIZE  = 1024, class TR = std::char_traits<T>, class A = std::allocator<T> >
-class basic_msgbuf : public std::basic_streambuf<T, TR>, public SyncObject {
+class basic_msgbuf : public std::basic_streambuf<T, TR>, public SyncObject
+{
 public:
     typedef std::basic_string<T, TR, A>     String; ///<
     typedef std::basic_streambuf<T, TR>     Super;  ///<
@@ -66,16 +67,14 @@ public:
      #elif defined(__linux__) || defined(__APPLE__)
         int     i_file
      #endif
-    ) :
+    )
      #if 0 //defined(WIN32)
-        m_hwnd(i_hwnd)
+        : m_hwnd(i_hwnd)
         , m_messageId(i_messageId)
-        ,
      #elif defined(__linux__) || defined(__APPLE__)
-        m_file(i_file)
-        ,
+        : m_file(i_file)
      #endif
-        m_buf( m_allocator.allocate(SIZE, 0) )
+        , m_buf( m_allocator.allocate(SIZE, 0) )
         , m_debugLevel(0)
         , m_msgDebugLevel(0)
     {
@@ -112,15 +111,15 @@ public:
         m_hwnd = 0;
         return this;
     }
-
  #else //linux and mac // TODO:
     basic_msgbuf *attach(int i_file)
     {
         Acquire a(&m_cs);
         ASSERT( !m_file && i_file );
         m_file = i_file;
-        if ( !m_str.empty() ) {
-            //      fputs(m_file, m_str.c_str());
+        if ( !m_str.empty() )
+        {
+            // fputs(m_file, m_str.c_str());
             write( m_file, m_str.c_str(), m_str.size() + sizeof ( _T('\n') ) );
             releaseString();
         }
@@ -176,7 +175,8 @@ public:
         if ( sync() == TR::eof() )  // sync before new buffer created below
             return TR::eof();
 
-        if ( i_c != TR::eof() ) {
+        if ( i_c != TR::eof() )
+        {
             *basic_streambuf<T, TR>::pptr() = TR::to_char_type(i_c);
             basic_streambuf<T, TR>::pbump(1);
             sync();
@@ -192,15 +192,19 @@ public:
         T * end    = basic_streambuf<T, TR>::pptr();
      #if 0 //def USE_MBC
         T * i;
-        for (i = begin; i < end; ++i) {
+        for (i = begin; i < end; ++i)
+        {
             if ( _istlead(*i) )
                 ++i;
         }
-        if (i == end) {
+        if (i == end)
+        {
             if (m_msgDebugLevel <= m_debugLevel)
                 m_str += String(begin, end - begin);
             this->setp(m_buf, m_buf + SIZE);
-        } else { // end < i
+        }
+        else    // end < i
+        {
             if (m_msgDebugLevel <= m_debugLevel)
                 m_str += String(begin, end - begin - 1);
 
@@ -239,7 +243,8 @@ public:
             PostMessage( m_hwnd, m_messageId, 0, reinterpret_cast<LPARAM>(this) );
 
      #elif defined(__linux__) || defined(__APPLE__)
-        if ( !m_str.empty() ) {
+        if ( !m_str.empty() )
+        {
             write( m_file, m_str.c_str(), m_str.size() + sizeof ( _T('\n') ) );
             releaseString();
         }
@@ -252,14 +257,15 @@ public:
 
 ///
 template<class T, size_t SIZE  = 1024, class TR = std::char_traits<T>, class A = std::allocator<T> >
-class basic_omsgstream : public std::basic_ostream<T, TR>, public SyncObject {
+class basic_omsgstream : public std::basic_ostream<T, TR>, public SyncObject
+{
 public:
-    typedef std::basic_ostream<T, TR>       Super;      ///
-    typedef basic_msgbuf<T, SIZE, TR, A>    StreamBuf;  ///
-    typedef std::basic_string<T, TR, A>     String;     ///
+    typedef std::basic_ostream<T, TR>       Super;      ///<
+    typedef basic_msgbuf<T, SIZE, TR, A>    StreamBuf;  ///<
+    typedef std::basic_string<T, TR, A>     String;     ///<
 
 private:
-    StreamBuf m_streamBuf;                              ///
+    StreamBuf m_streamBuf;                              ///<
 
 public:
     ///

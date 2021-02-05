@@ -11,7 +11,8 @@
 #include <stdio.h>
 
 /// define virtual key code and its name
-class VKeyTable {
+class VKeyTable
+{
 public:
     uint8_t         m_code;             ///< VKey code
     const _TCHAR *  m_name;             ///< VKey name

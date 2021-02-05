@@ -1,5 +1,6 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // multithread.h
+// マルチスレッド用. (実質ダミー)
 
 #ifndef _MULTITHREAD_H
 #define _MULTITHREAD_H
@@ -11,7 +12,8 @@
 #endif
 
 ///
-class SyncObject {
+class SyncObject
+{
 public:
     ///
     virtual void    acquire()  = 0;
@@ -24,8 +26,9 @@ public:
 
 # if 0 //defined(_MSC_VER)
 ///
-class CriticalSection : public SyncObject {
-    CRITICAL_SECTION m_cs;  ///
+class CriticalSection : public SyncObject
+{
+    CRITICAL_SECTION m_cs;  ///<
 
 public:
     ///
@@ -41,8 +44,9 @@ public:
 #elif defined(__linux__) || defined(__APPLE__)
 // TODO:
 
-//とりあえずシングルスレッドで動かすので Null Object
-class CriticalSection : public SyncObject {
+// とりあえずシングルスレッドで動かすので Null Object
+class CriticalSection : public SyncObject
+{
 public:
     ///
     CriticalSection() { }
@@ -54,7 +58,8 @@ public:
     void release() { }
 };
 
-class Mutex : public SyncObject {
+class Mutex : public SyncObject
+{
 public:
     ///
     Mutex() {}
@@ -69,8 +74,10 @@ public:
 #endif
 
 ///
-class Acquire {
+class Acquire
+{
     SyncObject *m_so;       ///
+
 public:
     ///
     Acquire(SyncObject *i_so) : m_so(i_so) { m_so->acquire(); }
@@ -79,5 +86,6 @@ public:
     ///
     ~Acquire() { m_so->release(); }
 };
+
 
 #endif // !_MULTITHREAD_H

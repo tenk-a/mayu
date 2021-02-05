@@ -9,7 +9,8 @@
 
 
 // Vkey table (terminated by NULL)
-const VKeyTable g_vkeyTable[] = {
+const VKeyTable g_vkeyTable[] =
+{
     #if 0 //defined(WIN32)
      #define VK(name)   { VK_ ## name,  _T(# name) }
     #elif defined(__linux__) || defined(__APPLE__)
@@ -320,6 +321,7 @@ const VKeyTable g_vkeyTable[] = {
     VK(DBE_DETERMINESTRING),        // 0x0fc
     VK(DBE_ENTERDLGCONVERSIONMODE), // 0x0fd
  #endif
+
     { 0,            NULL       },
  #undef VK
 };

@@ -54,7 +54,8 @@ bool Key::isSameScanCode(const Key &i_key) const
 // is the key's scan code the prefix of this key's scan code ?
 bool Key::isPrefixScanCode(const Key &i_key) const
 {
-    for (size_t i = 0; i < i_key.m_scanCodesSize; ++i) {
+    for (size_t i = 0; i < i_key.m_scanCodesSize; ++i)
+    {
         if (m_scanCodes[i] != i_key.m_scanCodes[i])
             return false;
     }
@@ -78,7 +79,8 @@ Modifier::Modifier()
     , m_dontcares(0)
 {
     ASSERT( Type_end <= (sizeof (MODIFIERS) * 8) );
-    static const Type defaultDontCare[] = {
+    static const Type defaultDontCare[] =
+    {
         Type_Up,        Type_Down,      Type_Repeat,
         Type_ImeLock,   Type_ImeComp,   Type_NumLock,     Type_CapsLock,      Type_ScrollLock,
         Type_KanaLock,
@@ -95,9 +97,12 @@ Modifier::Modifier()
 // add m's modifiers where this dontcare
 void Modifier::add(const Modifier &i_m)
 {
-    for (int i = 0; i < Type_end; ++i) {
-        if ( isDontcare( static_cast<Modifier::Type>(i) ) ) {
-            if ( !i_m.isDontcare( static_cast<Modifier::Type>(i) ) ) {
+    for (int i = 0; i < Type_end; ++i)
+    {
+        if ( isDontcare( static_cast<Modifier::Type>(i) ) )
+        {
+            if ( !i_m.isDontcare( static_cast<Modifier::Type>(i) ) )
+            {
                 if ( i_m.isPressed( static_cast<Modifier::Type>(i) ) )
                     press( static_cast<Modifier::Type>(i) );
                 else
@@ -111,12 +116,14 @@ void Modifier::add(const Modifier &i_m)
 // stream output
 tostream & operator <<(tostream &i_ost, const Modifier &i_m)
 {
-    struct Mods {
+    struct Mods
+    {
         Modifier::Type  m_mt;
         const _TCHAR *  m_symbol;
     };
 
-    static Mods const mods[] = {
+    static Mods const mods[] =
+    {
         { Modifier::Type_Up,           _T("U-")    }, { Modifier::Type_Down,    _T("D-")  },
         { Modifier::Type_Shift,        _T("S-")    }, { Modifier::Type_Alt,     _T("A-")  },
         { Modifier::Type_Control,      _T("C-")    }, { Modifier::Type_Windows, _T("W-")  },
@@ -144,7 +151,8 @@ tostream & operator <<(tostream &i_ost, const Modifier &i_m)
         { Modifier::Type_Lock8,        _T("L8-")   }, { Modifier::Type_Lock9,   _T("L9-") },
     };
 
-    for (size_t i = 0; i < NUMBER_OF(mods); ++i) {
+    for (size_t i = 0; i < NUMBER_OF(mods); ++i)
+    {
         if ( !i_m.isDontcare(mods[i].m_mt) && i_m.isPressed(mods[i].m_mt) )
             i_ost << mods[i].m_symbol;
      #if 0
@@ -161,7 +169,8 @@ tostream & operator <<(tostream &i_ost, const Modifier &i_m)
 /// stream output
 tostream & operator <<(tostream &i_ost, Modifier::Type i_type)
 {
-    static const _TCHAR *  const modNames[] = {
+    static const _TCHAR *  const modNames[] =
+    {
         _T("Shift"),
         _T("Alt"),
         _T("Control"),
@@ -247,8 +256,10 @@ void Keyboard::KeyIterator::next()
 
     ++m_i;
 
-    if ( m_i == (*m_hashedKeys).end() ) {
-        do {
+    if ( m_i == (*m_hashedKeys).end() )
+    {
+        do
+        {
             --m_hashedKeysSize;
             ++m_hashedKeys;
         } while ( 0 < m_hashedKeysSize && (*m_hashedKeys).empty() ); // ハッシュテーブルの空要素を飛ばす.
@@ -318,7 +329,8 @@ Key *Keyboard::searchKey(const Key &i_key)
 {
     Keys &keys = getKeys(i_key);
 
-    for (Keys::iterator i = keys.begin(); i != keys.end(); ++i) {
+    for (Keys::iterator i = keys.begin(); i != keys.end(); ++i)
+    {
         if ( (*i).isSameScanCode(i_key) )
             return &*i;
     }
@@ -331,7 +343,8 @@ Key *Keyboard::searchPrefixKey(const Key &i_key)
 {
     Keys &keys = getKeys(i_key);
 
-    for (Keys::iterator i = keys.begin(); i != keys.end(); ++i) {
+    for (Keys::iterator i = keys.begin(); i != keys.end(); ++i)
+    {
         if ( (*i).isPrefixScanCode(i_key) )
             return &*i;
     }
@@ -352,7 +365,8 @@ Key *Keyboard::searchKey(const tstringi &i_name)
 // search a key by non-alias name
 Key *Keyboard::searchKeyByNonAliasName(const tstringi &i_name)
 {
-    for (int j = 0; j < HASHED_KEYS_SIZE; ++j) {
+    for (int j = 0; j < HASHED_KEYS_SIZE; ++j)
+    {
         Keys &          keys   = m_hashedKeys[j];
         Keys::iterator  i      = std::find(keys.begin(), keys.end(), i_name);
         if ( i != keys.end() )
@@ -365,7 +379,8 @@ Key *Keyboard::searchKeyByNonAliasName(const tstringi &i_name)
 /// search a substitute
 ModifiedKey Keyboard::searchSubstitute(const ModifiedKey &i_mkey)
 {
-    for (Substitutes::const_iterator i = m_substitutes.begin(); i != m_substitutes.end(); ++i) {
+    for (Substitutes::const_iterator i = m_substitutes.begin(); i != m_substitutes.end(); ++i)
+    {
         if ( i->m_mkeyFrom.m_key == i_mkey.m_key && i->m_mkeyFrom.m_modifier.doesMatch(i_mkey.m_modifier) )
             return i->m_mkeyTo;
     }

@@ -31,7 +31,8 @@
 
 
 template <class T>
-class TypeTable {
+class TypeTable
+{
 public:
     T               m_type;
     const _TCHAR *  m_name;
@@ -42,8 +43,10 @@ template <class T>
 static inline
 bool getTypeName(tstring *o_name, T i_type, const TypeTable<T> *i_table, size_t i_n)
 {
-    for (size_t i = 0; i < i_n; ++i) {
-        if (i_table[i].m_type == i_type) {
+    for (size_t i = 0; i < i_n; ++i)
+    {
+        if (i_table[i].m_type == i_type)
+        {
             *o_name = i_table[i].m_name;
             return true;
         }
@@ -56,8 +59,10 @@ template <class T>
 static inline
 bool getTypeValue(T *o_type, const tstringi &i_name, const TypeTable<T> *i_table, size_t i_n)
 {
-    for (size_t i = 0; i < i_n; ++i) {
-        if (i_table[i].m_name == i_name) {
+    for (size_t i = 0; i < i_n; ++i)
+    {
+        if (i_table[i].m_name == i_name)
+        {
             *o_type = i_table[i].m_type;
             return true;
         }
@@ -106,11 +111,12 @@ tostream & operator <<(tostream &i_ost, VKey i_data)
 // ToWindowType table
 typedef TypeTable<ToWindowType>  TypeTable_ToWindowType;
 
-static const TypeTable_ToWindowType g_toWindowTypeTable[]  = {
-    { ToWindowType_toOverlappedWindow, _T("toOverlappedWindow")           },
-    { ToWindowType_toMainWindow,       _T("toMainWindow")                 },
-    { ToWindowType_toItself,           _T("toItself")                     },
-    { ToWindowType_toParentWindow,     _T("toParentWindow")               },
+static const TypeTable_ToWindowType g_toWindowTypeTable[]  =
+{
+    { ToWindowType_toOverlappedWindow, _T("toOverlappedWindow") },
+    { ToWindowType_toMainWindow,       _T("toMainWindow")       },
+    { ToWindowType_toItself,           _T("toItself")           },
+    { ToWindowType_toParentWindow,     _T("toParentWindow")     },
 };
 
 
@@ -119,7 +125,7 @@ tostream &  operator <<(tostream &i_ost, ToWindowType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_toWindowTypeTable, NUMBER_OF(g_toWindowTypeTable) ) )
+    if ( getTypeName(&name, i_data, g_toWindowTypeTable, NUMBER_OF(g_toWindowTypeTable)) )
         i_ost << name;
     else
         i_ost << static_cast<int>(i_data);
@@ -142,7 +148,8 @@ bool getTypeValue(ToWindowType *o_type, const tstring &i_name)
 // GravityType table
 typedef TypeTable<GravityType>  TypeTable_GravityType;
 
-static const TypeTable_GravityType  g_gravityTypeTable[] = {
+static const TypeTable_GravityType  g_gravityTypeTable[] =
+{
     { GravityType_C,  _T("C")   },
     { GravityType_N,  _T("N")   },
     { GravityType_E,  _T("E")   },
@@ -164,7 +171,7 @@ tostream &  operator <<(tostream &i_ost, GravityType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_gravityTypeTable, NUMBER_OF(g_gravityTypeTable) ) )
+    if ( getTypeName(&name, i_data, g_gravityTypeTable, NUMBER_OF(g_gravityTypeTable)) )
         i_ost << name;
     else
         i_ost << _T("(GravityType internal error)");
@@ -187,7 +194,8 @@ bool getTypeValue(GravityType *o_type, const tstring &i_name)
 // ModifierLockType table
 typedef TypeTable<MayuDialogType>  TypeTable_MayuDialogType;
 
-static const TypeTable_MayuDialogType   g_mayuDialogTypeTable[] = {
+static const TypeTable_MayuDialogType   g_mayuDialogTypeTable[] =
+{
     { MayuDialogType_investigate, _T("investigate")          },
     { MayuDialogType_log,         _T("log")                  },
 };
@@ -198,7 +206,7 @@ tostream &  operator <<(tostream &i_ost, MayuDialogType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_mayuDialogTypeTable, NUMBER_OF(g_mayuDialogTypeTable) ) )
+    if ( getTypeName(&name, i_data, g_mayuDialogTypeTable, NUMBER_OF(g_mayuDialogTypeTable)) )
         i_ost << name;
     else
         i_ost << _T("(MayuDialogType internal error)");
@@ -221,7 +229,8 @@ bool getTypeValue(MayuDialogType *o_type, const tstring &i_name)
 // ToggleType table
 typedef TypeTable<ToggleType>  TypeTable_ToggleType;
 
-static const TypeTable_ToggleType   g_toggleType[] = {
+static const TypeTable_ToggleType   g_toggleType[] =
+{
     { ToggleType_toggle, _T("toggle")    },
     { ToggleType_off,    _T("off")       },
     { ToggleType_off,    _T("false")     },
@@ -237,7 +246,7 @@ tostream &  operator <<(tostream &i_ost, ToggleType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_toggleType, NUMBER_OF(g_toggleType) ) )
+    if ( getTypeName(&name, i_data, g_toggleType, NUMBER_OF(g_toggleType)) )
         i_ost << name;
     else
         i_ost << _T("(ToggleType internal error)");
@@ -260,7 +269,8 @@ bool getTypeValue(ToggleType *o_type, const tstring &i_name)
 // ModifierLockType table
 typedef TypeTable<ModifierLockType>  TypeTable_ModifierLockType;
 
-static const TypeTable_ModifierLockType g_modifierLockTypeTable[] = {
+static const TypeTable_ModifierLockType g_modifierLockTypeTable[] =
+{
     { ModifierLockType_Lock0, _T("lock0") },
     { ModifierLockType_Lock1, _T("lock1") },
     { ModifierLockType_Lock2, _T("lock2") },
@@ -279,7 +289,7 @@ tostream &  operator <<(tostream &i_ost, ModifierLockType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_modifierLockTypeTable, NUMBER_OF(g_modifierLockTypeTable) ) )
+    if ( getTypeName(&name, i_data, g_modifierLockTypeTable, NUMBER_OF(g_modifierLockTypeTable)) )
         i_ost << name;
     else
         i_ost << _T("(ModifierLockType internal error)");
@@ -302,20 +312,21 @@ bool getTypeValue(ModifierLockType *o_type, const tstring &i_name)
 // ShowCommandType table
 typedef TypeTable<ShowCommandType>  TypeTable_ShowCommandType;
 
-static const TypeTable_ShowCommandType  g_showCommandTypeTable[] = {
+static const TypeTable_ShowCommandType  g_showCommandTypeTable[] =
+{
  #if 0 //defined(WIN32)
-    { ShowCommandType_hide,            _T("hide")                       },
-    { ShowCommandType_maximize,        _T("maximize")                   },
-    { ShowCommandType_minimize,        _T("minimize")                   },
-    { ShowCommandType_restore,         _T("restore")                    },
-    { ShowCommandType_show,            _T("show")                       },
-    { ShowCommandType_showDefault,     _T("showDefault")                },
-    { ShowCommandType_showMaximized,   _T("showMaximized")              },
-    { ShowCommandType_showMinimized,   _T("showMinimized")              },
-    { ShowCommandType_showMinNoActive, _T("showMinNoActive")            },
-    { ShowCommandType_showNA,          _T("showNA")                     },
-    { ShowCommandType_showNoActivate,  _T("showNoActivate")             },
-    { ShowCommandType_showNormal,      _T("showNormal")                 },
+    { ShowCommandType_hide,            _T("hide")               },
+    { ShowCommandType_maximize,        _T("maximize")           },
+    { ShowCommandType_minimize,        _T("minimize")           },
+    { ShowCommandType_restore,         _T("restore")            },
+    { ShowCommandType_show,            _T("show")               },
+    { ShowCommandType_showDefault,     _T("showDefault")        },
+    { ShowCommandType_showMaximized,   _T("showMaximized")      },
+    { ShowCommandType_showMinimized,   _T("showMinimized")      },
+    { ShowCommandType_showMinNoActive, _T("showMinNoActive")    },
+    { ShowCommandType_showNA,          _T("showNA")             },
+    { ShowCommandType_showNoActivate,  _T("showNoActivate")     },
+    { ShowCommandType_showNormal,      _T("showNormal")         },
  #endif
 };
 
@@ -325,7 +336,7 @@ tostream &  operator <<(tostream &i_ost, ShowCommandType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_showCommandTypeTable, NUMBER_OF(g_showCommandTypeTable) ) )
+    if ( getTypeName(&name, i_data, g_showCommandTypeTable, NUMBER_OF(g_showCommandTypeTable)) )
         i_ost << name;
     else
         i_ost << _T("(ShowCommandType internal error)");
@@ -348,7 +359,8 @@ bool getTypeValue(ShowCommandType *o_type, const tstring &i_name)
 // ModifierLockType table
 typedef TypeTable<TargetWindowType>  TypeTable_TargetWindowType;
 
-static const TypeTable_TargetWindowType g_targetWindowType[] = {
+static const TypeTable_TargetWindowType g_targetWindowType[] =
+{
     { TargetWindowType_overlapped, _T("overlapped")        },
     { TargetWindowType_mdi,        _T("mdi")               },
 };
@@ -359,7 +371,7 @@ tostream &  operator <<(tostream &i_ost, TargetWindowType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_targetWindowType, NUMBER_OF(g_targetWindowType) ) )
+    if ( getTypeName(&name, i_data, g_targetWindowType, NUMBER_OF(g_targetWindowType)) )
         i_ost << name;
     else
         i_ost << _T("(TargetWindowType internal error)");
@@ -382,7 +394,8 @@ bool getTypeValue(TargetWindowType *o_type, const tstring &i_name)
 // BooleanType table
 typedef TypeTable<BooleanType>  TypeTable_BooleanType;
 
-static const TypeTable_BooleanType  g_booleanType[] = {
+static const TypeTable_BooleanType  g_booleanType[] =
+{
     { BooleanType_false, _T("false")  },
     { BooleanType_true,  _T("true")   },
 };
@@ -393,7 +406,7 @@ tostream &  operator <<(tostream &i_ost, BooleanType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_booleanType, NUMBER_OF(g_booleanType) ) )
+    if ( getTypeName(&name, i_data, g_booleanType, NUMBER_OF(g_booleanType)) )
         i_ost << name;
     else
         i_ost << _T("(BooleanType internal error)");
@@ -416,7 +429,8 @@ bool getTypeValue(BooleanType *o_type, const tstring &i_name)
 // LogicalOperatorType table
 typedef TypeTable<LogicalOperatorType>  TypeTable_LogicalOperatorType;
 
-static const TypeTable_LogicalOperatorType g_logicalOperatorType[] = {
+static const TypeTable_LogicalOperatorType g_logicalOperatorType[] =
+{
     { LogicalOperatorType_or,  _T("||")   },
     { LogicalOperatorType_and, _T("&&")   },
 };
@@ -427,7 +441,7 @@ tostream &operator <<(tostream &i_ost, LogicalOperatorType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_logicalOperatorType, NUMBER_OF(g_logicalOperatorType) ) )
+    if ( getTypeName(&name, i_data, g_logicalOperatorType, NUMBER_OF(g_logicalOperatorType)) )
         i_ost << name;
     else
         i_ost << _T("(LogicalOperatorType internal error)");
@@ -450,7 +464,8 @@ bool getTypeValue(LogicalOperatorType *o_type, const tstring &i_name)
 // WindowMonitorFromType table
 typedef TypeTable<WindowMonitorFromType>  TypeTable_WindowMonitorFromType;
 
-static const TypeTable_WindowMonitorFromType g_windowMonitorFromType[] = {
+static const TypeTable_WindowMonitorFromType g_windowMonitorFromType[] =
+{
     { WindowMonitorFromType_primary, _T("primary") },
     { WindowMonitorFromType_current, _T("current") },
 };
@@ -461,7 +476,7 @@ tostream &operator <<(tostream &i_ost, WindowMonitorFromType i_data)
 {
     tstring name;
 
-    if ( getTypeName( &name, i_data, g_windowMonitorFromType, NUMBER_OF(g_windowMonitorFromType) ) )
+    if ( getTypeName(&name, i_data, g_windowMonitorFromType, NUMBER_OF(g_windowMonitorFromType)) )
         i_ost << name;
     else
         i_ost << _T("(WindowMonitorFromType internal error)");
@@ -484,7 +499,8 @@ bool getTypeValue(WindowMonitorFromType *o_type, const tstring &i_name)
 /// stream output
 tostream & operator <<(tostream &i_ost, const std::list<tstringq> &i_data)
 {
-    for (std::list<tstringq>::const_iterator i = i_data.begin(); i != i_data.end(); ++i) {
+    for (std::list<tstringq>::const_iterator i = i_data.begin(); i != i_data.end(); ++i)
+    {
         i_ost << *i << _T(", ");
     }
 
@@ -514,13 +530,14 @@ tostream &operator <<(tostream &i_ost, const FunctionData *i_data)
 
 
 ///
-class FunctionCreator {
+class FunctionCreator
+{
 public:
-    typedef FunctionData *(*Creator)(); ///
+    typedef FunctionData *(*Creator)(); ///<
 
 public:
-    const _TCHAR *  m_name;             /// function name
-    Creator         m_creator;          /// function data creator
+    const _TCHAR *  m_name;             ///< function name
+    Creator         m_creator;          ///< function data creator
 };
 
 
@@ -533,7 +550,8 @@ FunctionData *createFunctionData(const tstring &i_name)
  #undef FUNCTION_CREATOR
     ;
 
-    for (size_t i = 0; i != NUMBER_OF(functionCreators); ++i) {
+    for (size_t i = 0; i != NUMBER_OF(functionCreators); ++i)
+    {
         if (i_name == functionCreators[i].m_name)
             return functionCreators[i].m_creator();
     }
@@ -576,12 +594,14 @@ bool getSuitableMdiWindow(FunctionParam *i_param, HWND *o_hwnd,
     if (!*o_hwnd)
         return false;
 
-    switch (*io_twt) {
+    switch (*io_twt)
+    {
     case TargetWindowType_overlapped:
         if (o_rcWindow)
             GetWindowRect(*o_hwnd, o_rcWindow);
 
-        if (o_rcParent) {
+        if (o_rcParent)
+        {
             HMONITOR    hm = monitorFromWindow(i_param->m_hwnd, MONITOR_DEFAULTTONEAREST);
             MONITORINFO mi;
             mi.cbSize      = sizeof (mi);
@@ -635,7 +655,8 @@ static void closeClipboard(HGLOBAL i_hdata, HGLOBAL i_hdataNew = NULL)
     if (i_hdata)
         GlobalUnlock(i_hdata);
 
-    if (i_hdataNew) {
+    if (i_hdataNew)
+    {
         EmptyClipboard();
      #ifdef UNICODE
         SetClipboardData(CF_UNICODETEXT, i_hdataNew);
@@ -656,7 +677,8 @@ static void closeClipboard(HGLOBAL i_hdata, HGLOBAL i_hdataNew = NULL)
 void Engine::EmacsEditKillLine::func()
 {
  #if 0 //defined(WIN32)
-    if ( !m_buf.empty() ) {
+    if ( !m_buf.empty() )
+    {
         HGLOBAL         g;
         const _TCHAR *  text = getTextFromClipboard(&g);
 
@@ -666,7 +688,8 @@ void Engine::EmacsEditKillLine::func()
         closeClipboard(g);
     }
 
-    if ( OpenClipboard(NULL) ) {
+    if ( OpenClipboard(NULL) )
+    {
         EmptyClipboard();
         CloseClipboard();
     }
@@ -707,15 +730,20 @@ HGLOBAL Engine::EmacsEditKillLine::makeNewKillLineBuf(const _TCHAR *i_data, int 
 
     len        = _tcslen(i_data);
 
-    if ( 3 <= len && i_data[len - 2] == _T('\r') && i_data[len - 1] == _T('\n') ) {
+    if ( 3 <= len && i_data[len - 2] == _T('\r') && i_data[len - 1] == _T('\n') )
+    {
         _tcscat(dataNew, i_data);
         len                = _tcslen(dataNew);
         dataNew[len - 2]   = _T('\0'); // chomp
         *o_retval          = 2;
-    } else if (len == 0) {
+    }
+    else if (len == 0)
+    {
         _tcscat( dataNew, _T("\r\n") );
         *o_retval = 1;
-    } else {
+    }
+    else
+    {
         _tcscat(dataNew, i_data);
         *o_retval = 0;
     }
@@ -775,7 +803,8 @@ void Engine::funcKeymapParent(FunctionParam *i_param)
 
     c.m_keymap  = c.m_keymap->getParentKeymap();
 
-    if (!c.m_keymap) {
+    if (!c.m_keymap)
+    {
         funcDefault(i_param);
         return;
     }
@@ -805,7 +834,8 @@ void Engine::funcKeymapPrevPrefix(FunctionParam *i_param, int i_previous)
 {
     Current c(i_param->m_c);
 
-    if (0 < i_previous && 0 <= m_keymapPrefixHistory.size() - i_previous) {
+    if (0 < i_previous && 0 <= m_keymapPrefixHistory.size() - i_previous)
+    {
         int                             n  = i_previous - 1;
         KeymapPtrList::reverse_iterator i  = m_keymapPrefixHistory.rbegin();
 
@@ -825,7 +855,8 @@ void Engine::funcOtherWindowClass(FunctionParam *i_param)
 
     ++c.m_i;
 
-    if ( c.m_i == m_currentFocusOfThread->m_keymaps.end() ) {
+    if ( c.m_i == m_currentFocusOfThread->m_keymaps.end() )
+    {
         funcDefault(i_param);
         return;
     }
@@ -912,7 +943,8 @@ void Engine::funcSync(FunctionParam *i_param)
     m_cs.release();
     DWORD   r = WaitForSingleObject(m_eSync, 5000);
 
-    if (r == WAIT_TIMEOUT) {
+    if (r == WAIT_TIMEOUT)
+    {
         Acquire a(&m_log, 0);
         m_log << _T(" *FAILED*") << std::endl;
     }
@@ -935,7 +967,8 @@ void Engine::funcToggle(FunctionParam *i_param, ModifierLockType i_lock, ToggleT
 
     Modifier::Type mt = static_cast<Modifier::Type>(i_lock);
 
-    switch (i_toggle) {
+    switch (i_toggle)
+    {
     case ToggleType_toggle:
         m_currentLock.press( mt, !m_currentLock.isPressed(mt) );
         break;
@@ -976,7 +1009,8 @@ void Engine::funcVariable(FunctionParam *i_param, int i_mag, int i_inc)
 // repeat N times
 void Engine::funcRepeat(FunctionParam *i_param, const KeySeq *i_keySeq, int i_max)
 {
-    if (i_param->m_isPressed) {
+    if (i_param->m_isPressed)
+    {
         int end = std::min(m_variable, i_max);
 
         for (int i = 0; i < end - 1; ++i)
@@ -984,7 +1018,9 @@ void Engine::funcRepeat(FunctionParam *i_param, const KeySeq *i_keySeq, int i_ma
 
         if (0 < end)
             generateKeySeqEvents(i_param->m_c, i_keySeq, Part_down);
-    } else {
+    }
+    else
+    {
         generateKeySeqEvents(i_param->m_c, i_keySeq, Part_up);
     }
 }
@@ -1025,18 +1061,25 @@ void Engine::funcPostMessage(FunctionParam *i_param, ToWindowType i_window,
     int     window = static_cast<int>(i_window);
     HWND    hwnd   = i_param->m_hwnd;
 
-    if (0 < window) {
+    if (0 < window)
+    {
         for (int i = 0; i < window; ++i)
             hwnd = GetParent(hwnd);
-    } else if (window == ToWindowType_toMainWindow) {
-        while (true) {
+    }
+    else if (window == ToWindowType_toMainWindow)
+    {
+        while (true)
+        {
             HWND p = GetParent(hwnd);
             if (!p)
                 break;
             hwnd = p;
         }
-    } else if (window == ToWindowType_toOverlappedWindow) {
-        while (hwnd) {
+    }
+    else if (window == ToWindowType_toOverlappedWindow)
+    {
+        while (hwnd)
+        {
             LONG style = GetWindowLong(hwnd, GWL_STYLE);
             if ( (style & WS_CHILD) == 0 )
                 break;
@@ -1097,7 +1140,8 @@ void Engine::shellExecute()
 
     typedef TypeTable<int>  ErrorTable;
 
-    static const ErrorTable     errorTable[]   = {
+    static const ErrorTable     errorTable[]   =
+    {
         { 0,                        _T("The operating system is out of memory or resources.")   },
         { ERROR_FILE_NOT_FOUND,     _T("The specified file was not found.")                     },
         { ERROR_PATH_NOT_FOUND,     _T("The specified path was not found.")                     },
@@ -1131,7 +1175,8 @@ void Engine::shellExecute()
 
 
 #if 0 //defined(WIN32)
-struct EnumWindowsForSetForegroundWindowParam {
+struct EnumWindowsForSetForegroundWindowParam
+{
     const FunctionData_SetForegroundWindow *m_fd;
     HWND                                    m_hwnd;
 
@@ -1160,12 +1205,14 @@ static BOOL CALLBACK enumWindowsForSetForegroundWindow(HWND i_hwnd, LPARAM i_lPa
 
     tcmatch_results     what;
 
-    if ( !std::regex_search(tstring(name), what, ep.m_fd->m_windowClassName) ) {
+    if ( !std::regex_search(tstring(name), what, ep.m_fd->m_windowClassName) )
+    {
         if (ep.m_fd->m_logicalOp == LogicalOperatorType_and)
             return TRUE;    // match failed
     }
 
-    if (ep.m_fd->m_logicalOp == LogicalOperatorType_and) {
+    if (ep.m_fd->m_logicalOp == LogicalOperatorType_and)
+    {
         if (GetWindowText( i_hwnd, name, NUMBER_OF(name) ) == 0)
             name[0] = _T('\0');
 
@@ -1191,7 +1238,8 @@ void Engine::funcSetForegroundWindow(FunctionParam *i_param, const tregex &, Log
             ep( static_cast<const FunctionData_SetForegroundWindow *>( i_param->m_af->m_functionData) );
     EnumWindows( enumWindowsForSetForegroundWindow, reinterpret_cast<LPARAM>(&ep) );
 
-    if (ep.m_hwnd) {
+    if (ep.m_hwnd)
+    {
         PostMessage( m_hwndAssocWindow,
                     WM_APP_engineNotify, EngineNotify_setForegroundWindow,
                     reinterpret_cast<LPARAM>(ep.m_hwnd) );
@@ -1209,14 +1257,16 @@ void Engine::funcLoadSetting(FunctionParam *i_param, const StrExprArg &i_name)
         return;
 
  #if 0 //defined(WIN32)
-    if ( !i_name.eval().empty() ) {
+    if ( !i_name.eval().empty() )
+    {
         // set MAYU_REGISTRY_ROOT\.mayuIndex which name is same with i_name
         Registry    reg(MAYU_REGISTRY_ROOT);
 
         tregex      split( _T("^([^;]*);([^;]*);(.*)$") );
         tstringi    dot_mayu;
 
-        for (size_t i = 0; i < MAX_MAYU_REGISTRY_ENTRIES; ++i) {
+        for (size_t i = 0; i < MAX_MAYU_REGISTRY_ENTRIES; ++i)
+        {
             _TCHAR          buf[100];
             _sntprintf(buf, NUMBER_OF(buf), _T(".mayu%d"), i);
 
@@ -1273,7 +1323,8 @@ void Engine::funcVK(FunctionParam *i_param, VKey i_vkey)
     else if (vkey == VK_XBUTTON2 && isDown) mouse_event(MOUSEEVENTF_XDOWN       , 0, 0, XBUTTON2, 0);
     else if (vkey == VK_XBUTTON2 && isUp  ) mouse_event(MOUSEEVENTF_XUP         , 0, 0, XBUTTON2, 0);
   #endif /* _WIN32_WINNT >= 0x0500 */
-    else if (isUp || isDown) {
+    else if (isUp || isDown)
+    {
         keybd_event( vkey
             , static_cast<BYTE>( MapVirtualKey(vkey, 0) )
             , (isExtended ? KEYEVENTF_EXTENDEDKEY : 0) | (i_param->m_isPressed ? 0 : KEYEVENTF_KEYUP)
@@ -1456,11 +1507,13 @@ void Engine::funcWindowHVMaximize(FunctionParam *   i_param,
         return;
 
     // erase non window
-    while (true) {
+    while (true)
+    {
         WindowPositions::iterator   i      = m_windowPositions.begin();
         WindowPositions::iterator   end    = m_windowPositions.end();
 
-        for (; i != end; ++i) {
+        for (; i != end; ++i)
+        {
             if ( !IsWindow( (*i).m_hwnd ) )
                 break;
         }
@@ -1475,31 +1528,44 @@ void Engine::funcWindowHVMaximize(FunctionParam *   i_param,
     WindowPositions::iterator   end    = m_windowPositions.end();
     WindowPositions::iterator   target = end;
 
-    for (; i != end; ++i) {
-        if ( (*i).m_hwnd == hwnd ) {
+    for (; i != end; ++i)
+    {
+        if ( (*i).m_hwnd == hwnd )
+        {
             target = i;
             break;
         }
     }
 
-    if ( IsZoomed(hwnd) ) {
+    if ( IsZoomed(hwnd) )
+    {
         PostMessage(hwnd, WM_SYSCOMMAND, SC_RESTORE, 0);
-    } else {
+    }
+    else
+    {
         WindowPosition::Mode mode = WindowPosition::Mode_normal;
 
-        if (target != end) {
+        if (target != end)
+        {
             WindowPosition &wp = *target;
             rc = wp.m_rc;
 
-            if (wp.m_mode == WindowPosition::Mode_HV) {
+            if (wp.m_mode == WindowPosition::Mode_HV)
+            {
                 mode = wp.m_mode = i_isHorizontal ? WindowPosition::Mode_V : WindowPosition::Mode_H;
-            } else if ( ( i_isHorizontal && wp.m_mode == WindowPosition::Mode_V)
-                    || (!i_isHorizontal && wp.m_mode == WindowPosition::Mode_H) ) {
+            }
+            else if (  ( i_isHorizontal && wp.m_mode == WindowPosition::Mode_V)
+                    || (!i_isHorizontal && wp.m_mode == WindowPosition::Mode_H) )
+            {
                 mode = wp.m_mode = WindowPosition::Mode_HV;
-            } else {
+            }
+            else
+            {
                 m_windowPositions.erase(target);
             }
-        } else {
+        }
+        else
+        {
             mode = i_isHorizontal ? WindowPosition::Mode_H : WindowPosition::Mode_V;
             m_windowPositions.push_front( WindowPosition(hwnd, rc, mode) );
         }
@@ -1598,7 +1664,8 @@ void Engine::funcWindowMoveVisibly(FunctionParam* i_param, TargetWindowType i_tw
 
 #if 0 //defined(WIN32)
 
-struct EnumDisplayMonitorsForWindowMonitorToParam {
+struct EnumDisplayMonitorsForWindowMonitorToParam
+{
     std::vector<HMONITOR>       m_monitors;
     std::vector<MONITORINFO>    m_monitorinfos;
     int                         m_primaryMonitorIdx;
@@ -1638,8 +1705,8 @@ static BOOL CALLBACK enumDisplayMonitorsForWindowMonitorTo(HMONITOR i_hmon,
     return TRUE;
 }
 
-
 #endif
+
 /// move window to other monitor
 void Engine::funcWindowMonitorTo(FunctionParam *i_param, WindowMonitorFromType i_fromType, int i_monitor,
                                  BooleanType i_adjustPos, BooleanType i_adjustSize)
@@ -1661,7 +1728,8 @@ void Engine::funcWindowMonitorTo(FunctionParam *i_param, WindowMonitorFromType i
 
     int         targetIdx;
 
-    switch (i_fromType) {
+    switch (i_fromType)
+    {
     case WindowMonitorFromType_primary:
         targetIdx  = (ep.m_primaryMonitorIdx + i_monitor) % ep.m_monitors.size();
         break;
@@ -1684,14 +1752,16 @@ void Engine::funcWindowMonitorTo(FunctionParam *i_param, WindowMonitorFromType i
     int         w  = rcWidth(&rcWin);
     int         h  = rcHeight(&rcWin);
 
-    if (i_adjustPos) {
+    if (i_adjustPos)
+    {
         if (x + w > rcTarget.right)
             x = rcTarget.right - w;
 
         if (x < rcTarget.left)
             x = rcTarget.left;
 
-        if ( w > rcWidth(&rcTarget) ) {
+        if ( w > rcWidth(&rcTarget) )
+        {
             x  = rcTarget.left;
             w  = rcWidth(&rcTarget);
         }
@@ -1702,18 +1772,22 @@ void Engine::funcWindowMonitorTo(FunctionParam *i_param, WindowMonitorFromType i
         if (y < rcTarget.top)
             y = rcTarget.top;
 
-        if ( h > rcHeight(&rcTarget) ) {
+        if ( h > rcHeight(&rcTarget) )
+        {
             y  = rcTarget.top;
             h  = rcHeight(&rcTarget);
         }
     }
 
-    if (i_adjustPos && i_adjustSize) {
+    if (i_adjustPos && i_adjustSize)
+    {
         if ( IsZoomed(hwnd) )
             PostMessage(hwnd, WM_SYSCOMMAND, SC_RESTORE, 0);
 
         asyncMoveWindow(hwnd, x, y, w, h);
-    } else {
+    }
+    else
+    {
         asyncMoveWindow(hwnd, x, y);
     }
  #endif
@@ -1809,8 +1883,10 @@ void Engine::funcWindowIdentify(FunctionParam *i_param)
     _TCHAR  className[GANA_MAX_ATOM_LENGTH];
     bool    ok = false;
 
-    if ( GetClassName( i_param->m_hwnd, className, NUMBER_OF(className) ) ) {
-        if (_tcsicmp( className, _T("ConsoleWindowClass") ) == 0) {
+    if ( GetClassName( i_param->m_hwnd, className, NUMBER_OF(className) ) )
+    {
+        if (_tcsicmp( className, _T("ConsoleWindowClass") ) == 0)
+        {
             _TCHAR  titleName[1024];
 
             if (GetWindowText( i_param->m_hwnd, titleName, NUMBER_OF(titleName) ) == 0)
@@ -1845,7 +1921,8 @@ void Engine::funcWindowIdentify(FunctionParam *i_param)
         }
     }
 
-    if (!ok) {
+    if (!ok)
+    {
         UINT WM_MAYU_MESSAGE = RegisterWindowMessage( addSessionId(WM_MAYU_MESSAGE_NAME).c_str() );
         CHECK_TRUE( PostMessage(i_param->m_hwnd, WM_MAYU_MESSAGE, MayuMessage_notifyName, 0) );
     }
@@ -1863,16 +1940,21 @@ void Engine::funcWindowSetAlpha(FunctionParam *i_param, int i_alpha)
     if ( !getSuitableWindow(i_param, &hwnd) )
         return;
 
-    if (i_alpha < 0) {                  // remove all alpha
-        for (WindowsWithAlpha::iterator i = m_windowsWithAlpha.begin(); i != m_windowsWithAlpha.end(); ++i) {
+    if (i_alpha < 0)                    // remove all alpha
+    {
+        for (WindowsWithAlpha::iterator i = m_windowsWithAlpha.begin(); i != m_windowsWithAlpha.end(); ++i)
+        {
             SetWindowLong(*i, GWL_EXSTYLE, GetWindowLong(*i, GWL_EXSTYLE) & ~WS_EX_LAYERED);
             RedrawWindow(*i, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_FRAME | RDW_ALLCHILDREN);
         }
         m_windowsWithAlpha.clear();
-    } else {
+    }
+    else
+    {
         LONG exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
 
-        if (exStyle & WS_EX_LAYERED) {  // remove alpha
+        if (exStyle & WS_EX_LAYERED)    // remove alpha
+        {
             WindowsWithAlpha::iterator i = std::find(m_windowsWithAlpha.begin(), m_windowsWithAlpha.end(), hwnd);
 
             if ( i == m_windowsWithAlpha.end() )
@@ -1881,11 +1963,14 @@ void Engine::funcWindowSetAlpha(FunctionParam *i_param, int i_alpha)
             m_windowsWithAlpha.erase(i);
 
             SetWindowLong(hwnd, GWL_EXSTYLE, exStyle & ~WS_EX_LAYERED);
-        } else {                        // add alpha
+        }
+        else                            // add alpha
+        {
             SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED);
             i_alpha %= 101;
 
-            if ( !setLayeredWindowAttributes(hwnd, 0, (BYTE) (255 * i_alpha / 100), LWA_ALPHA) ) {
+            if ( !setLayeredWindowAttributes(hwnd, 0, (BYTE) (255 * i_alpha / 100), LWA_ALPHA) )
+            {
                 Acquire a(&m_log, 0);
                 m_log << _T("error: &WindowSetAlpha(") << i_alpha
                       << _T(") failed for HWND: ") << std::hex
@@ -1987,14 +2072,18 @@ void Engine::funcClipboardChangeCase(FunctionParam *i_param, BooleanType i_doesC
     const _TCHAR *  text       = getTextFromClipboard(&hdata);
     HGLOBAL         hdataNew   = NULL;
 
-    if (text) {
+    if (text)
+    {
         int size = static_cast<int>( GlobalSize(hdata) );
         hdataNew = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, size);
-        if (hdataNew) {
-            if ( _TCHAR * dataNew = reinterpret_cast<_TCHAR *>( GlobalLock(hdataNew) ) ) {
+        if (hdataNew)
+        {
+            if ( _TCHAR * dataNew = reinterpret_cast<_TCHAR *>( GlobalLock(hdataNew) ) )
+            {
                 std::memcpy(dataNew, text, size);
                 _TCHAR *dataEnd = dataNew + size;
-                while (dataNew < dataEnd && *dataNew) {
+                while (dataNew < dataEnd && *dataNew)
+                {
                     _TCHAR c = *dataNew;
                  #if 0 //def USE_MBC
                     if ( _istlead(c) )
@@ -2109,7 +2198,8 @@ void Engine::funcRecenter(FunctionParam *i_param)
         return;
 
  #if 0 //defined(WIN32)
-    if (m_hwndFocus) {
+    if (m_hwndFocus)
+    {
         UINT WM_MAYU_MESSAGE = RegisterWindowMessage( addSessionId(WM_MAYU_MESSAGE_NAME).c_str() );
         PostMessage(m_hwndFocus, WM_MAYU_MESSAGE, MayuMessage_funcRecenter, 0);
     }
@@ -2124,11 +2214,13 @@ void Engine::funcSetImeStatus(FunctionParam *i_param, ToggleType i_toggle)
         return;
 
  #if 0 //defined(WIN32)
-    if (m_hwndFocus) {
+    if (m_hwndFocus)
+    {
         UINT    WM_MAYU_MESSAGE    = RegisterWindowMessage( addSessionId(WM_MAYU_MESSAGE_NAME).c_str() );
         int     status             = -1;
 
-        switch (i_toggle) {
+        switch (i_toggle)
+        {
         case ToggleType_toggle:
             status = -1;
             break;
@@ -2154,7 +2246,8 @@ void Engine::funcSetImeString(FunctionParam *i_param, const StrExprArg &i_data)
     if (!i_param->m_isPressed)
         return;
 
-    if (m_hwndFocus) {
+    if (m_hwndFocus)
+    {
         UINT    WM_MAYU_MESSAGE    = RegisterWindowMessage( addSessionId(WM_MAYU_MESSAGE_NAME).c_str() );
         PostMessage(m_hwndFocus, WM_MAYU_MESSAGE, MayuMessage_funcSetImeString, i_data.eval().size() * sizeof(_TCHAR));
         DWORD   len                = 0;
@@ -2177,7 +2270,8 @@ void Engine::funcSetImeString(FunctionParam *i_param, const StrExprArg &i_data)
 #if 0 //defined(WIN32)
 
 // Direct SSTP Server
-class DirectSSTPServer {
+class DirectSSTPServer
+{
 public:
     tstring m_path;
     HWND    m_hwnd;
@@ -2192,7 +2286,8 @@ public:
 };
 
 
-class ParseDirectSSTPData {
+class ParseDirectSSTPData
+{
     typedef std::match_results<std::regex::const_iterator>  MR;
 
 public:
@@ -2246,25 +2341,28 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
 
  #if 0 //defined(WIN32)
     // check Direct SSTP server exist ?
-    if ( HANDLE hm = OpenMutex( MUTEX_ALL_ACCESS, FALSE, _T("sakura") ) ) {
+    if ( HANDLE hm = OpenMutex( MUTEX_ALL_ACCESS, FALSE, _T("sakura") ) )
+    {
         CloseHandle(hm);
-    } else {
+    }
+    else
+    {
         Acquire a(&m_log, 0);
         m_log << _T(" Error(1): Direct SSTP server does not exist.");
         return;
     }
 
     HANDLE  hfm = OpenFileMapping( FILE_MAP_READ, FALSE, _T("Sakura") );
-
-    if (!hfm) {
+    if (!hfm)
+    {
         Acquire a(&m_log, 0);
         m_log << _T(" Error(2): Direct SSTP server does not provide data.");
         return;
     }
 
     char *  data = reinterpret_cast<char *>( MapViewOfFile(hfm, FILE_MAP_READ, 0, 0, 0) );
-
-    if (!data) {
+    if (!data)
+    {
         CloseHandle(hfm);
         Acquire a(&m_log, 0);
         m_log << _T(" Error(3): Direct SSTP server does not provide data.");
@@ -2306,7 +2404,8 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
         request   += _T("\r\n");
     }
 
-    if (!hasSender) {
+    if (!hasSender)
+    {
         request   += _T("Sender: ");
         request   += loadString(IDS_mayu);
         request   += _T("\r\n");
@@ -2328,10 +2427,12 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
  #endif
 
     // send request to Direct SSTP Server which matches i_name;
-    for (ParseDirectSSTPData::DirectSSTPServers::iterator i = servers.begin(); i != servers.end(); ++i) {
+    for (ParseDirectSSTPData::DirectSSTPServers::iterator i = servers.begin(); i != servers.end(); ++i)
+    {
         tcmatch_results what;
 
-        if ( std::regex_match(i->second.m_name, what, i_name) ) {
+        if ( std::regex_match(i->second.m_name, what, i_name) )
+        {
             COPYDATASTRUCT  cd;
             cd.dwData  = 9801;
          #ifdef UNICODE
@@ -2356,10 +2457,13 @@ void Engine::funcDirectSSTP(FunctionParam *             i_param,
 
 
 #if 0 //defined(WIN32)
-namespace shu {
+namespace shu
+{
 
-class PlugIn {
-    enum Type {
+class PlugIn
+{
+    enum Type
+    {
         Type_A,
         Type_W
     };
@@ -2383,16 +2487,19 @@ public:
     bool load(const tstringq &i_dllName, const tstringq &i_funcName, const tstringq &i_funcParam, tomsgstream &i_log)
     {
         m_dll = LoadLibrary( (_T("Plugins\\") + i_dllName).c_str() );
-        if (!m_dll) {
+        if (!m_dll)
+        {
             m_dll = LoadLibrary( (_T("Plugin\\") + i_dllName).c_str() );
-            if (!m_dll) {
+            if (!m_dll)
+            {
                 m_dll = LoadLibrary( i_dllName.c_str() );
-                if (!m_dll) {
+                if (!m_dll)
+                {
                     Acquire a(&i_log);
                     i_log << std::endl;
                     i_log << _T("error: &PlugIn() failed to load ") << i_dllName << std::endl;
+                    return false;
                 }
-                return false;
             }
         }
 
@@ -2404,15 +2511,18 @@ public:
      #endif
         m_type  = Type_W;
         m_func  = GetProcAddress( m_dll, to_string( _T("mayu") + i_funcName + _T("W") ).c_str() );
-
-        if (!m_func) {
+        if (!m_func)
+        {
             m_type = Type_A;
             m_func = GetProcAddress( m_dll, to_string( _T("mayu") + i_funcName + _T("A") ).c_str() );
-            if (!m_func) {
+            if (!m_func)
+            {
                 m_func = GetProcAddress( m_dll, to_string(_T("mayu") + i_funcName).c_str() );
-                if (!m_func) {
+                if (!m_func)
+                {
                     m_func = GetProcAddress( m_dll, to_string(i_funcName).c_str() );
-                    if (!m_func) {
+                    if (!m_func)
+                    {
                         Acquire a(&i_log);
                         i_log << std::endl;
                         i_log << _T("error: &PlugIn() failed to find function: ")
@@ -2433,7 +2543,8 @@ public:
         ASSERT( m_func );
         typedef void (WINAPI* PLUGIN_FUNCTION_A)(const char    *i_arg);
         typedef void (WINAPI* PLUGIN_FUNCTION_W)(const wchar_t *i_arg);
-        switch (m_type) {
+        switch (m_type)
+        {
         case Type_A:
             reinterpret_cast<PLUGIN_FUNCTION_A>(m_func)( to_string(m_funcParam).c_str() );
             break;
@@ -2469,20 +2580,25 @@ void Engine::funcPlugIn(FunctionParam *     i_param,
 
     shu::PlugIn *plugin = new shu::PlugIn();
 
-    if ( !plugin->load(i_dllName.eval(), i_funcName.eval(), i_funcParam.eval(), m_log) ) {
+    if ( !plugin->load(i_dllName.eval(), i_funcName.eval(), i_funcParam.eval(), m_log) )
+    {
         delete plugin;
         return;
     }
 
-    if (i_doesCreateThread) {
-        if (_beginthread(shu::plugInThread, 0, plugin) == -1) {
+    if (i_doesCreateThread)
+    {
+        if (_beginthread(shu::plugInThread, 0, plugin) == -1)
+        {
             delete plugin;
             Acquire a(&m_log);
             m_log << std::endl;
             m_log << _T("error: &PlugIn() failed to create thread.");
         }
         return;
-    } else {
+    }
+    else
+    {
         plugin->exec();
     }
 }
@@ -2496,7 +2612,8 @@ void Engine::funcPlugIn(FunctionParam *     i_param,
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // StrExpr
-class StrExpr {
+class StrExpr
+{
 private:
     tstringq m_symbol;
 
@@ -2527,7 +2644,8 @@ const Engine *StrExpr::s_engine = NULL;
 #if 0 //defined(WIN32)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // StrExprClipboard
-class StrExprClipboard : public StrExpr {
+class StrExprClipboard : public StrExpr
+{
 public:
     StrExprClipboard(const tstringq &i_symbol) : StrExpr(i_symbol) {}
 
@@ -2553,7 +2671,8 @@ public:
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // StrExprWindowClassName
-class StrExprWindowClassName : public StrExpr {
+class StrExprWindowClassName : public StrExpr
+{
 public:
     StrExprWindowClassName(const tstringq &i_symbol) : StrExpr(i_symbol) {}
 
@@ -2573,7 +2692,8 @@ public:
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // StrExprWindowTitleName
-class StrExprWindowTitleName : public StrExpr {
+class StrExprWindowTitleName : public StrExpr
+{
 public:
     StrExprWindowTitleName(const tstringq &i_symbol) : StrExpr(i_symbol) {}
 
@@ -2624,7 +2744,8 @@ StrExprArg & StrExprArg::operator =(const StrExprArg &i_data)
 // initializer
 StrExprArg::StrExprArg(const tstringq &i_symbol, Type i_type)
 {
-    switch (i_type) {
+    switch (i_type)
+    {
     case Literal:
         m_expr = new StrExpr(i_symbol);
         break;

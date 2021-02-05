@@ -22,7 +22,7 @@ public:
       super::taggedRelease(tag, when);
     }
   }
-	
+
   virtual void taggedRetain(const void *tag) const
   {
     if (orgInterruptTargetKeyboard_)
@@ -59,7 +59,8 @@ public:
     // ApplePS2Controllerを探す
     OSIterator* it;
     it = IOService::getMatchingServices(IOService::serviceMatching("ApplePS2KeyboardDevice"));
-    if (it) {
+    if (it)
+    {
       OSObject* machobj = it->getNextObject();
       if (machobj)
       {
@@ -86,12 +87,12 @@ public:
           }
         }
       }
-      it->release();		// もう無いよね?
+      it->release();        // もう無いよね?
     }
     else
     {
     }
-		
+
   }
 
   void stop() const
@@ -116,15 +117,15 @@ protected:
   {
     PS2KeyboardHook* my = OSDynamicCast(PS2KeyboardHook, (OSObject*)target);
     if (my == NULL)
-    {	// !?
+    {   // !?
       return;
     }
-			
+
     if (my->scancodeRestSize_ == 0)
       my->lastScanCode_ = 0;
     else
       --my->scancodeRestSize_;
-		
+
     // 今のところ大雑把なreplaceでいい (変換と無変換とカタカナしか対象にしていないので)
     switch (data)
     {
@@ -132,16 +133,16 @@ protected:
       my->scancodeRestSize_ = 1;
       my->lastScanCode_ = data;
       break;
-			
+
     case 0xE1:
       my->scancodeRestSize_ = 2;
       my->lastScanCode_ = data;
       break;
-			
+
     default:
       my->lastScanCode_ = (my->lastScanCode_ << 8) | data;
     }
-		
+
     my->orgInterruptActionKeyboard_(my->orgInterruptTargetKeyboard_, data);
   }
 

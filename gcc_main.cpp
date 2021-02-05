@@ -28,17 +28,21 @@ int main(int argc, char *argv[])
 
     //TODO: 多重起動 check
 
-    try {
+    try
+    {
         Mayu mayu;
 
         // 設定ファイルのロード.
-        if (mayu.load()) {
+        if (mayu.load())
+        {
             //コマンド実行時のEnterが残る可能性があるため、ちょっとだけ待つ.
             sleep(2);
             // キー置き換えの実行.
              mayu.taskLoop();
         }
-    } catch (ErrorMessage e) {
+    }
+    catch (ErrorMessage e)
+    {
         fprintf( stderr, "%s\n", e.getMessage().c_str() );
     }
 

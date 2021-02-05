@@ -108,7 +108,7 @@
  * ************************************************************************** */
 
 
-// copy
+/// copy
 template <class T>
 static inline size_t xstrlcpy(T *o_dest, const T *i_src, size_t i_destSize)
 {
@@ -120,15 +120,18 @@ static inline size_t xstrlcpy(T *o_dest, const T *i_src, size_t i_destSize)
     ASSERT( i_src != NULL );
 
     // Copy as many bytes as will fit
-    if (n != 0 && --n != 0) {
-        do {
+    if (n != 0 && --n != 0)
+    {
+        do
+        {
             if ( (*d++ = *s++) == 0 )
                 break;
         } while (--n != 0);
     }
 
     // Not enough room in o_dest, add NUL and traverse rest of i_src
-    if (n == 0) {
+    if (n == 0)
+    {
         if (i_destSize != 0)
             *d = T();           // NUL-terminate o_dest
 
@@ -141,23 +144,22 @@ static inline size_t xstrlcpy(T *o_dest, const T *i_src, size_t i_destSize)
 
 
 #if !defined(__APPLE__)
-// copy
+/// copy
 size_t strlcpy(char *o_dest, const char *i_src, size_t i_destSize)
 {
     return xstrlcpy(o_dest, i_src, i_destSize);
 }
 #endif
 
-// copy
+/// copy
 size_t wcslcpy(wchar_t *o_dest, const wchar_t *i_src, size_t i_destSize)
 {
     return xstrlcpy(o_dest, i_src, i_destSize);
 }
 
 
-// copy
-size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
-               size_t i_destSize)
+/// copy
+size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src, size_t i_destSize)
 {
     unsigned char *         d  = o_dest;
     const unsigned char *   s  = i_src;
@@ -170,9 +172,11 @@ size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
         return strlen( reinterpret_cast<const char *>(i_src) );
 
     // Copy as many bytes as will fit
-    for (--n; *s && 0 < n; --n) {
+    for (--n; *s && 0 < n; --n)
+    {
      #if 0 //def USE_MBS
-        if ( _ismbblead(*s) ) {
+        if ( _ismbblead(*s) )
+        {
             if ( !(s[1] && 2 <= n) )
                 break;
             *d++ = *s++;
@@ -182,8 +186,10 @@ size_t mbslcpy(unsigned char *o_dest, const unsigned char *i_src,
         *d++ = *s++;
     }
     *d = '\0';
+
     for (; *s; ++s)
         ;
+
     return s - i_src;
 }
 
@@ -193,8 +199,10 @@ tostream & operator <<(tostream &i_ost, const tstringq &i_data)
 {
     i_ost << _T("\"");
 
-    for (const _TCHAR *s = i_data.c_str(); *s; ++s) {
-        switch (*s) {
+    for (const _TCHAR *s = i_data.c_str(); *s; ++s)
+    {
+        switch (*s)
+        {
         case _T('\a'): i_ost << _T("\\a");  break;
         case _T('\f'): i_ost << _T("\\f");  break;
         case _T('\n'): i_ost << _T("\\n");  break;
@@ -204,16 +212,21 @@ tostream & operator <<(tostream &i_ost, const tstringq &i_data)
         case _T('"') : i_ost << _T("\\\""); break;
         default:
          #if 0 //def USE_MBC
-            if ( _istlead(*s) ) {
+            if ( _istlead(*s) )
+            {
                 _TCHAR buf[3] = { s[0], s[1], 0 };
                 i_ost << buf;
                 ++s;
-            } else
+            }
+            else
          #endif
-            if ( _istprint(*s) ) {
+            if ( _istprint(*s) )
+            {
                 _TCHAR buf[2] = { *s, 0 };
                 i_ost << buf;
-            } else {
+            }
+            else
+            {
                 i_ost << _T("\\x");
                 _TCHAR buf[5];
              #if 0 //def UNICODE
@@ -231,7 +244,7 @@ tostream & operator <<(tostream &i_ost, const tstringq &i_data)
 }
 
 
-// interpret meta characters such as \n
+/// interpret meta characters such as \n
 tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
                                 const _TCHAR *i_quote,
                                 bool i_doesUseRegexpBackReference)
@@ -243,20 +256,28 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
     // end pointer
     const _TCHAR *  end    = i_str + i_len;
 
-    while (i_str < end && *i_str) {
-        if ( *i_str != _T('\\') ) {
+    while (i_str < end && *i_str)
+    {
+        if ( *i_str != _T('\\') )
+        {
          #if 0 //def USE_MBC
             if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
                 *d++ = *i_str++;
          #endif
             *d++ = *i_str++;
-        } else if ( *(i_str + 1) != _T('\0') ) {
+        }
+        else if ( *(i_str + 1) != _T('\0') )
+        {
             i_str++;
 
-            if ( i_quote && _tcschr(i_quote, *i_str) ) {
+            if ( i_quote && _tcschr(i_quote, *i_str) )
+            {
                 *d++ = *i_str++;
-            } else {
-                switch (*i_str) {
+            }
+            else
+            {
+                switch (*i_str)
+                {
                 case _T('a' ): *d++     = _T('\x07');   i_str++;    break;
                 //case _T('b'): *d++    = _T('\b');     i_str ++;   break;
                 case _T('e' ): *d++     = _T('\x1b');   i_str++;    break;
@@ -274,7 +295,8 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
 
                 case _T('c'): // control code, for example '\c[' is escape: '\x1b'
                     i_str++;
-                    if (i_str < end && *i_str) {
+                    if (i_str < end && *i_str)
+                    {
                         static const _TCHAR * const ctrlchar   =
                             _T("@ABCDEFGHIJKLMNO")
                             _T("PQRSTUVWXYZ[\\]^_")
@@ -296,20 +318,23 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
                     {
                         i_str++;
                         static const _TCHAR* const  hexchar = _T("0123456789ABCDEFabcdef");
-                        static int  const       hexvalue[] = {
+                        static int  const           hexvalue[] =
+                        {
                             0,  1,  2,  3,  4,  5 , 6, 7, 8, 9,
                             10, 11, 12, 13, 14, 15,
                             10, 11, 12, 13, 14, 15,
                         };
                         bool    brace = false;
 
-                        if ( i_str < end && *i_str == _T('{') ) {
+                        if ( i_str < end && *i_str == _T('{') )
+                        {
                             i_str++;
                             brace = true;
                         }
 
                         int n = 0;
-                        for (; i_str < end && *i_str; i_str++) {
+                        for (; i_str < end && *i_str; i_str++)
+                        {
                             if ( const _TCHAR * c = _tcschr(hexchar, *i_str) )
                                 n = n * 16 + hexvalue[c - hexchar];
                             else
@@ -337,10 +362,11 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
 
                 case _T('0'):
                     {
-                        static const _TCHAR *   octalchar      = _T("01234567");
-                        static int              octalvalue[]   = { 0, 1, 2, 3, 4, 5 , 6, 7, };
-                        int                     n              = 0;
-                        for (; i_str < end && *i_str; i_str++) {
+                        static const _TCHAR * const octalchar    = _T("01234567");
+                        static int const            octalvalue[] = { 0, 1, 2, 3, 4, 5 , 6, 7, };
+                        int  n  = 0;
+                        for (; i_str < end && *i_str; i_str++)
+                        {
                             if ( const _TCHAR * c = _tcschr(octalchar, *i_str) )
                                 n = n * 8 + octalvalue[c - octalchar];
                             else
@@ -352,7 +378,7 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
                     }
 
                 default:
-                case_default:
+              case_default:
                     *d++   = _T('\\');
                  #if 0 //def USE_MBC
                     if (_istlead(*i_str) && *(i_str + 1) && i_str + 1 < end)
@@ -371,12 +397,13 @@ tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
 
 
 #if 0 //defined(WIN32)
-// add session id to i_str
+/// add session id to i_str
 tstring addSessionId(const _TCHAR *i_str)
 {
     DWORD   sessionId;
     tstring s(i_str);
-    if ( ProcessIdToSessionId(GetCurrentProcessId(), &sessionId) ) {
+    if ( ProcessIdToSessionId(GetCurrentProcessId(), &sessionId) )
+    {
         _TCHAR buf[20];
         _sntprintf(buf, NUMBER_OF(buf), _T("%u"), sessionId);
         s += buf;
@@ -387,15 +414,17 @@ tstring addSessionId(const _TCHAR *i_str)
 
 
 #if 0 //def _MBCS
-// escape regexp special characters in MBCS trail bytes
+/// escape regexp special characters in MBCS trail bytes
 std::string guardRegexpFromMbcs(const char *i_str)
 {
     size_t      len    = strlen(i_str);
     Array<char> buf(len * 2 + 1);
     char *      p      = buf.get();
 
-    while (*i_str) {
-        if (_ismbblead( static_cast<u_char>(*i_str) ) && i_str[1]) {
+    while (*i_str)
+    {
+        if (_ismbblead( static_cast<u_char>(*i_str) ) && i_str[1])
+        {
             *p++ = *i_str++;
             if ( strchr(".*?+(){}[]^$", *i_str) )
                 *p++ = '\\';
@@ -407,7 +436,7 @@ std::string guardRegexpFromMbcs(const char *i_str)
 #endif // !_MBCS
 
 
-// converter
+/// converter
 std::wstring to_wstring(const std::string &i_str)
 {
     size_t  size = mbstowcs(NULL, i_str.c_str(), i_str.size() + 1);
@@ -418,7 +447,8 @@ std::wstring to_wstring(const std::string &i_str)
     return std::wstring( result.get() );
 }
 
-// converter
+
+/// converter
 std::string to_string(const std::wstring &i_str)
 {
     size_t  size = wcstombs(NULL, i_str.c_str(), i_str.size() + 1);
@@ -441,7 +471,8 @@ tostream & operator <<(tostream &i_ost, const tregex &i_data)
 tstring toLower(const tstring &i_str)
 {
     tstring str(i_str);
-    for (size_t i = 0; i < str.size(); ++i) {
+    for (size_t i = 0; i < str.size(); ++i)
+    {
       #if 0 //def USE_MBS
         if ( _ismbblead(str[i]) )
             ++i;
@@ -453,7 +484,7 @@ tstring toLower(const tstring &i_str)
 }
 
 
-// convert wstring to UTF-8
+/// convert wstring to UTF-8
 std::string to_UTF_8(const std::wstring &i_str)
 {
     // 0xxxxxxx: 00-7F
@@ -462,7 +493,8 @@ std::string to_UTF_8(const std::wstring &i_str)
     int         size   = 0;
 
     // count needed buffer size
-    for (std::wstring::const_iterator i = i_str.begin(); i != i_str.end(); ++i) {
+    for (std::wstring::const_iterator i = i_str.begin(); i != i_str.end(); ++i)
+    {
         if (0x0000 <= *i && *i <= 0x007f)
             size += 1;
         else if (0x0080 <= *i && *i <= 0x07ff)
@@ -475,13 +507,19 @@ std::string to_UTF_8(const std::wstring &i_str)
     int         ri     = 0;
 
     // make UTF-8
-    for (std::wstring::const_iterator i = i_str.begin(); i != i_str.end(); ++i) {
-        if (0x0000 <= *i && *i <= 0x007f) {
+    for (std::wstring::const_iterator i = i_str.begin(); i != i_str.end(); ++i)
+    {
+        if (0x0000 <= *i && *i <= 0x007f)
+        {
             result[ri++] = static_cast<char>(*i);
-        } else if (0x0080 <= *i && *i <= 0x07ff) {
+        }
+        else if (0x0080 <= *i && *i <= 0x07ff)
+        {
             result[ri++]   = static_cast<char>( ( (*i & 0x0fc0) >>  6 ) | 0xc0 );
             result[ri++]   = static_cast<char>( (  *i & 0x003f        ) | 0x80 );
-        } else if (0x0800 <= *i && *i <= 0xffff) {
+        }
+        else if (0x0800 <= *i && *i <= 0xffff)
+        {
             result[ri++]   = static_cast<char>( ( (*i & 0xf000) >> 12 ) | 0xe0 );
             result[ri++]   = static_cast<char>( ( (*i & 0x0fc0) >>  6 ) | 0x80 );
             result[ri++]   = static_cast<char>( (  *i & 0x003f        ) | 0x80 );

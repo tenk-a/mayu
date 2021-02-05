@@ -39,6 +39,9 @@ static udev_monitor *   g_udev_mon;
 static int              g_udev_fd              = -1;
 static libusb_context * g_usb_context;
 
+
+/**
+ */
 static bool add_fd_to_epoll(int fd)
 {
     if (g_epoll_fd < 0)
@@ -50,31 +53,36 @@ static bool add_fd_to_epoll(int fd)
     return epoll_ctl(g_epoll_fd, EPOLL_CTL_ADD, fd, &e) == 0;
 }
 
-
+/**
+ */
 static void delete_fd_from_epoll(int fd)
 {
-    if (g_epoll_fd >= 0) {
+    if (g_epoll_fd >= 0)
+    {
         epoll_event e = { 0 };
         e.data.fd = fd;
         epoll_ctl(g_epoll_fd, EPOLL_CTL_DEL, fd, &e);
     }
 }
 
-
+/**
+ */
 static bool is_keyboard_device(int fd)
 {
     uint8_t         evtype_bitmask[EV_MAX / 8 + 1];
     struct input_id devinfo;
 
     // check bustype
-    if (ioctl(fd, EVIOCGID, &devinfo) != 0) {
+    if (ioctl(fd, EVIOCGID, &devinfo) != 0)
+    {
         //なんぞ.
         fprintf(stderr, "error: EVIOCGID ioctl failed.\n");
         return false;
     }
 
     // allow USB, PS/2, ADB
-    switch (devinfo.bustype) {
+    switch (devinfo.bustype)
+    {
     case BUS_USB:
     case BUS_I8042:
     case BUS_ADB:
@@ -84,7 +92,8 @@ static bool is_keyboard_device(int fd)
     }
 
     // check ev_bit
-    if (ioctl(fd, EVIOCGBIT( 0, sizeof (evtype_bitmask) ), evtype_bitmask) > 0) {
+    if (ioctl(fd, EVIOCGBIT( 0, sizeof (evtype_bitmask) ), evtype_bitmask) > 0)
+    {
         // EV_SYN, EV_KEY, EV_REP ならおｋ.
         if (test_bit(EV_SYN, evtype_bitmask) && test_bit(EV_KEY, evtype_bitmask) && test_bit(EV_REP, evtype_bitmask))
             return true;
@@ -92,7 +101,8 @@ static bool is_keyboard_device(int fd)
     return false;
 }
 
-
+/**
+ */
 static int open_event_device(int dev_num)
 {
     char        path[128];
@@ -100,7 +110,8 @@ static int open_event_device(int dev_num)
     unsigned    i;
     const char *endev_path[] = { "/dev/input/event%d", "/dev/event%d" };
 
-    for (i = 0; i < array_size(endev_path); i++) {
+    for (i = 0; i < array_size(endev_path); i++)
+    {
         sprintf(path, endev_path[i], dev_num);
         fd = open(path, O_RDONLY | O_NDELAY);
         if (fd >= 0)
@@ -110,33 +121,40 @@ static int open_event_device(int dev_num)
     if (fd == -1)
         return -1;
 
-    if (ioctl(fd, EVIOCGVERSION, &version) == -1) {
+    if (ioctl(fd, EVIOCGVERSION, &version) == -1)
+    {
         fprintf(stderr, "error: EVIOCGVERSION ioctl failed\n");
         close(fd);
         return -1;
     }
 
     //evdevのデバイスで無いなら取り扱わない.
-    if (version != EV_VERSION) {
+    if (version != EV_VERSION)
+    {
         close(fd);
         return -1;
     }
     return fd;
 }
 
-
-// オープンしたデバイスの個数を返す.
+/** オープンしたデバイスの個数を返す.
+ */
 static int open_keyboard()
 {
     int i, fd;
 
-    for (i = 0; i < EVDEV_MINORS; i++) {
+    for (i = 0; i < EVDEV_MINORS; i++)
+    {
         fd = open_event_device(i);
-        if (fd != -1) {
-            if ( is_keyboard_device(fd) ) {
+        if (fd != -1)
+        {
+            if ( is_keyboard_device(fd) )
+            {
                 g_envdev_key_fds[g_envdev_key_fds_count++] = fd;
                 add_fd_to_epoll(fd);
-            } else {
+            }
+            else
+            {
                 close(fd);
             }
         }
@@ -145,12 +163,14 @@ static int open_keyboard()
     return g_envdev_key_fds_count;
 }
 
-
+/**
+ */
 static void close_keyboard()
 {
     int i;
 
-    for (i = 0; i < g_envdev_key_fds_count; i++) {
+    for (i = 0; i < g_envdev_key_fds_count; i++)
+    {
         close(g_envdev_key_fds[i]);
         delete_fd_from_epoll(g_envdev_key_fds[i]);
         g_envdev_key_fds[i] = 0;
@@ -159,19 +179,20 @@ static void close_keyboard()
     g_envdev_key_fds_count = 0;
 }
 
-
-// キーコード出力用のキーボードを破棄.
+/** キーコード出力用のキーボードを破棄.
+ */
 static void destroy_uinput_keyboard()
 {
-    if (g_uinput_fd != -1) {
+    if (g_uinput_fd != -1)
+    {
         ioctl(g_uinput_fd, UI_DEV_DESTROY);
         close(g_uinput_fd);
         g_uinput_fd = -1;
     }
 }
 
-
-// キーコード出力用のキーボードを作成.
+/** キーコード出力用のキーボードを作成.
+ */
 static int create_uinput_keyboard()
 {
     struct uinput_user_dev  uinp           = { { 0 } };
@@ -183,7 +204,8 @@ static int create_uinput_keyboard()
     destroy_uinput_keyboard();
 
     // input deviceを開く.
-    for (i = 0; i < array_size(uinput_path); i++) {
+    for (i = 0; i < array_size(uinput_path); i++)
+    {
         g_uinput_fd = open(uinput_path[i], O_RDWR);
         if (g_uinput_fd >= 0)
             break;
@@ -191,7 +213,8 @@ static int create_uinput_keyboard()
             err = errno;
     }
 
-    if (g_uinput_fd <= 0) {
+    if (g_uinput_fd <= 0)
+    {
         if (err == ENOENT)
             fprintf(stderr, "error: The uinput not found. Did you load a uinput module?\n");
         else
@@ -232,15 +255,16 @@ static int create_uinput_keyboard()
         ;
 
     ret = ioctl(g_uinput_fd, UI_DEV_CREATE);
-    if (ret) {
+    if (ret)
+    {
         fprintf(stderr, "error: Failed to open a uinput.\n");
         return -1;
     }
     return 0;
 }
 
-
-// udev/usb
+/** udev/usbデバイスモニタopen
+ */
 static bool open_udev_usb_monitors(udev * &udev, udev_monitor * &mon, int &fd)
 {
     // udev
@@ -249,7 +273,8 @@ static bool open_udev_usb_monitors(udev * &udev, udev_monitor * &mon, int &fd)
         return false;
 
     mon    = udev_monitor_new_from_netlink(udev, "udev");
-    if (mon == NULL) {
+    if (mon == NULL)
+    {
         udev_unref(udev);
         udev = NULL;
         return false;
@@ -264,15 +289,18 @@ static bool open_udev_usb_monitors(udev * &udev, udev_monitor * &mon, int &fd)
     return true;
 }
 
-
+/** usbデバイスモニタclose
+ */
 static void close_udev_usb_monitors(udev * &udev, udev_monitor * &mon, int &fd)
 {
     // udev
-    if (mon) {
+    if (mon)
+    {
         udev_monitor_unref(mon);
         mon = NULL;
     }
-    if (udev) {
+    if (udev)
+    {
         udev_unref(udev);
         udev = NULL;
     }
@@ -284,21 +312,27 @@ static void close_udev_usb_monitors(udev * &udev, udev_monitor * &mon, int &fd)
     libusb_exit(g_usb_context);
 }
 
-
+/**
+ */
 static int get_udev_usb_vid_pid(udev_monitor *mon, int &vid, int &pid)
 {
     udev_device *   dev    = udev_monitor_receive_device(mon);
     int             result = 0;
-    if (dev) {
+    if (dev)
+    {
         string action = udev_device_get_action(dev);
-        if (action == "add" || action == "remove") {
+        if (action == "add" || action == "remove")
+        {
             const char *propvalue = udev_device_get_property_value(dev, "ID_VENDOR_ID");
             char *      endp;
-            if (propvalue) {
+            if (propvalue)
+            {
                 vid = ::strtol(propvalue, &endp, 16);
-                if (propvalue != endp) {
+                if (propvalue != endp)
+                {
                     propvalue = udev_device_get_property_value(dev, "ID_MODEL_ID");
-                    if (propvalue) {
+                    if (propvalue)
+                    {
                         pid = ::strtol(propvalue, &endp, 16);
                         if (propvalue != endp)
                             result = 1;
@@ -306,7 +340,9 @@ static int get_udev_usb_vid_pid(udev_monitor *mon, int &vid, int &pid)
                 }
             }
         }
-    } else {
+    }
+    else
+    {
         return -1;
     }
 
@@ -314,27 +350,35 @@ static int get_udev_usb_vid_pid(udev_monitor *mon, int &vid, int &pid)
     return result;
 }
 
-
+/**
+ */
 static bool is_divice_keyboard_with_vid_pid(libusb_context *usbctx, int vid, int pid)
 {
     bool                    result = false;
     libusb_device_handle *  handle = libusb_open_device_with_vid_pid(usbctx, vid, pid);
-    if (handle) {
+    if (handle)
+    {
         libusb_device *             dev = libusb_get_device(handle);
         libusb_device_descriptor    devicedesc;
 
-        if (libusb_get_device_descriptor(dev, &devicedesc) == 0) {
-            if (devicedesc.bDeviceClass == 0) { // HIDは0
+        if (libusb_get_device_descriptor(dev, &devicedesc) == 0)
+        {
+            if (devicedesc.bDeviceClass == 0)   // HIDは0
+            {
                 bool done = false;
 
-                for (unsigned char confIndex = 0; confIndex < devicedesc.bNumConfigurations && !done; confIndex++) {
+                for (unsigned char confIndex = 0; confIndex < devicedesc.bNumConfigurations && !done; confIndex++)
+                {
                     libusb_config_descriptor *config;
 
-                    if (libusb_get_config_descriptor(dev, confIndex, &config) == 0) {
-                        for (int ifIndex = 0; ifIndex < config->bNumInterfaces && !done; ifIndex++) {
+                    if (libusb_get_config_descriptor(dev, confIndex, &config) == 0)
+                    {
+                        for (int ifIndex = 0; ifIndex < config->bNumInterfaces && !done; ifIndex++)
+                        {
                             const libusb_interface &interface = config->interface[ifIndex];
 
-                            for (int alterIndex = 0; alterIndex < interface.num_altsetting; alterIndex++) {
+                            for (int alterIndex = 0; alterIndex < interface.num_altsetting; alterIndex++)
+                            {
                                 const libusb_interface_descriptor &ifdescriptor = interface.altsetting[alterIndex];
                                 if (ifdescriptor.bInterfaceClass == 0x03        // HID
                                    && ifdescriptor.bInterfaceProtocol == 0x01)  // keyboard
@@ -354,7 +398,8 @@ static bool is_divice_keyboard_with_vid_pid(libusb_context *usbctx, int vid, int
     return result;
 }
 
-
+/** キーボードclose
+ */
 static void close_keyboard_and_uinput()
 {
     keyboard_grab_onoff(false);
@@ -362,24 +407,28 @@ static void close_keyboard_and_uinput()
     close_keyboard();
 }
 
-
-// 失敗したならエラーコード、成功なら0を返す.
+/** キーボードopem
+ * @return 失敗したならエラーコード、成功なら0を返す.
+ */
 static int open_keyboard_and_uinput()
 {
     int ret = open_keyboard();          // オープンに成功したデバイスの個数が返る.
-    if (ret <= 0) {
+    if (ret <= 0)
+    {
         fprintf(stderr, "error: Cannot open any keyboard event devices. Do you run as root?\n");
         return -1;
     }
     ret = create_uinput_keyboard();     // 成功したら0が返る.
-    if (ret < 0) {
+    if (ret < 0)
+    {
         close_keyboard_and_uinput();
         return -1;
     }
     return 0;
 }
 
-
+/** キーボードデバイス開始(open)
+ */
 int start_keyboard()
 {
     int ret    = 0;
@@ -388,7 +437,8 @@ int start_keyboard()
         ret = -1;
     if (ret == 0)
         ret = open_keyboard_and_uinput();
-    if (ret == 0) {
+    if (ret == 0)
+    {
         // udev
         if ( open_udev_usb_monitors(g_udev, g_udev_mon, g_udev_fd) )
             add_fd_to_epoll(g_udev_fd);
@@ -396,7 +446,8 @@ int start_keyboard()
     return ret;
 }
 
-
+/** キーボードデバイス停止(close)
+ */
 void stop_keyboard()
 {
     close_keyboard_and_uinput();
@@ -406,13 +457,15 @@ void stop_keyboard()
         close_udev_usb_monitors(g_udev, g_udev_mon, g_udev_fd);
 
     // epoll
-    if (g_epoll_fd > 0) {
+    if (g_epoll_fd > 0)
+    {
         close(g_epoll_fd);
         g_epoll_fd = -1;
     }
 }
 
-
+/** キーボードデバイスを開き直す.
+ */
 static int restart_keyboard()
 {
     bool    grabed = g_grab_onoff;
@@ -420,15 +473,17 @@ static int restart_keyboard()
     close_keyboard_and_uinput();
 
     int ret = open_keyboard_and_uinput();
-    if (ret == 0) {
+    if (ret == 0)
+    {
         if (grabed)
             keyboard_grab_onoff(grabed);
     }
     return ret;
 }
 
-
-//成功なら0を返す.
+/** 入力イベント送信.
+ *  @return 成功なら0を返す.
+ */
 int send_input_event(int type, int code, int value)
 {
     int         result;
@@ -445,7 +500,8 @@ int send_input_event(int type, int code, int value)
     return ( result < 0 ? errno : (result < (int) sizeof (event) ? -1 : 0) );
 }
 
-
+/** キーボード・イベント送信. 送信したら真を返す.
+ */
 bool send_keyboard_event(int code, KEY_EVENT_VAL value)
 {
     if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
@@ -458,8 +514,8 @@ bool send_keyboard_event(int code, KEY_EVENT_VAL value)
     return true;
 }
 
-
-// error code
+/** キーボード・イベント受取. 成功したら真を返す.
+ */
 bool receive_keyboard_event(struct input_event *event)
 {
     epoll_event         epoll_e[EVDEV_MINORS + 1];
@@ -470,18 +526,23 @@ bool receive_keyboard_event(struct input_event *event)
     if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
         return false;
 
-    while (!loop_stop) {
+    while (!loop_stop)
+    {
         int num_of_events = epoll_wait(g_epoll_fd, epoll_e, EVDEV_MINORS + 1, -1);
 
-        for (int i = 0; i < num_of_events; i++) {
+        for (int i = 0; i < num_of_events; i++)
+        {
             int event_fd = epoll_e[i].data.fd;
 
             // udevをチェック.
-            if (event_fd == g_udev_fd) {
+            if (event_fd == g_udev_fd)
+            {
                 int vid = 0, pid = 0;
 
-                if (get_udev_usb_vid_pid(g_udev_mon, vid, pid) > 0) {
-                    if ( is_divice_keyboard_with_vid_pid(g_usb_context, vid, pid) ) {
+                if (get_udev_usb_vid_pid(g_udev_mon, vid, pid) > 0)
+                {
+                    if ( is_divice_keyboard_with_vid_pid(g_usb_context, vid, pid) )
+                    {
                         // キーボードデバイスを開き直す.
                         restart_keyboard();
                         // 最初から.
@@ -489,15 +550,22 @@ bool receive_keyboard_event(struct input_event *event)
                             return false;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // データが書き込まれたデバイスから読み込む.
-                if ( read( event_fd, &revent, sizeof (revent) ) < (int) sizeof (revent) ) {
+                if ( read( event_fd, &revent, sizeof (revent) ) < (int) sizeof (revent) )
+                {
                     // キーボードが外された時に、ENODEVのエラーになる.
-                    if (errno == ENODEV) {
-                        if (try_to_repair) {
+                    if (errno == ENODEV)
+                    {
+                        if (try_to_repair)
+                        {
                             // 開きなおして読み直しでも駄目だった.
                             return false;
-                        } else {
+                        }
+                        else
+                        {
                             // 状態修復.
                             try_to_repair = true;
                             // キーボードデバイスを開き直す.
@@ -507,7 +575,9 @@ bool receive_keyboard_event(struct input_event *event)
                                 return false;
                             continue;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         fprintf(stderr, "error: Failed to read a event file.\n");
                         return false;
                     }
@@ -517,13 +587,20 @@ bool receive_keyboard_event(struct input_event *event)
                 try_to_repair = false;
 
                 // キーボードイベントならhandlerへ通知.
-                if (revent.type == EV_KEY) {
+                if (revent.type == EV_KEY)
+                {
                     loop_stop  = true;
                     *event     = revent;
                     break;
-                } else if (revent.type == EV_SYN) { // 無視.
-                } else if (revent.type == EV_MSC) { // 無視.
-                } else {
+                }
+                else if (revent.type == EV_SYN)   // 無視.
+                {
+                }
+                else if (revent.type == EV_MSC)   // 無視.
+                {
+                }
+                else
+                {
                     // キーボードイベント以外は、そのまま出力.
                     write( g_uinput_fd, &revent, sizeof (revent) );
                 }
@@ -533,7 +610,8 @@ bool receive_keyboard_event(struct input_event *event)
     return true;
 }
 
-
+/**
+ */
 void keyboard_grab_onoff(bool onoff)
 {
     int i;
@@ -541,7 +619,8 @@ void keyboard_grab_onoff(bool onoff)
     if (g_envdev_key_fds_count <= 0 && g_uinput_fd <= 0)
         return;
 
-    for (i = 0; i < g_envdev_key_fds_count; i++) {
+    for (i = 0; i < g_envdev_key_fds_count; i++)
+    {
         if (ioctl(g_envdev_key_fds[i], EVIOCGRAB, (int) onoff) == -1) //grab開始.
             fprintf(stderr, "error: EVIOCGRAB ioctl failed\n");
     }

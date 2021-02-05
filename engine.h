@@ -12,7 +12,8 @@
 
 
 #if 0 //defined(WIN32)
-enum {
+enum
+{
     ///
     WM_APP_engineNotify = WM_APP + 110,
 };
@@ -20,29 +21,33 @@ enum {
 
 
 ///
-enum EngineNotify {
-    EngineNotify_shellExecute,                                                  ///
-    EngineNotify_loadSetting,                                                   ///
-    EngineNotify_showDlg,                                                       ///
-    EngineNotify_helpMessage,                                                   ///
-    EngineNotify_setForegroundWindow,                                           ///
-    EngineNotify_clearLog,                                                      ///
+enum EngineNotify
+{
+    EngineNotify_shellExecute,                              ///<
+    EngineNotify_loadSetting,                               ///<
+    EngineNotify_showDlg,                                   ///<
+    EngineNotify_helpMessage,                               ///<
+    EngineNotify_setForegroundWindow,                       ///<
+    EngineNotify_clearLog,                                  ///<
 };
 
 
 ///
-class Engine {
+class Engine
+{
 private:
-    enum {
-        MAX_GENERATE_KEYBOARD_EVENTS_RECURSION_COUNT   = 64,   ///<
-        MAX_KEYMAP_PREFIX_HISTORY                      = 64,   ///<
+    enum
+    {
+        MAX_GENERATE_KEYBOARD_EVENTS_RECURSION_COUNT   = 64,    ///<
+        MAX_KEYMAP_PREFIX_HISTORY                      = 64,    ///<
     };
 
     typedef Keymaps::KeymapPtrList      KeymapPtrList;      ///<
 
     /// focus of a thread
-    class FocusOfThread {
-public:
+    class FocusOfThread
+    {
+    public:
         bool            m_isConsole;                        ///< is hwndFocus console ?
      #if 0 //defined(WIN32)
         DWORD           m_threadId;                         ///< thread id
@@ -52,7 +57,7 @@ public:
         tstringi        m_titleName;                        ///< title name of hwndFocus
         KeymapPtrList   m_keymaps;                          ///< keymaps
 
-public:
+    public:
         ///
         FocusOfThread()
             : m_isConsole(false)
@@ -67,13 +72,14 @@ public:
     typedef std::list<uint32_t/*ThreadId*/>                 DetachedThreadIds;  ///<
 
     /// current status in generateKeyboardEvents
-    class Current {
+    class Current
+    {
     public:
         const Keymap *                      m_keymap;       ///< current keymap
         ModifiedKey                         m_mkey;         ///< current processing key that user inputed
         Keymaps::KeymapPtrList::iterator    m_i;            ///< index in currentFocusOfThread-&gt;keymaps
 
-public:
+    public:
         ///
         bool isPressed() const { return m_mkey.m_modifier.isOn(Modifier::Type_Down); }
     };
@@ -81,17 +87,19 @@ public:
     friend class FunctionParam;
 
     /// part of keySeq
-    enum Part {
-        Part_all,                                                               ///
-        Part_up,                                                                ///
-        Part_down,                                                              ///
+    enum Part
+    {
+        Part_all,                                           ///<
+        Part_up,                                            ///<
+        Part_down,                                          ///<
     };
 
     ///
-    class EmacsEditKillLine {
-        tstring m_buf;                                                          ///< previous kill-line contents
+    class EmacsEditKillLine
+    {
+        tstring m_buf;                                      ///< previous kill-line contents
     public:
-        bool    m_doForceReset;                                                 ///<
+        bool    m_doForceReset;                             ///<
     private:
      #if 0 //defined(WIN32)
         ///
@@ -111,12 +119,15 @@ public:
         /// EmacsEditKillLinePred
         int     pred();
     };
+
  #if 0 //defined(WIN32)
     /// window positon for &amp;WindowHMaximize, &amp;WindowVMaximize
-    class WindowPosition {
+    class WindowPosition
+    {
     public:
         ///
-        enum Mode {
+        enum Mode
+        {
             Mode_normal,                        ///
             Mode_H,                             ///
             Mode_V,                             ///
@@ -140,7 +151,8 @@ public:
     typedef std::list<HWND>             WindowsWithAlpha;       ///< windows for &amp;WindowSetAlpha
  #endif
 
-    enum InterruptThreadReason {
+    enum InterruptThreadReason
+    {
         InterruptThreadReason_Terminate,
         InterruptThreadReason_Pause,
         InterruptThreadReason_Resume,
@@ -275,8 +287,7 @@ private:
     /// update m_lastPressedKey
     void        updateLastPressedKey(Key *i_key);
     /// set current keymap
-    void        setCurrentKeymap(const Keymap * i_keymap,
-                                 bool           i_doesAddToHistory = false);
+    void        setCurrentKeymap(const Keymap * i_keymap, bool i_doesAddToHistory = false);
     /** open mayu device
         @return true if mayu device successfully is opened
       */
@@ -304,8 +315,7 @@ private:
     /// sync
     void        funcSync(FunctionParam* i_param);
     /// toggle lock
-    void        funcToggle(FunctionParam* i_param, ModifierLockType i_lock,
-                           ToggleType i_toggle = ToggleType_toggle);
+    void        funcToggle(FunctionParam* i_param, ModifierLockType i_lock, ToggleType i_toggle = ToggleType_toggle);
     /// edit next user input key's modifier
     void        funcEditNextModifier(FunctionParam* i_param, const Modifier& i_modifier);
     /// variable
@@ -346,7 +356,7 @@ private:
     void        funcDescribeBindings(FunctionParam* i_param);
     /// show help message
     void        funcHelpMessage( FunctionParam* i_param,
-                                const StrExprArg &i_title = StrExprArg(),
+                                const StrExprArg &i_title   = StrExprArg(),
                                 const StrExprArg &i_message = StrExprArg() );
     /// show variable
     void        funcHelpVariable(FunctionParam* i_param, const StrExprArg &i_title);
@@ -416,9 +426,7 @@ private:
     /// set the contents of the Clipboard to the string
     void        funcClipboardCopy(FunctionParam* i_param, const StrExprArg &i_text);
     ///
-    void        funcEmacsEditKillLinePred(FunctionParam *   i_param,
-                                          const KeySeq *    i_keySeq1,
-                                          const KeySeq *    i_keySeq2);
+    void        funcEmacsEditKillLinePred(FunctionParam * i_param, const KeySeq* i_keySeq1, const KeySeq* i_keySeq2);
     ///
     void        funcEmacsEditKillLineFunc(FunctionParam* i_param);
     /// clear log
@@ -519,7 +527,8 @@ public:
 
 
 ///
-class FunctionParam {
+class FunctionParam
+{
 public:
     bool                    m_isPressed;    ///< is key pressed ?
  #if 0 //defined(WIN32)

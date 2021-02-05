@@ -10,24 +10,26 @@
 
 
 ///
-class Token {
+class Token
+{
 public:
     ///
-    enum Type {
-        Type_string,                ///
-        Type_number,                ///
-        Type_regexp,                ///
-        Type_openParen,             ///
-        Type_closeParen,            ///
-        Type_comma,                 ///
+    enum Type
+    {
+        Type_string,                ///<
+        Type_number,                ///<
+        Type_regexp,                ///<
+        Type_openParen,             ///<
+        Type_closeParen,            ///<
+        Type_comma,                 ///<
     };
 
 private:
-    u_char      m_type;             ///
-    bool        m_isValueQuoted;    ///
-    int         m_numericValue;     ///
-    tstringi    m_stringValue;      ///
-    long        m_data;             ///
+    u_char      m_type;             ///<
+    bool        m_isValueQuoted;    ///<
+    int         m_numericValue;     ///<
+    tstringi    m_stringValue;      ///<
+    long        m_data;             ///<
 
 public:
     ///
@@ -96,7 +98,8 @@ public:
 
 
 ///
-class Parser {
+class Parser
+{
 public:
     ///
     typedef std::vector<Token>      Tokens;

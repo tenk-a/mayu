@@ -5,7 +5,8 @@
 #include "../../common.h"
 
 // enum
-typedef enum KEY_EVENT_VAL_e {
+typedef enum KEY_EVENT_VAL_e
+{
     KEY_EVENT_BREAK,
     KEY_EVENT_PRESSE,
     KEY_EVENT_REPEAT

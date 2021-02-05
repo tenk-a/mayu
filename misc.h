@@ -20,26 +20,26 @@
 using namespace std;
 
 #if 0
-typedef unsigned char       u_char;     /// unsigned char
-typedef unsigned short      u_short;    /// unsigned short
-typedef unsigned long       u_long;     /// unsigned long
+typedef unsigned char       u_char;     ///< unsigned char
+typedef unsigned short      u_short;    ///< unsigned short
+typedef unsigned long       u_long;     ///< unsigned long
 
-typedef char                int8;       /// signed 8bit
-typedef short               int16;      /// signed 16bit
-typedef long                int32;      /// signed 32bit
-typedef unsigned char       u_int8;     /// unsigned 8bit
-typedef unsigned short      u_int16;    /// unsigned 16bit
-typedef unsigned long       u_int32;    /// unsigned 32bit
+typedef char                int8;       ///< signed 8bit
+typedef short               int16;      ///< signed 16bit
+typedef long                int32;      ///< signed 32bit
+typedef unsigned char       u_int8;     ///< unsigned 8bit
+typedef unsigned short      u_int16;    ///< unsigned 16bit
+typedef unsigned long       u_int32;    ///< unsigned 32bit
 #if 0 //defined(__BORLANDC__)
-typedef unsigned __int64    u_int64;    /// unsigned 64bit
+typedef unsigned __int64    u_int64;    ///< unsigned 64bit
 #elif 0 //defined(_MSC_VER) && _MSC_VER <= 1300
-typedef unsigned _int64     u_int64;    /// unsigned 64bit
+typedef unsigned _int64     u_int64;    ///< unsigned 64bit
 #else
-typedef unsigned long long  u_int64;    /// unsigned 64bit
+typedef unsigned long long  u_int64;    ///< unsigned 64bit
 #endif
 
 #if defined(__linux__) || defined(__APPLE__)
-typedef long long           _int64;     /// signed 64bit
+typedef long long           _int64;     ///< signed 64bit
 #endif
 #endif
 

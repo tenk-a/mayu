@@ -14,19 +14,21 @@
 
 
 /// a scan code with flags
-class ScanCode {
+class ScanCode
+{
 public:
     ///
-    enum {
-        BREAK  = KEYBOARD_INPUT_DATA::BREAK,    /// key release flag
-        E0     = KEYBOARD_INPUT_DATA::E0,       /// extended key flag
-        E1     = KEYBOARD_INPUT_DATA::E1,       /// extended key flag
-        E0E1   = KEYBOARD_INPUT_DATA::E0E1,     /// extended key flag
+    enum
+    {
+        BREAK  = KEYBOARD_INPUT_DATA::BREAK,    ///< key release flag
+        E0     = KEYBOARD_INPUT_DATA::E0,       ///< extended key flag
+        E1     = KEYBOARD_INPUT_DATA::E1,       ///< extended key flag
+        E0E1   = KEYBOARD_INPUT_DATA::E0E1,     ///< extended key flag
     };
 
 public:
-    uint16_t m_scan;                            ///
-    uint16_t m_flags;                           ///
+    uint16_t m_scan;                            ///<
+    uint16_t m_flags;                           ///<
 
 public:
     ///
@@ -34,7 +36,8 @@ public:
     ///
     ScanCode(uint16_t i_scan, uint16_t i_flags) : m_scan(i_scan), m_flags(i_flags) { }
     ///
-    bool operator ==(const ScanCode &i_sc) const {
+    bool operator ==(const ScanCode &i_sc) const
+    {
         return ( m_scan == i_sc.m_scan && (E0E1 & m_flags) == (E0E1 & i_sc.m_flags) );
     }
 
@@ -44,9 +47,11 @@ public:
 
 
 /// a key
-class Key {
+class Key
+{
 public:
-    enum {
+    enum
+    {
         ///
         MAX_SCAN_CODES_SIZE = 4,
     };
@@ -128,7 +133,8 @@ public:
 
 
 ///
-class Modifier {
+class Modifier
+{
     ///
     typedef uint64_t MODIFIERS;
     ///
@@ -138,54 +144,54 @@ class Modifier {
 
 public:
     ///
-    enum Type                           // モディファイヤキー名として使用できるキータイプ
+    enum Type                           ///< モディファイヤキー名として使用できるキータイプ
     {
-        Type_begin     = 0,             ///
+        Type_begin     = 0,             ///<
 
-        Type_Shift     = Type_begin,    /// &lt;BASIC_MODIFIER&gt;
-        Type_Alt,                       /// &lt;BASIC_MODIFIER&gt;
-        Type_Control,                   /// &lt;BASIC_MODIFIER&gt;
-        Type_Windows,                   /// &lt;BASIC_MODIFIER&gt;
-        Type_BASIC,                     ///
+        Type_Shift     = Type_begin,    ///< &lt;BASIC_MODIFIER&gt;
+        Type_Alt,                       ///< &lt;BASIC_MODIFIER&gt;
+        Type_Control,                   ///< &lt;BASIC_MODIFIER&gt;
+        Type_Windows,                   ///< &lt;BASIC_MODIFIER&gt;
+        Type_BASIC,                     ///<
 
-        Type_Up        = Type_BASIC,    /// &lt;KEYSEQ_MODIFIER&gt;
-        Type_Down,                      /// &lt;KEYSEQ_MODIFIER&gt;
-        Type_KEYSEQ,                    ///
+        Type_Up        = Type_BASIC,    ///< &lt;KEYSEQ_MODIFIER&gt;
+        Type_Down,                      ///< &lt;KEYSEQ_MODIFIER&gt;
+        Type_KEYSEQ,                    ///<
 
-        Type_Repeat    = Type_KEYSEQ,   /// &lt;ASSIGN_MODIFIER&gt;
-        Type_ImeLock,                   /// &lt;ASSIGN_MODIFIER&gt;
-        Type_ImeComp,                   /// &lt;ASSIGN_MODIFIER&gt;
-        Type_NumLock,                   /// &lt;ASSIGN_MODIFIER&gt;
-        Type_CapsLock,                  /// &lt;ASSIGN_MODIFIER&gt;
-        Type_ScrollLock,                /// &lt;ASSIGN_MODIFIER&gt;
-        Type_KanaLock,                  /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Maximized,                 /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Minimized,                 /// &lt;ASSIGN_MODIFIER&gt;
-        Type_MdiMaximized,              /// &lt;ASSIGN_MODIFIER&gt;
-        Type_MdiMinimized,              /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod0,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod1,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod2,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod3,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod4,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod5,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod6,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod7,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod8,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Mod9,                      /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock0,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock1,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock2,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock3,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock4,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock5,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock6,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock7,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock8,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_Lock9,                     /// &lt;ASSIGN_MODIFIER&gt;
-        Type_ASSIGN,                    ///
+        Type_Repeat    = Type_KEYSEQ,   ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_ImeLock,                   ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_ImeComp,                   ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_NumLock,                   ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_CapsLock,                  ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_ScrollLock,                ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_KanaLock,                  ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Maximized,                 ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Minimized,                 ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_MdiMaximized,              ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_MdiMinimized,              ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod0,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod1,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod2,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod3,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod4,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod5,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod6,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod7,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod8,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Mod9,                      ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock0,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock1,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock2,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock3,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock4,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock5,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock6,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock7,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock8,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_Lock9,                     ///< &lt;ASSIGN_MODIFIER&gt;
+        Type_ASSIGN,                    ///<
 
-        Type_end = Type_ASSIGN          ///
+        Type_end = Type_ASSIGN          ///<
     };
 
 public:
@@ -234,7 +240,8 @@ public:
     friend tostream & operator <<(tostream &i_ost, const Modifier &i_m);
 
     /// <
-    bool operator <(const Modifier &i_m) const {
+    bool operator <(const Modifier &i_m) const
+    {
         return m_modifiers < i_m.m_modifiers || (m_modifiers == i_m.m_modifiers && m_dontcares < i_m.m_dontcares);
     }
 };
@@ -245,10 +252,11 @@ tostream &operator <<(tostream &i_ost, Modifier::Type i_type);
 
 
 ///
-class ModifiedKey {
+class ModifiedKey
+{
 public:
-    Modifier    m_modifier;                             ///
-    Key *       m_key;                                  ///
+    Modifier    m_modifier;                             ///<
+    Key *       m_key;                                  ///<
 
 public:
     ///
@@ -266,14 +274,16 @@ public:
     friend tostream & operator <<(tostream &i_ost, const ModifiedKey &i_mk);
 
     /// <
-    bool operator <(const ModifiedKey &i_mk) const {
+    bool operator <(const ModifiedKey &i_mk) const
+    {
         return *m_key < *i_mk.m_key || (!(*i_mk.m_key < *m_key) && m_modifier < i_mk.m_modifier);
     }
 };
 
 
 /// キーの名前とスキャンコードを格納するamap
-class Keyboard {
+class Keyboard
+{
 public:
     /// keyboard modifiers (pointer into Keys)
     typedef std::list<Key *>            Mods;
@@ -283,39 +293,42 @@ private:
         Keys must be *list* of Key.
         Because *pointers* into Keys exist anywhere in this program, the address
         of Key's elements must be fixed.  */
-    enum {
-        HASHED_KEYS_SIZE = 128,                         ///
+    enum
+    {
+        HASHED_KEYS_SIZE = 128,                         ///<
     };
-    typedef std::list<Key>              Keys;           /// スキャンコード列を格納するリスト.
-    typedef std::map<tstringi, Key *>   Aliases;        /// key name aliases
+    typedef std::list<Key>              Keys;           ///< スキャンコード列を格納するリスト.
+    typedef std::map<tstringi, Key *>   Aliases;        ///< key name aliases
     ///
-    class Substitute {
+    class Substitute
+    {
     public:
         ModifiedKey m_mkeyFrom;
         ModifiedKey m_mkeyTo;
 
     public:
-    Substitute(const ModifiedKey &  i_mkeyFrom, const ModifiedKey & i_mkeyTo)
+        Substitute(const ModifiedKey &  i_mkeyFrom, const ModifiedKey & i_mkeyTo)
             : m_mkeyFrom(i_mkeyFrom)
             , m_mkeyTo(i_mkeyTo)
         {
         }
     };
-    typedef std::list<Substitute>       Substitutes;    /// substitutes
+    typedef std::list<Substitute>       Substitutes;    ///< substitutes
 
 private:
-    Keys        m_hashedKeys[HASHED_KEYS_SIZE];         /// スキャンコードの最初の値をキーとするハッシュテーブル hashtable[hash][list][scancode] な形.
-    Aliases     m_aliases;                              /// 別名.
-    Substitutes m_substitutes;                          /// 代理キー.
-    Key         m_syncKey;                              /// key used to synchronize
+    Keys        m_hashedKeys[HASHED_KEYS_SIZE];         ///< スキャンコードの最初の値をキーとするハッシュテーブル hashtable[hash][list][scancode] な形.
+    Aliases     m_aliases;                              ///< 別名.
+    Substitutes m_substitutes;                          ///< 代理キー.
+    Key         m_syncKey;                              ///< key used to synchronize
 
 private:
     ///
-    Mods        m_mods[Modifier::Type_BASIC];           /// 一般的なモディファイヤキー
+    Mods        m_mods[Modifier::Type_BASIC];           ///< 一般的なモディファイヤキー
 
 public:
     /// m_hashedKeys内のキーコードを列挙するためのクラス.
-    class KeyIterator {
+    class KeyIterator
+    {
         ///
         Keys *          m_hashedKeys;
         ///

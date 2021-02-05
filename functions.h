@@ -3,9 +3,11 @@
 // see dependency information in mayu-common.mak
 
 #ifdef FUNCTION_DATA
-class FunctionData_Default : public FunctionData {
+class FunctionData_Default : public FunctionData
+{
 public:
-    static FunctionData *create() {
+    static FunctionData *create()
+    {
         FunctionData_Default *fd = new FunctionData_Default;
         return fd;
     }
@@ -39,7 +41,8 @@ public:
     }
 };
 
-class FunctionData_KeymapParent : public FunctionData {
+class FunctionData_KeymapParent : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -76,7 +79,8 @@ public:
     }
 };
 
-class FunctionData_KeymapWindow : public FunctionData {
+class FunctionData_KeymapWindow : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -113,7 +117,8 @@ public:
     }
 };
 
-class FunctionData_KeymapPrevPrefix : public FunctionData {
+class FunctionData_KeymapPrevPrefix : public FunctionData
+{
 public:
     int m_previous;
 
@@ -156,7 +161,8 @@ public:
     }
 };
 
-class FunctionData_OtherWindowClass : public FunctionData {
+class FunctionData_OtherWindowClass : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -193,7 +199,8 @@ public:
     }
 };
 
-class FunctionData_Prefix : public FunctionData {
+class FunctionData_Prefix : public FunctionData
+{
 public:
     const Keymap *  m_keymap;
     BooleanType     m_doesIgnoreModifiers;
@@ -243,7 +250,8 @@ public:
     }
 };
 
-class FunctionData_Keymap : public FunctionData {
+class FunctionData_Keymap : public FunctionData
+{
 public:
     const Keymap *m_keymap;
 
@@ -286,7 +294,8 @@ public:
     }
 };
 
-class FunctionData_Sync : public FunctionData {
+class FunctionData_Sync : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -323,7 +332,8 @@ public:
     }
 };
 
-class FunctionData_Toggle : public FunctionData {
+class FunctionData_Toggle : public FunctionData
+{
 public:
     ModifierLockType    m_lock;
     ToggleType          m_toggle;
@@ -375,7 +385,8 @@ public:
     }
 };
 
-class FunctionData_EditNextModifier : public FunctionData {
+class FunctionData_EditNextModifier : public FunctionData
+{
 public:
     Modifier m_modifier;
 
@@ -418,7 +429,8 @@ public:
     }
 };
 
-class FunctionData_Variable : public FunctionData {
+class FunctionData_Variable : public FunctionData
+{
 public:
     int m_mag;
     int m_inc;
@@ -453,7 +465,7 @@ public:
     {
         i_ost << _T("&") << getName();
         i_ost << _T("(");
-        i_ost << m_mag << _T(", ");
+        i_ost << m_mag   << _T(", ");
         i_ost << m_inc;
         i_ost << _T(") ");
         return i_ost;
@@ -465,7 +477,8 @@ public:
     }
 };
 
-class FunctionData_Repeat : public FunctionData {
+class FunctionData_Repeat : public FunctionData
+{
 public:
     const KeySeq *  m_keySeq;
     int             m_max;
@@ -517,7 +530,8 @@ public:
     }
 };
 
-class FunctionData_Undefined : public FunctionData {
+class FunctionData_Undefined : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -554,7 +568,8 @@ public:
     }
 };
 
-class FunctionData_Ignore : public FunctionData {
+class FunctionData_Ignore : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -591,7 +606,8 @@ public:
     }
 };
 
-class FunctionData_LoadSetting : public FunctionData {
+class FunctionData_LoadSetting : public FunctionData
+{
 public:
     StrExprArg m_name;
 
@@ -640,7 +656,8 @@ public:
     }
 };
 
-class FunctionData_VK : public FunctionData {
+class FunctionData_VK : public FunctionData
+{
 public:
     VKey m_vkey;
 
@@ -683,7 +700,8 @@ public:
     }
 };
 
-class FunctionData_Wait : public FunctionData {
+class FunctionData_Wait : public FunctionData
+{
 public:
     int m_milliSecond;
 
@@ -726,7 +744,8 @@ public:
     }
 };
 
-class FunctionData_InvestigateCommand : public FunctionData {
+class FunctionData_InvestigateCommand : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -763,7 +782,8 @@ public:
     }
 };
 
-class FunctionData_HelpMessage : public FunctionData {
+class FunctionData_HelpMessage : public FunctionData
+{
 public:
     StrExprArg  m_title;
     StrExprArg  m_message;
@@ -821,7 +841,8 @@ public:
     }
 };
 
-class FunctionData_HelpVariable : public FunctionData {
+class FunctionData_HelpVariable : public FunctionData
+{
 public:
     StrExprArg m_title;
 
@@ -864,7 +885,8 @@ public:
     }
 };
 
-class FunctionData_WindowRaise : public FunctionData {
+class FunctionData_WindowRaise : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -913,7 +935,8 @@ public:
     }
 };
 
-class FunctionData_WindowLower : public FunctionData {
+class FunctionData_WindowLower : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -962,7 +985,8 @@ public:
     }
 };
 
-class FunctionData_WindowMinimize : public FunctionData {
+class FunctionData_WindowMinimize : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1011,7 +1035,8 @@ public:
     }
 };
 
-class FunctionData_WindowMaximize : public FunctionData {
+class FunctionData_WindowMaximize : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1060,7 +1085,8 @@ public:
     }
 };
 
-class FunctionData_WindowHMaximize : public FunctionData {
+class FunctionData_WindowHMaximize : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1109,7 +1135,8 @@ public:
     }
 };
 
-class FunctionData_WindowVMaximize : public FunctionData {
+class FunctionData_WindowVMaximize : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1158,7 +1185,8 @@ public:
     }
 };
 
-class FunctionData_WindowHVMaximize : public FunctionData {
+class FunctionData_WindowHVMaximize : public FunctionData
+{
 public:
     BooleanType         m_isHorizontal;
     TargetWindowType    m_twt;
@@ -1210,7 +1238,8 @@ public:
     }
 };
 
-class FunctionData_WindowMove : public FunctionData {
+class FunctionData_WindowMove : public FunctionData
+{
 public:
     int                 m_dx;
     int                 m_dy;
@@ -1266,7 +1295,8 @@ public:
     }
 };
 
-class FunctionData_WindowMoveTo : public FunctionData {
+class FunctionData_WindowMoveTo : public FunctionData
+{
 public:
     GravityType         m_gravityType;
     int                 m_dx;
@@ -1326,7 +1356,8 @@ public:
     }
 };
 
-class FunctionData_WindowMoveVisibly : public FunctionData {
+class FunctionData_WindowMoveVisibly : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1375,7 +1406,8 @@ public:
     }
 };
 
-class FunctionData_WindowMonitorTo : public FunctionData {
+class FunctionData_WindowMonitorTo : public FunctionData
+{
 public:
     WindowMonitorFromType   m_fromType;
     int                     m_monitor;
@@ -1440,7 +1472,8 @@ public:
     }
 };
 
-class FunctionData_WindowMonitor : public FunctionData {
+class FunctionData_WindowMonitor : public FunctionData
+{
 public:
     int         m_monitor;
     BooleanType m_adjustPos;
@@ -1501,7 +1534,8 @@ public:
     }
 };
 
-class FunctionData_WindowClingToLeft : public FunctionData {
+class FunctionData_WindowClingToLeft : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1550,7 +1584,8 @@ public:
     }
 };
 
-class FunctionData_WindowClingToRight : public FunctionData {
+class FunctionData_WindowClingToRight : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1599,7 +1634,8 @@ public:
     }
 };
 
-class FunctionData_WindowClingToTop : public FunctionData {
+class FunctionData_WindowClingToTop : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1648,7 +1684,8 @@ public:
     }
 };
 
-class FunctionData_WindowClingToBottom : public FunctionData {
+class FunctionData_WindowClingToBottom : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1697,7 +1734,8 @@ public:
     }
 };
 
-class FunctionData_WindowClose : public FunctionData {
+class FunctionData_WindowClose : public FunctionData
+{
 public:
     TargetWindowType m_twt;
 
@@ -1746,7 +1784,8 @@ public:
     }
 };
 
-class FunctionData_WindowToggleTopMost : public FunctionData {
+class FunctionData_WindowToggleTopMost : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -1783,7 +1822,8 @@ public:
     }
 };
 
-class FunctionData_WindowIdentify : public FunctionData {
+class FunctionData_WindowIdentify : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -1820,7 +1860,8 @@ public:
     }
 };
 
-class FunctionData_WindowSetAlpha : public FunctionData {
+class FunctionData_WindowSetAlpha : public FunctionData
+{
 public:
     int m_alpha;
 
@@ -1863,7 +1904,8 @@ public:
     }
 };
 
-class FunctionData_WindowRedraw : public FunctionData {
+class FunctionData_WindowRedraw : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -1900,7 +1942,8 @@ public:
     }
 };
 
-class FunctionData_WindowResizeTo : public FunctionData {
+class FunctionData_WindowResizeTo : public FunctionData
+{
 public:
     int                 m_width;
     int                 m_height;
@@ -1956,7 +1999,8 @@ public:
     }
 };
 
-class FunctionData_MouseMove : public FunctionData {
+class FunctionData_MouseMove : public FunctionData
+{
 public:
     int m_dx;
     int m_dy;
@@ -2003,7 +2047,8 @@ public:
     }
 };
 
-class FunctionData_MouseWheel : public FunctionData {
+class FunctionData_MouseWheel : public FunctionData
+{
 public:
     int m_delta;
 
@@ -2046,7 +2091,8 @@ public:
     }
 };
 
-class FunctionData_ClipboardChangeCase : public FunctionData {
+class FunctionData_ClipboardChangeCase : public FunctionData
+{
 public:
     BooleanType m_doesConvertToUpperCase;
 
@@ -2089,7 +2135,8 @@ public:
     }
 };
 
-class FunctionData_ClipboardUpcaseWord : public FunctionData {
+class FunctionData_ClipboardUpcaseWord : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -2126,7 +2173,8 @@ public:
     }
 };
 
-class FunctionData_ClipboardDowncaseWord : public FunctionData {
+class FunctionData_ClipboardDowncaseWord : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -2163,7 +2211,8 @@ public:
     }
 };
 
-class FunctionData_ClipboardCopy : public FunctionData {
+class FunctionData_ClipboardCopy : public FunctionData
+{
 public:
     StrExprArg m_text;
 
@@ -2206,7 +2255,8 @@ public:
     }
 };
 
-class FunctionData_EmacsEditKillLinePred : public FunctionData {
+class FunctionData_EmacsEditKillLinePred : public FunctionData
+{
 public:
     const KeySeq *  m_keySeq1;
     const KeySeq *  m_keySeq2;
@@ -2253,7 +2303,8 @@ public:
     }
 };
 
-class FunctionData_EmacsEditKillLineFunc : public FunctionData {
+class FunctionData_EmacsEditKillLineFunc : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -2290,7 +2341,8 @@ public:
     }
 };
 
-class FunctionData_LogClear : public FunctionData {
+class FunctionData_LogClear : public FunctionData
+{
 public:
     static FunctionData *create()
     {
@@ -2327,7 +2379,8 @@ public:
     }
 };
 
-class FunctionData_Recenter : public FunctionData {
+class FunctionData_Recenter : public FunctionData
+{
 public:
 
 public:
@@ -2366,7 +2419,8 @@ public:
     }
 };
 
-class FunctionData_DirectSSTP : public FunctionData {
+class FunctionData_DirectSSTP : public FunctionData
+{
 public:
     tregex              m_name;
     StrExprArg          m_protocol;
@@ -2418,7 +2472,8 @@ public:
 };
 
  # if defined(WIN32)
-class FunctionData_PlugIn : public FunctionData {
+class FunctionData_PlugIn : public FunctionData
+{
 public:
     StrExprArg  m_dllName;
     StrExprArg  m_funcName;
@@ -2489,7 +2544,8 @@ public:
 };
  # endif
 
-class FunctionData_SetImeStatus : public FunctionData {
+class FunctionData_SetImeStatus : public FunctionData
+{
 public:
     ToggleType m_toggle;
 
@@ -2538,7 +2594,8 @@ public:
     }
 };
 
-class FunctionData_SetImeString : public FunctionData {
+class FunctionData_SetImeString : public FunctionData
+{
 public:
     StrExprArg m_data;
 
@@ -2646,7 +2703,8 @@ friend class FunctionData_SetImeString;
 #endif // FUNCTION_FRIEND
 
 #ifdef FUNCTION_CREATOR
-FunctionCreator functionCreators[] = {
+FunctionCreator functionCreators[] =
+{
     { _T("Default"),               FunctionData_Default::create               },
     { _T("KeymapParent"),          FunctionData_KeymapParent::create          },
     { _T("KeymapWindow"),          FunctionData_KeymapWindow::create          },
