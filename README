@@ -1,3 +1,7 @@
+mayu for linux 私家版 のビルドを c++11 の std::regex があること前提で
+boost, boost-regex を使わない(リンクしない)ように こっそり勝手微修正したもの.
+以下 元々の私家版のreadme まま. ※最後に追記.
+-------------------------------------------------------------------------------
 私家版
 mayu for linux
 mayu for mac (Darwin)
@@ -17,18 +21,18 @@ ver 0.12.1 2011/11/04
 ========
 * 起動コマンド
   root権限で実行して下さい。
-   
+
   mayu [options ...]
 
   options :
     -Dsymbol        symbol というシンボル名を定義(いくつでも)
-    -v                ログの詳細表示
+    -v              ログの詳細表示
 
 * 設定ファイル
   ホームディレクトリに .mayu という名前のファイルを作成して、設定を記述して下さい。
 
   データディレクトリに参考用の設定ファイルとか色々入ってます。
-  データディレクトリは、通常 /usr/local/share/mayu あたりです。  
+  データディレクトリは、通常 /usr/local/share/mayu あたりです。
 
   include による設定ファイルの検索順序は、まずホームディレクトリ内で指定ファイルを探し、
   ファイルがみつからなければデータディレクトリ内のファイルを探します。
@@ -41,7 +45,7 @@ ver 0.12.1 2011/11/04
   - キーコードとキー定義ファイルについて
       キーが押されたときに検出する スキャンコード/キーコード は
     本家windows版、linux版、mac版でそれぞれ別々のものとなっています。
-  
+
       そのため、データディレクトリ下にある 109.mayu と 104.mayu が本家windows版のものとは別物です。
 
   - 日本語のキー名はサポートしません。
@@ -65,13 +69,13 @@ Linuxへのインストール準備
     boost-devel
     libudev-devel
     libusb1-devel
-  
+
   * Debian系(Debian, Ubuntu, Mint)では次のもの又は類似のパッケージをインストールして下さい。
     g++
     libboost-regex-dev
     libboost-dev
     libudev-dev
-    libusb-1.0-0-dev 
+    libusb-1.0-0-dev
 
 * uinput
   uinput がロードされている必要があります。
@@ -87,7 +91,7 @@ Linuxへのインストール準備
   という一行を追記して、
 
   # update-modules        (root権限で実行)
- 
+
   を実行して下さい。
 
 Mac (Darwin) へのインストール準備
@@ -103,39 +107,39 @@ Mac (Darwin) へのインストール準備
 
   [方法1] boost本家からダウンロードしてインストール
       あらかじめXcodeがインストールされている必要があります。
-  
+
     http://www.boost.org/users/download/
       から boost の最新版をダウンロードしてきて、展開したディレクトリ上で
-  
+
     $ ./configure && make && sudo make install
-  
+
     を実行して下さい。
 
   [方法2] MacPortsを使ってインストール
       MacPorts (http://www.macports.org/)を使ってインストールする場合は、
       MacPorts インストール後、
-  
+
       $ sudo port install boost
-    
+
       もしくは
-    
+
       $ sudo /opt/local/bin/port install boost
 
       でインストール出来ます。
 
 * Darwin 8.0 へのインストール
     make する前に、mayu のソースディレクトリ内の ./d/darwin/Info.plist をテキストエディタで編集して、
-    
+
             <!-- <key>OSBundleRequired</key> -->
             <!-- <string>Console</string>     -->
 
     の箇所を
-            
+
             <key>OSBundleRequired</key>
             <string>Console</string>
 
     に置き換えてください。
-  
+
 インストール
 ============
 コマンドライン上で mayu のソースディレクトリに移動し、
@@ -174,3 +178,32 @@ BUG
 http://hibari.2ch.net/test/read.cgi/software/1280042042/l50
 
 また、このソフトについての質問は、本家windows版の作者様にはしないようお願いします。
+
+
+
+-------------------------------------------------------------------------------
+2021-02-06 こっそり勝手微修正
+- debian系な環境でしか試してない.
+  ( sudo apt install g++ libudev-dev libusb-1.0-0-dev )
+  今どきのdebianには update-modules なさそうだけど、/etc/modules に uinput 追加
+  したあとマシン再起動したら動いてた.
+- init.d へのmayu追加は install.init.d.mayu.hinagata を参考にしてもらえば.
+- pid 1 が systemd な環境ではこちら
+http://yukimemi.github.io/post/2015-05-02_mayu-for-ime-off-in-vim/
+のサイトで書かれてる設定真似ればよさそう(けどそのような環境未使用につき未確認)
+- mac 未確認...ビルド通らないかも.
+ただ今どきのmacosではビルドできてもまともに働かないと思う(darwinわからん)
+- gitリポジトリは 本家 と yamy と 私家版 をぶっこんだ状態、
+  それぞれ original, yamy, shika ブランチ。元のリポジトリは,
+ - 本家リポジトリ (cvsなので要変換)        https://sourceforge.net/p/mayu/code/
+ - win版 yamy リポジトリ                   https://github.com/byplayer/yamy.git
+ - linux,mac私家版リポジトリ(バックアップ) https://github.com/kenhys/mayu.git
+- 機能改善とか一つもしてないけど ソースは、
+ - boost::regex を std::regex に置換. が、windowやfunctionまわり移植されてない
+   ので そもそも正規表現ライブラリ使ってない気がする... (ので動作未確認)
+ - UTF-8前提でSJIS/EUC 向処理外したり、型名はstdint.hに統一したり、
+   復活できないwin関係は#if 0化したりとか細かいこと諸々.
+ - ソースは壊れたタブ空白変換されてたようなので、120桁位で元準拠と好みで
+   適当に整形……適当にやりすぎた.(古い整形ツール適応後 手修正なので……)
+ - なんか弄ろうとして準備しただけで飽きた残骸でスミマセン.
+- 5ch にスレあるようだけど、みてません.
