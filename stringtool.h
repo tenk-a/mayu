@@ -5,7 +5,8 @@
 #define _STRINGTOOL_H
 
 // 現状windowやfunctionに未対応で正規表現使ってないので利用しないようにする定義.
-#define UNUSE_REGEX
+// →実行するとエラー動作になるため使えなかった.
+//#define UNUSE_REGEX
 
 #include "misc.h"
 //#  include <tchar.h>

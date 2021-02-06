@@ -202,8 +202,7 @@ http://hibari.2ch.net/test/read.cgi/software/1280042042/l50
 - 機能改善とか一つもしてないけど ソースは、
  - boost::regex を std::regex に置換. が、windowやfunctionまわり移植されてない
    ので そもそも正規表現ライブラリ使ってない気がする... (ので動作未確認)
-   → std::regex も使わないようにした(UNUSE_REGEX).
-      boostもc++11も無い環境でビルドできるはず.
+   → std::regex も使わないようにしてみた...が失敗中(UNUSE_REGEX).
  - UTF-8前提でSJIS/EUC 向処理外したり、型名はstdint.hに統一したり、
    復活できないwin関係は#if 0化したりとか細かいこと諸々.
  - ソースは壊れたタブ空白変換されてたようなので、120桁位で元準拠と好みで

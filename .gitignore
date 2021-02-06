@@ -3,6 +3,7 @@
 *.BAK
 *.tmp
 *.sav
+*.save
 *.cache
 *.o
 .deps
