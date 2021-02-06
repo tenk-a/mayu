@@ -460,11 +460,13 @@ std::string to_string(const std::wstring &i_str)
 }
 
 
+#if !defined(UNUSE_REGEX)
 /// stream output
 tostream & operator <<(tostream &i_ost, const tregex &i_data)
 {
     return i_ost << i_data.str();
 }
+#endif
 
 
 /// get lower string

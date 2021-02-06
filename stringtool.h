@@ -4,13 +4,18 @@
 #ifndef _STRINGTOOL_H
 #define _STRINGTOOL_H
 
+// 現状windowやfunctionに未対応で正規表現使ってないので利用しないようにする定義.
+#define UNUSE_REGEX
+
 #include "misc.h"
 //#  include <tchar.h>
 #include "_tchar.h"
 #include <cctype>
 #include <string>
 #include <iosfwd>
+#if !defined(UNUSE_REGEX)
 #include <regex>
+#endif
 #include <stdio.h>      // for snprintf
 #include <string.h>     // for stricmp
 
@@ -37,6 +42,7 @@ typedef std::basic_stringstream<_TCHAR>     tstringstream;
 /// ifstream for generic international text
 typedef std::basic_ifstream<_TCHAR>         tifstream;
 
+#if !defined(UNUSE_REGEX)
 /// basic_regex for generic international text
 //typedef boost::basic_regex<_TCHAR> tregex;
 class tregex : public std::basic_regex<_TCHAR>
@@ -71,6 +77,11 @@ private:
 /// match_results for generic international text
 typedef std::match_results<tstring::const_iterator>  tcmatch;
 
+#else
+typedef tstring tregex;
+typedef tstring tcmatch;
+#endif
+
 /// string with custom stream output
 class tstringq : public tstring
 {
@@ -97,6 +108,7 @@ public:
 extern tostream &operator <<(tostream &i_ost, const tstringq &i_data);
 
 
+#if !defined(UNUSE_REGEX)
 /// identical to tcmatch except for str()
 class tcmatch_results : public tcmatch
 {
@@ -111,7 +123,9 @@ public:
         return static_cast<tstring>(static_cast<const tcmatch *>(this)->operator [](i_n) );
     }
 };
-
+#else
+typedef tstring tcmatch_results;
+#endif
 
 /// interpret meta characters such as \n
 tstring interpretMetaCharacters(const _TCHAR *i_str, size_t i_len,
@@ -261,8 +275,11 @@ inline bool operator !=(const tstringi &i_str1, const tstringi &i_str2)
     return i_str1.compare(i_str2) != 0;
 }
 
+#if !defined(UNUSE_REGEX)
 /// stream output
-extern tostream &operator   <<(tostream &i_ost, const tregex &i_data);
+extern tostream &operator <<(tostream &i_ost, const tregex &i_data);
+#endif
+
 /// get lower string
 extern tstring              toLower(const tstring &i_str);
 

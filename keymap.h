@@ -253,8 +253,10 @@ private:
 
     Type                    m_type;             ///< type
     tstringi                m_name;             ///< keymap name
+ #if !defined(UNUSE_REGEX)
     tregex                  m_windowClass;      ///< window class name regexp
     tregex                  m_windowTitle;      ///< window title name regexp
+ #endif
 
     KeySeq *                m_defaultKeySeq;    ///< default keySeq
     Keymap *                m_parentKeymap;     ///< parent keymap
@@ -281,7 +283,7 @@ public:
     /// get
     const KeySeq *          getDefaultKeySeq() const { return m_defaultKeySeq; }
     ///
-    Keymap *getParentKeymap() const { return m_parentKeymap; }
+    Keymap *                getParentKeymap() const { return m_parentKeymap; }
     ///
     const tstringi &        getName() const { return m_name; }
     /// does same window

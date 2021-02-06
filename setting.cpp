@@ -515,7 +515,7 @@ Modifier SettingLoader::load_MODIFIER(Modifier::Type i_mode, Modifier i_modifier
 
                 isModifierSpecified.on(mt);
                 flag = PRESS;
-	
+
                 if (o_mode && *o_mode < mt)
                 {
                     if (mt < Modifier::Type_BASIC)
