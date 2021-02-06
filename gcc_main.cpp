@@ -1,4 +1,4 @@
-// Linux,Darwin—p‚Ìmaine
+// Linux,Darwinç”¨ã®maine
 
 #define APSTUDIO_INVOKED
 
@@ -8,8 +8,8 @@
 #include "errormessage.h"
 #include "function.h"
 #include "mayu.h"
-#if defined(WIN32)
-#include "mayurc.h"
+#if 0 //defined(WIN32)
+ # include "mayurc.h"
 #endif
 #include "msgstream.h"
 #include "multithread.h"
@@ -19,35 +19,34 @@
 
 
 #if defined(__linux__) || defined(__APPLE__)
+
 // TODO:
-
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-  __argc = argc;
-  __targv = argv;
-	
-  //TODO: ‘½d‹N“® check
-	
-  try
-  {
-    Mayu mayu;
+    __argc     = argc;
+    __targv    = argv;
 
-    // İ’èƒtƒ@ƒCƒ‹‚Ìƒ[ƒh
-    if (mayu.load())
+    //TODO: å¤šé‡èµ·å‹• check
+
+    try
     {
-      //ƒRƒ}ƒ“ƒhÀs‚ÌEnter‚ªc‚é‰Â”\«‚ª‚ ‚é‚½‚ßA‚¿‚å‚Á‚Æ‚¾‚¯‘Ò‚Â
-      sleep(2);
-		
-      // ƒL[’u‚«Š·‚¦‚ÌÀs
-      mayu.taskLoop();			
+        Mayu mayu;
+
+        // è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ­ãƒ¼ãƒ‰.
+        if (mayu.load())
+        {
+            //ã‚³ãƒãƒ³ãƒ‰å®Ÿè¡Œæ™‚ã®EnterãŒæ®‹ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãŸã‚ã€ã¡ã‚‡ã£ã¨ã ã‘å¾…ã¤.
+            sleep(2);
+            // ã‚­ãƒ¼ç½®ãæ›ãˆã®å®Ÿè¡Œ.
+             mayu.taskLoop();
+        }
     }
-  }
-  catch (ErrorMessage e)
-  {
-    fprintf(stderr, "%s\n", e.getMessage().c_str());
-  }
-	
-  return 0;
+    catch (ErrorMessage e)
+    {
+        fprintf( stderr, "%s\n", e.getMessage().c_str() );
+    }
+
+    return 0;
 }
 
 #endif

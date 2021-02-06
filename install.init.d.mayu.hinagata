@@ -1,0 +1,86 @@
+#!/bin/bash
+# Start/stop the mayu daemon.
+#
+### BEGIN INIT INFO
+# Provides: mayu
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: mayu
+# Description: Enable service provided by root
+#
+### END INIT INFO
+
+# init.d な環境用の起動スクリプトの雛形
+# (2021-01 debianベースの MX Linux 環境で試したモノ)
+#
+# 以下のサイトのスクリプトを使わせてもらっています.
+# https://anekos.hatenablog.com/entry/20090227/1235742723
+# http://heavy.sblog.jp/index.php?e=1499
+#
+# USER=@@@ の @@@ を自分のユーザ名に書き換えたファイルを
+# /etc/init.d/mayu
+# のパス名でセーブ/コピー、root で実行可能なように
+# sudo chown root:root /etc/init.d/mayu
+# sudo chmod 755 /etc/init.d/mayu
+# その後
+# sudo /sbin/insserv -v mayu
+# 再起動
+
+DAEMON=/usr/local/bin/mayu
+NAME=mayu
+USER=@@@
+DESC="Mayu at $USER"
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/mayu
+
+do_start()
+{
+	echo -n "Starting $DESC: "
+	if start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+			--signal 0
+	then
+		echo "already running."
+		exit
+	fi
+	env HOME=/home/$USER \
+	start-stop-daemon --user $USER --start --quiet --background \
+					  --make-pidfile --pidfile $PIDFILE \
+					  --exec $DAEMON
+	echo "$NAME was started"
+}
+
+do_loadtest()
+{
+	env HOME=/home/$USER \
+	start-stop-daemon --user $USER --start --quiet --exec $DAEMON
+	echo "$NAME was started"
+}
+
+do_stop()
+{
+	echo "Stopping daemon: $NAME"
+	start-stop-daemon --stop --pidfile $PIDFILE
+	rm -f $PIDFILE
+}
+
+
+case "$1" in
+	start)
+		do_start
+	;;
+	stop)
+		do_stop
+	;;
+	restart)
+		do_stop
+		do_start
+	;;
+	loadtest)
+		do_loadtest
+	;;
+	*)
+		echo "Usage: $0 (start|stop|restart)"
+	;;
+esac

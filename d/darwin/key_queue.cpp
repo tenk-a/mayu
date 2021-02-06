@@ -48,7 +48,7 @@ unsigned int keyqueue_pop(KEYBOARD_INPUT_DATA* buffer, unsigned int bufferSize)
   unsigned int copy_count = min(bufferSize, g_keyQueueSize);
   for (i = 0; i < copy_count; i++)
   {
-    // 後ろから取得していく
+    // 後ろから取得していく.
     g_keyQueueIndex = (g_keyQueueIndex == 0 ? KEY_QUE_MAX_SIZE - 1 : g_keyQueueIndex - 1);
     buffer[copy_count - i - 1] = g_keyQueue[g_keyQueueIndex];
   }

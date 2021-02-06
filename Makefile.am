@@ -52,8 +52,9 @@ mayu_CPPFLAGS = \
 		-DVERSION=""""$(VERSION)"""" \
 		-DLOGNAME=""""$(LOGNAME)"""" \
 		-DCOMPUTERNAME=""""$(COMPUTERNAME)"""" \
-		-DPKGDATADIR="\"$(pkgdatadir)\"" \
-		@BOOST_CPPFLAGS@
+		-DPKGDATADIR="\"$(pkgdatadir)\""
+
+#		@BOOST_CPPFLAGS@
 
 nobase_dist_pkgdata_DATA= \
 		109.mayu \
@@ -75,8 +76,8 @@ nobase_dist_pkgdata_DATA= \
 		contrib/dvorak109.mayu \
 		emacsedit.mayu
 
-mayu_LDFLAGS = @BOOST_LDFLAGS@
-mayu_LDADD = @BOOST_REGEX_LIB@
+# mayu_LDFLAGS = @BOOST_LDFLAGS@
+# mayu_LDADD = @BOOST_REGEX_LIB@
 
 if OS_LINUX
 mayu_SOURCES += d/linux/keydriver.cpp

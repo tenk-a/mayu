@@ -1,0 +1,52 @@
+# VZ(Word Master/WORD STAR) なダイアモンド・カーソル例.
+# Ctrlの代わりにEisuu/CapsLockで操作 (往年のCtrlの配置)
+# ※ IME(日本語変換)キー設定で Eisuu キーは使わないようにしたほうがよいかも?
+# 以下 ^ は Eisuu(CapsLock)キーの意味.
+# 上下左右 ^e ^x ^s ^d  頁上下 ^r ^c
+# 単語左右 ^a ^f  行頭^qs 行末 ^qd  ファイル頭/末 ^qr ^qc
+# BS ^h  DEL ^g
+# 検索 ^qf 置換 ^qa   ※ Microsoftアプリの操作系前提(ctrl-f,ctrl-h).
+# Eisuuキー ^TAB      ※ イマイチだけどEisuuキー無も困るかもで TODO:後で変更
+# https://github.com/tenk-a/
+
+
+# まずキーボード定義を読み込む
+if ( USE104 )
+  include "104.mayu"		# 104 キーボード設定
+  if ( USE109on104 )
+    include "109on104.mayu"	# 104 キーボードを 109 キーボード風に
+  endif
+else
+  include "109.mayu"		# 109 キーボード設定
+  if ( USE104on109 )
+    include "104on109.mayu"	# 109 キーボードを 104 キーボード風に
+  endif
+endif
+
+
+
+keymap Global
+
+keymap2 Q2
+key *r = C-HOME
+key *c = C-END
+key *s = HOME
+key *d = END
+key *f = C-F
+key *a = C-H
+
+keymap Global
+mod mod0 = !Eisuu
+key M0-e = Up
+key M0-s = Left
+key M0-d = Right
+key M0-x = Down
+key M0-r = PageUp
+key M0-c = PageDown
+key M0-h = BackSpace
+key M0-g = Delete
+key M0-a = C-Left
+key M0-f = C-Right
+key M0-q = &Prefix(Q2)
+key M0-TAB = Eisuu
+# key M0-i = TAB

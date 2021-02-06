@@ -1,17 +1,19 @@
 #pragma once
 
-#define array_size(array) (sizeof(array)/sizeof(array[0]))
+#define array_size(array)   ( sizeof (array) / sizeof (array[0]) )
 
+#if 0
 #ifndef __cplusplus
 
 typedef enum _bool_e
 {
-	false = 0,
-	true = 1
+    false  = 0,
+    true   = 1
 } bool;
 
 #endif
 
-#define max(a,b) ((a)>(b)?(a):(b))
+#define max(a, b)   ( (a) > (b) ? (a) : (b) )
 
 //struct Closure(
+#endif
