@@ -183,6 +183,11 @@ http://hibari.2ch.net/test/read.cgi/software/1280042042/l50
 
 -------------------------------------------------------------------------------
 2021-02-06 こっそり勝手微修正
+- boost::regex を c++11以降の std::regex に置換. が、windowやfunctionまわり
+  移植されてないので そもそも正規表現ライブラリ使ってない気がする...
+  → c++11未満向けに std::regex も使わないようにしてみた(UNUSE_REGEX).
+  実際は微妙に使われていたため辻褄合わせしたが、よくわからないのでデフォは off.
+  stringtool.h (9) #define UNUSE_REGEX のコメント外せば試せる.
 - debian系な環境でしか試してない.
   ( sudo apt install g++ libudev-dev libusb-1.0-0-dev )
   今どきのdebianには update-modules なさそうだけど、/etc/modules に uinput 追加
@@ -191,7 +196,8 @@ http://hibari.2ch.net/test/read.cgi/software/1280042042/l50
 - pid 1 が systemd な環境ではこちらのサイト
   http://yukimemi.github.io/post/2015-05-02_mayu-for-ime-off-in-vim/
   で書かれてる設定真似ればよさそう(けどそのような環境未使用につき未確認)
-- make で aclocal-1.15 無いって怒られたら autoreconf -f -i してから ./configure
+- make で aclocal-?.?? 無いって怒られ、autoconfが無いならインストール.
+  それで駄目なら autoreconf -f -i してから ./configure
 - mac 未確認...ビルド通らないかも.
   ただ今どきのMacOSではビルドできてもまともに働かないと思う(Darwinわからん)
 - gitリポジトリは 本家 と yamy と 私家版 をぶっこんだ状態、
@@ -199,10 +205,7 @@ http://hibari.2ch.net/test/read.cgi/software/1280042042/l50
  - 本家リポジトリ (cvsなので要変換)        https://sourceforge.net/p/mayu/code/
  - win版 yamy リポジトリ                   https://github.com/byplayer/yamy.git
  - linux,mac私家版リポジトリ(バックアップ) https://github.com/kenhys/mayu.git
-- 機能改善とか一つもしてないけど ソースは、
- - boost::regex を std::regex に置換. が、windowやfunctionまわり移植されてない
-   ので そもそも正規表現ライブラリ使ってない気がする... (ので動作未確認)
-   → std::regex も使わないようにしてみた...が失敗中(UNUSE_REGEX).
+- ソースは、
  - UTF-8前提でSJIS/EUC 向処理外したり、型名はstdint.hに統一したり、
    復活できないwin関係は#if 0化したりとか細かいこと諸々.
  - ソースは壊れたタブ空白変換されてたようなので、120桁位で元準拠と好みで

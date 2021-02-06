@@ -228,16 +228,14 @@ Keymap::Keymap(Type             i_type,
                Keymap *         i_parentKeymap)
     : m_type(i_type)
     , m_name(i_name)
- #if !defined(UNUSE_REGEX)
     , m_windowClass( _T(".*") )
     , m_windowTitle( _T(".*") )
- #endif
     , m_defaultKeySeq(i_defaultKeySeq)
     , m_parentKeymap(i_parentKeymap)
 {
- #if !defined(UNUSE_REGEX)
     if (i_type == Type_windowAnd || i_type == Type_windowOr)
     {
+     #if !defined(UNUSE_REGEX)
         try
         {
             std::regex_constants::syntax_option_type f = (std::regex_constants::basic | std::regex_constants::icase );
@@ -250,8 +248,13 @@ Keymap::Keymap(Type             i_type,
         {
             throw ErrorMessage() << i_e.what();
         }
+     #else
+        if ( !i_windowClass.empty() )
+            m_windowClass = i_windowClass;
+        if ( !i_windowTitle.empty() )
+            m_windowTitle = i_windowTitle;
+     #endif
     }
- #endif
 }
 
 
@@ -341,7 +344,7 @@ bool Keymap::doesSameWindow(const tstringi i_className, const tstringi &i_titleN
             return std::regex_search(i_titleName, what, m_windowTitle);
     }
  #else
-    return false;
+    return (m_type != Type_keymap);
  #endif
 }
 
@@ -454,7 +457,6 @@ void Keymap::describe(tostream &i_ost, DescribeParam *i_dp) const
         i_ost << _T("keymap ") << m_name;
         break;
 
- #if !defined(UNUSE_REGEX)
     case Type_windowAnd:
         i_ost << _T("window ") << m_name << _T(" ");
         if ( m_windowTitle.str() == _T(".*") )
@@ -469,9 +471,6 @@ void Keymap::describe(tostream &i_ost, DescribeParam *i_dp) const
               << m_windowClass.str() << _T("/ || /") << m_windowTitle.str()
               << _T("/ )");
         break;
- #else
-    default: ;
- #endif
     }
 
     if (m_parentKeymap)
