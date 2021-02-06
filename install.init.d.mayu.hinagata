@@ -24,8 +24,11 @@
 # のパス名でセーブ/コピー、root で実行可能なように
 # sudo chown root:root /etc/init.d/mayu
 # sudo chmod 755 /etc/init.d/mayu
-# その後
+# し
+# /etc/init.d/mayu start
+# してみて意図通りにキー操作できていたら
 # sudo /sbin/insserv -v mayu
+# (場合によっては -f 追加)
 # 再起動
 
 DAEMON=/usr/local/bin/mayu

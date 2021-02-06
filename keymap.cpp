@@ -235,6 +235,7 @@ Keymap::Keymap(Type             i_type,
 {
     if (i_type == Type_windowAnd || i_type == Type_windowOr)
     {
+     #if !defined(UNUSE_REGEX)
         try
         {
             std::regex_constants::syntax_option_type f = (std::regex_constants::basic | std::regex_constants::icase );
@@ -247,6 +248,12 @@ Keymap::Keymap(Type             i_type,
         {
             throw ErrorMessage() << i_e.what();
         }
+     #else
+        if ( !i_windowClass.empty() )
+            m_windowClass = i_windowClass;
+        if ( !i_windowTitle.empty() )
+            m_windowTitle = i_windowTitle;
+     #endif
     }
 }
 
@@ -316,6 +323,7 @@ const Keymap::KeyAssignment *Keymap::searchAssignment(const ModifiedKey &i_mk) c
 // does same window
 bool Keymap::doesSameWindow(const tstringi i_className, const tstringi &i_titleName)
 {
+ #if !defined(UNUSE_REGEX)
     if (m_type == Type_keymap)
         return false;
 
@@ -335,6 +343,9 @@ bool Keymap::doesSameWindow(const tstringi i_className, const tstringi &i_titleN
         else    // type == Type_windowOr
             return std::regex_search(i_titleName, what, m_windowTitle);
     }
+ #else
+    return (m_type != Type_keymap);
+ #endif
 }
 
 

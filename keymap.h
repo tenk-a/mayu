@@ -281,7 +281,7 @@ public:
     /// get
     const KeySeq *          getDefaultKeySeq() const { return m_defaultKeySeq; }
     ///
-    Keymap *getParentKeymap() const { return m_parentKeymap; }
+    Keymap *                getParentKeymap() const { return m_parentKeymap; }
     ///
     const tstringi &        getName() const { return m_name; }
     /// does same window
