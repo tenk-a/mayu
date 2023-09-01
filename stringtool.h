@@ -63,7 +63,8 @@ public:
         base_type::assign(pattern, f);
         m_pattern = pattern;
     }
-    std::string const &str() const { return m_pattern; }
+
+    tstring const &str() const { return m_pattern; }
 
     void swap(tregex &rhs)
     {
@@ -72,7 +73,7 @@ public:
     }
 
 private:
-    std::string m_pattern;
+    tstring m_pattern;
 };
 
 /// match_results for generic international text
@@ -91,8 +92,8 @@ public:
     tregex & operator =(std::string const &rhs) { tregex(rhs).swap(*this); return *this; }
     tregex & operator =(char const *rhs) { tregex(rhs).swap(*this); return *this; }
     void swap(tregex &rhs) { std::swap(*(base_type *) this, *(base_type *) &rhs); }
-    std::string const &str() const { return *(base_type*)this; }
-    void assign(std::string const &pattern) { *(base_type*)this = pattern; }
+    tstring const &str() const { return *(base_type*)this; }
+    void assign(tstring const &pattern) { *(base_type*)this = pattern; }
 };
 typedef tstring tcmatch;
 #endif
